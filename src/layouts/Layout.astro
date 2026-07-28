@@ -12,9 +12,7 @@ const baseUrl = import.meta.env.BASE_URL;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
 		<link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
-		
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
@@ -41,11 +39,13 @@ const baseUrl = import.meta.env.BASE_URL;
 			</div>
 		</header>
 
-		<slot />
+		<main class="main-content">
+			<slot />
+		</main>
 
 		<footer class="site-footer">
 			<div class="container">
-				<p>&copy; 2026 Nago Youth Future Summit & うみポス</p>
+				<p>&copy; 2026 Nago Youth Future Summit & うみポス All rights reserved.</p>
 			</div>
 		</footer>
 	</body>
@@ -62,24 +62,30 @@ const baseUrl = import.meta.env.BASE_URL;
 		margin: 0;
 		padding: 0;
 	}
+	html, body {
+		width: 100%;
+		overflow-x: hidden;
+	}
 	body {
 		font-family: 'Noto Sans JP', sans-serif;
 		color: var(--text);
 		background: var(--bg);
 		line-height: 1.6;
-		overflow-x: hidden; /* 横スクロールの発生を防止 */
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
 	}
-	h1, h2, h3 {
-		font-weight: 900;
-		letter-spacing: -0.02em;
+	.main-content {
+		flex: 1;
 	}
 	.container {
+		width: 100%;
 		max-width: 1000px;
 		margin: 0 auto;
-		padding: 0 1.25rem;
+		padding: 0 1rem;
 	}
 
-	/* ヘッダーのレスポンシブ対応 */
+	/* ヘッダー構造 */
 	.site-header {
 		background: #ffffff;
 		border-bottom: 1px solid #e2e8f0;
@@ -91,11 +97,8 @@ const baseUrl = import.meta.env.BASE_URL;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		min-height: 70px;
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
-		flex-wrap: wrap; /* スマホ時に折り返せるように */
-		gap: 0.75rem;
+		padding: 0.75rem 1rem;
+		gap: 1rem;
 	}
 
 	.logo-link {
@@ -103,6 +106,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		align-items: center;
 		gap: 0.5rem;
 		text-decoration: none;
+		flex-shrink: 0;
 	}
 	.logo-img {
 		height: 36px;
@@ -113,44 +117,29 @@ const baseUrl = import.meta.env.BASE_URL;
 		font-weight: 900;
 		color: var(--primary);
 		font-size: 1rem;
-		letter-spacing: -0.01em;
-		white-space: nowrap;
 	}
 
 	.nav {
 		display: flex;
 		gap: 1rem;
 		align-items: center;
+		flex-wrap: wrap;
 	}
 	.nav a {
 		text-decoration: none;
 		color: #475569;
 		font-weight: 700;
 		font-size: 0.9rem;
-		transition: color 0.2s;
-	}
-	.nav a:hover {
-		color: var(--primary);
 	}
 
-	/* スマートフォン用のスタイル調整 (画面幅 640px 以下) */
+	/* スマホサイズ調整 */
 	@media (max-width: 640px) {
 		.header-container {
-			flex-direction: column; /* 縦並びにする */
-			justify-content: center;
+			flex-direction: column;
 			text-align: center;
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-		}
-		.logo-text {
-			font-size: 0.95rem; /* スマホ用に少し小さく */
 		}
 		.nav {
-			gap: 1.25rem;
-			margin-top: 0.25rem;
-		}
-		.nav a {
-			font-size: 0.85rem;
+			justify-content: center;
 		}
 	}
 
@@ -161,6 +150,5 @@ const baseUrl = import.meta.env.BASE_URL;
 		font-size: 0.85rem;
 		border-top: 1px solid #e2e8f0;
 		background: #ffffff;
-		margin-top: 3rem;
 	}
 </style>
