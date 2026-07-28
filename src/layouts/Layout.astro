@@ -21,7 +21,11 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 		<header class="site-header">
 			<div class="container header-container">
 				<a href={baseUrl} class="logo-link">
-					<img src={`${baseUrl}logo.png`} alt="Logo" class="logo-img" />
+					<img 
+						src={`${baseUrl}logo.png`} 
+						alt="Nago Youth Future Summit Logo" 
+						class="logo-img"
+					/>
 					<span class="logo-text">Nago Youth Future Summit</span>
 				</a>
 
@@ -84,22 +88,21 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 		height: 70px;
 	}
 
-	/* ロゴ画像とテキストを横並びにするCSS */
 	.logo-link {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem; /* 画像とテキストの隙間 */
+		gap: 0.75rem;
 		text-decoration: none;
 	}
 	.logo-img {
-		height: 42px; /* 画像の高さ */
+		max-height: 40px;
 		width: auto;
-		object-fit: contain;
+		display: inline-block;
 	}
 	.logo-text {
 		font-weight: 900;
 		color: var(--primary);
-		font-size: 1.15rem;
+		font-size: 1.1rem;
 		letter-spacing: -0.01em;
 		white-space: nowrap;
 	}
