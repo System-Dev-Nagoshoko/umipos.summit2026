@@ -4,4 +4,8 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://System-Dev-Nagoshoko.github.io',
   base: '/umipos.summit2026',
+  trailingSlash: 'always',
+  build: {
+    format: 'directory'
+  }
 });

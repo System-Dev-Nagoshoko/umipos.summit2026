@@ -5,8 +5,9 @@ interface Props {
 
 const { title } = Astro.props;
 
-// GitHub Pages 用のベースパスを取得 (末尾のスラッシュを除去して整形)
-const base = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+// BASE_URL (/umipos.summit2026/) の末尾スラッシュを揃える
+const rawBase = import.meta.env.BASE_URL || '/';
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
 ---
 
 <!doctype html>
