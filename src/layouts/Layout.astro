@@ -67,7 +67,6 @@ const baseUrl = import.meta.env.BASE_URL;
 		color: var(--text);
 		background: var(--bg);
 		line-height: 1.6;
-		overflow-x: hidden; /* 横スクロールの発生を防止 */
 	}
 	h1, h2, h3 {
 		font-weight: 900;
@@ -76,10 +75,8 @@ const baseUrl = import.meta.env.BASE_URL;
 	.container {
 		max-width: 1000px;
 		margin: 0 auto;
-		padding: 0 1.25rem;
+		padding: 0 1.5rem;
 	}
-
-	/* ヘッダーのレスポンシブ対応 */
 	.site-header {
 		background: #ffffff;
 		border-bottom: 1px solid #e2e8f0;
@@ -91,76 +88,72 @@ const baseUrl = import.meta.env.BASE_URL;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		min-height: 70px;
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
-		flex-wrap: wrap; /* スマホ時に折り返せるように */
-		gap: 0.75rem;
+		height: 70px;
+		flex-wrap: wrap;
+		row-gap: 0.5rem;
+		padding: 0.5rem 0;
 	}
 
 	.logo-link {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		text-decoration: none;
 	}
 	.logo-img {
-		height: 36px;
+		height: 40px;
 		width: auto;
 		object-fit: contain;
+		flex-shrink: 0;
 	}
 	.logo-text {
 		font-weight: 900;
 		color: var(--primary);
-		font-size: 1rem;
+		font-size: clamp(0.8rem, 3.5vw, 1.1rem);
 		letter-spacing: -0.01em;
 		white-space: nowrap;
 	}
 
 	.nav {
 		display: flex;
-		gap: 1rem;
-		align-items: center;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 0.5rem 1.2rem;
+		width: 100%;
+		flex: 1 1 auto;
 	}
 	.nav a {
 		text-decoration: none;
 		color: #475569;
 		font-weight: 700;
-		font-size: 0.9rem;
+		font-size: clamp(0.75rem, 2.5vw, 1rem);
+		white-space: nowrap;
 		transition: color 0.2s;
 	}
 	.nav a:hover {
 		color: var(--primary);
 	}
 
-	/* スマートフォン用のスタイル調整 (画面幅 640px 以下) */
-	@media (max-width: 640px) {
+	@media (max-width: 480px) {
 		.header-container {
-			flex-direction: column; /* 縦並びにする */
-			justify-content: center;
-			text-align: center;
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-		}
-		.logo-text {
-			font-size: 0.95rem; /* スマホ用に少し小さく */
+			flex-direction: column;
+			align-items: center;
+			height: auto;
+			padding: 0.75rem 1rem;
 		}
 		.nav {
-			gap: 1.25rem;
-			margin-top: 0.25rem;
-		}
-		.nav a {
-			font-size: 0.85rem;
+			justify-content: center;
+			width: 100%;
 		}
 	}
 
 	.site-footer {
 		text-align: center;
-		padding: 2rem 0;
+		padding: 2.5rem 0;
 		color: #64748b;
-		font-size: 0.85rem;
+		font-size: 0.9rem;
 		border-top: 1px solid #e2e8f0;
 		background: #ffffff;
-		margin-top: 3rem;
+		margin-top: 4rem;
 	}
 </style>
