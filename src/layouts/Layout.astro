@@ -5,7 +5,6 @@ interface Props {
 
 const { title } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
-const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 ---
 
 <!doctype html>
@@ -22,7 +21,8 @@ const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 		<header class="site-header">
 			<div class="container header-container">
 				<a href={baseUrl} class="logo-link">
-					<img src={logoPath} alt="Nago Youth Future Summit 2026" class="logo-img" />
+					<img src={`${baseUrl}logo.png`} alt="Logo" class="logo-img" />
+					<span class="logo-text">Nago Youth Future Summit</span>
 				</a>
 
 				<nav class="nav">
@@ -83,16 +83,27 @@ const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 		align-items: center;
 		height: 70px;
 	}
+
+	/* ロゴ画像とテキストを横並びにするCSS */
 	.logo-link {
 		display: flex;
 		align-items: center;
+		gap: 0.75rem; /* 画像とテキストの隙間 */
 		text-decoration: none;
 	}
 	.logo-img {
-		height: 48px; /* ヘッダー内のロゴサイズ */
+		height: 42px; /* 画像の高さ */
 		width: auto;
 		object-fit: contain;
 	}
+	.logo-text {
+		font-weight: 900;
+		color: var(--primary);
+		font-size: 1.15rem;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+	}
+
 	.nav {
 		display: flex;
 		gap: 1.5rem;
