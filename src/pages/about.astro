@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ABOUT | Nago Youth Future Summit 2026">
+	<main>
+		<section class="page-header">
+			<div class="container">
+				<h1>ABOUT</h1>
+				<p>Nago Youth Future Summit 2026 について</p>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
+				<div class="card">
+					<h2>企画の背景と目的</h2>
+					
+					<div class="block">
+						<h3>🔴 若者の地域離れ</h3>
+						<p>スマホや娯楽のデジタル化に伴い、地元の小中高生がリアルな地域コミュニティやローカルカルチャーに触れる機会が減少しています。</p>
+					</div>
+
+					<div class="block">
+						<h3>🔴 主体的な活動の不足</h3>
+						<p>これまでの地域活性化は「大人が企画し、子どもを動員する」形が多く、若者が主役となって街を盛り上げる場が不足していました。</p>
+					</div>
+
+					<div class="block highlight-block">
+						<h3>🚀 本イベントの狙い</h3>
+						<p>地元の主体的な中高生（NYC）が中心となり、地域の大人たちや企業、行政と手を取り合うことで、若者主導による新しい地方創生のモデルケースを確立します。</p>
+						<p>絶景のビジネス拠点「名護サンセットオフィス MsiX」を舞台に、最先端のユースカルチャーと地域経済を融合させます。</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.page-header {
+		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
+		color: white;
+		padding: 4rem 0;
+		text-align: center;
+	}
+	.page-header h1 {
+		font-size: 2.5rem;
+		font-weight: 800;
+	}
+	.page-header p {
+		color: #93c5fd;
+		font-size: 1rem;
+		margin-top: 0.5rem;
+	}
+	.section {
+		padding: 3rem 0;
+	}
+	.card {
+		background: white;
+		border-radius: 16px;
+		padding: 2.5rem 2rem;
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+		max-width: 800px;
+		margin: 0 auto;
+		border: 1px solid #f1f5f9;
+	}
+	.card h2 {
+		font-size: 1.5rem;
+		color: #0f172a;
+		border-bottom: 2px solid #bae6fd;
+		padding-bottom: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+	.block {
+		margin-bottom: 1.5rem;
+	}
+	.block h3 {
+		font-size: 1.1rem;
+		color: #0369a1;
+		margin-bottom: 0.5rem;
+	}
+	.block p {
+		color: #475569;
+		line-height: 1.8;
+	}
+	.highlight-block {
+		background: #f0f9ff;
+		border: 1px solid #bae6fd;
+		padding: 1.5rem;
+		border-radius: 12px;
+	}
+</style>
