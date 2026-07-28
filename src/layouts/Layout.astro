@@ -5,6 +5,7 @@ interface Props {
 
 const { title } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
+const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 ---
 
 <!doctype html>
@@ -20,7 +21,11 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 	<body>
 		<header class="site-header">
 			<div class="container header-container">
-				<a href={baseUrl} class="logo">Nago Youth Future Summit</a>
+				<a href={baseUrl} class="logo-link">
+					<img src={logoPath} alt="Nago Youth Future Summit 2026" class="logo-img" onError="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+					<span class="logo-text" style="display: none;">Nago Youth Future Summit</span>
+				</a>
+
 				<nav class="nav">
 					<a href={baseUrl}>TOP</a>
 					<a href={`${baseUrl}about/`}>ABOUT</a>
@@ -79,10 +84,19 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 		align-items: center;
 		height: 70px;
 	}
-	.logo {
+	.logo-link {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+	}
+	.logo-img {
+		height: 48px; /* ヘッダーに収まるサイズ */
+		width: auto;
+		object-fit: contain;
+	}
+	.logo-text {
 		font-weight: 900;
 		color: var(--primary);
-		text-decoration: none;
 		font-size: 1.2rem;
 		letter-spacing: -0.01em;
 	}
