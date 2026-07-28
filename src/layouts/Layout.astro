@@ -12,6 +12,9 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 		<title>{title}</title>
 	</head>
 	<body>
@@ -49,9 +52,16 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 		padding: 0;
 	}
 	body {
-		font-family: system-ui, -apple-system, sans-serif;
+		/* フォントを Noto Sans JP に変更 */
+		font-family: 'Noto Sans JP', sans-serif;
 		color: var(--text);
 		background: var(--bg);
+		line-height: 1.6;
+	}
+	/* ページ全体の見出し（h1, h2など）をより力強くイベントらしく */
+	h1, h2, h3 {
+		font-weight: 900; /* 最も太いウェイト */
+		letter-spacing: -0.02em; /* わずかに詰めて力強さを出す */
 	}
 	.container {
 		max-width: 1000px;
@@ -69,13 +79,14 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		height: 64px;
+		height: 70px; /* フォントが太くなったので少し高さを調整 */
 	}
 	.logo {
-		font-weight: 800;
+		font-weight: 900; /* ロゴも力強く */
 		color: var(--primary);
 		text-decoration: none;
-		font-size: 1.1rem;
+		font-size: 1.2rem;
+		letter-spacing: -0.01em;
 	}
 	.nav {
 		display: flex;
@@ -84,8 +95,8 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 	.nav a {
 		text-decoration: none;
 		color: #475569;
-		font-weight: 600;
-		font-size: 0.95rem;
+		font-weight: 700; /* メニューも少し太くして視認性アップ */
+		font-size: 1rem;
 		transition: color 0.2s;
 	}
 	.nav a:hover {
@@ -93,9 +104,9 @@ const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 	}
 	.site-footer {
 		text-align: center;
-		padding: 2rem 0;
+		padding: 2.5rem 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.9rem;
 		border-top: 1px solid #e2e8f0;
 		background: #ffffff;
 		margin-top: 4rem;
