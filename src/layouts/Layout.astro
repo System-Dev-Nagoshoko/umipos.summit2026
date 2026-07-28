@@ -4,10 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
-
-// BASE_URL (/umipos.summit2026/) の末尾スラッシュを揃える
-const rawBase = import.meta.env.BASE_URL || '/';
-const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+const baseUrl = import.meta.env.BASE_URL; // 例: "/umipos.summit2026/"
 ---
 
 <!doctype html>
@@ -20,10 +17,10 @@ const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
 	<body>
 		<header class="site-header">
 			<div class="container header-container">
-				<a href={`${base}/`} class="logo">Nago Youth Future Summit</a>
+				<a href={baseUrl} class="logo">Nago Youth Future Summit</a>
 				<nav class="nav">
-					<a href={`${base}/`}>TOP</a>
-					<a href={`${base}/sns/`}>SNS</a>
+					<a href={baseUrl}>TOP</a>
+					<a href={`${baseUrl}sns/`}>SNS</a>
 				</nav>
 			</div>
 		</header>
