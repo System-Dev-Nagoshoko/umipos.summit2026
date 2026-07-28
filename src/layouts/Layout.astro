@@ -22,8 +22,7 @@ const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 		<header class="site-header">
 			<div class="container header-container">
 				<a href={baseUrl} class="logo-link">
-					<img src={logoPath} alt="Logo" class="logo-img" />
-					<span class="logo-text">Nago Youth Future Summit</span>
+					<img src={logoPath} alt="Nago Youth Future Summit 2026" class="logo-img" />
 				</a>
 
 				<nav class="nav">
@@ -84,27 +83,16 @@ const logoPath = `${baseUrl}Nago%20Youth%20Future%20Summit%202026.png`;
 		align-items: center;
 		height: 70px;
 	}
-	
-	/* ロゴ（画像＋テキスト）の並び設定 */
 	.logo-link {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem; /* 画像とテキストの間の余白 */
 		text-decoration: none;
 	}
 	.logo-img {
-		height: 40px; /* 画像のサイズ（高さを調整可能） */
+		height: 48px; /* ヘッダー内のロゴサイズ */
 		width: auto;
 		object-fit: contain;
 	}
-	.logo-text {
-		font-weight: 900;
-		color: var(--primary);
-		font-size: 1.15rem;
-		letter-spacing: -0.01em;
-		white-space: nowrap;
-	}
-
 	.nav {
 		display: flex;
 		gap: 1.5rem;
