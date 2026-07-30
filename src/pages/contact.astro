@@ -7,14 +7,65 @@ import Layout from '../layouts/Layout.astro';
 		<section class="page-header">
 			<div class="container">
 				<h1>CONTACT</h1>
-				<p>お問い合わせ</p>
+				<p>お問い合わせ・よくある質問</p>
 			</div>
 		</section>
 
 		<section class="section">
 			<div class="container flex-container">
+				
 				<div class="card">
-					<h2>主催・運営組織</h2>
+					<h2>❓ よくある質問（FAQ）</h2>
+					
+					<div class="faq-list">
+						<div class="faq-item">
+							<div class="faq-q">
+								<span class="q-badge">Q</span>
+								<h3>イベントへの入場料はかかりますか？</h3>
+							</div>
+							<div class="faq-a">
+								<span class="a-badge">A</span>
+								<p>完全無料です。名護市内の小中高生・保護者・ご家族をはじめ、どなたでもお気軽にご来場いただけます。</p>
+							</div>
+						</div>
+
+						<div class="faq-item">
+							<div class="faq-q">
+								<span class="q-badge">Q</span>
+								<h3>事前申し込みや予約は必要ですか？</h3>
+							</div>
+							<div class="faq-a">
+								<span class="a-badge">A</span>
+								<p>基本的には事前予約なしでご参加いただけます。一部の体験型ワークショップ等で事前予約が必要になる場合は、本サイトや公式Instagramにて順次ご案内いたします。</p>
+							</div>
+						</div>
+
+						<div class="faq-item">
+							<div class="faq-q">
+								<span class="q-badge">Q</span>
+								<h3>会場に駐車場や駐輪場はありますか？</h3>
+							</div>
+							<div class="faq-a">
+								<span class="a-badge">A</span>
+								<p>会場施設（MsiX）および周辺に駐車場・駐輪場がございます。混雑が予想されますので、可能な限り公共交通機関やお車での乗り合わせにご協力をお願いいたします。</p>
+							</div>
+						</div>
+
+						<div class="faq-item">
+							<div class="faq-q">
+								<span class="q-badge">Q</span>
+								<h3>取材や協賛・出店に関する相談はどこからすればいいですか？</h3>
+							</div>
+							<div class="faq-a">
+								<span class="a-badge">A</span>
+								<p>以下の「お問い合わせ」セクションに記載のメールアドレスまでご連絡ください。担当者より順次返信させていただきます。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<h2>主催・運営組織とお問い合わせ</h2>
 					
 					<div class="profile-box">
 						<dl class="profile-dl">
@@ -38,13 +89,14 @@ import Layout from '../layouts/Layout.astro';
 						</a>
 					</div>
 				</div>
+
 			</div>
 		</section>
 	</main>
 </Layout>
 
 <style>
-	/* ヘッダーセクション（ABOUTと統一） */
+	/* ヘッダーセクション（他ページと統一） */
 	.page-header {
 		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
 		color: white;
@@ -72,13 +124,13 @@ import Layout from '../layouts/Layout.astro';
 		gap: 2.5rem;
 	}
 
-	/* メインカード（ABOUTと角丸・シャドウ・余白を統一） */
+	/* メインカード（他ページと 1000px 幅・影・余白を統一） */
 	.card {
 		background: white;
 		border-radius: 16px;
-		padding: 2.5rem 2rem;
+		padding: 2.5rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid #f1f5f9;
@@ -92,16 +144,84 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 700;
 	}
 
-	/* 組織概要リスト（ABOUTのプロフィール表記スタイルと共通化） */
+	/* ✨ FAQ スタイル ✨ */
+	.faq-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+	.faq-item {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		padding: 1.25rem 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.faq-q {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+	.q-badge {
+		background: #0284c7;
+		color: #ffffff;
+		font-weight: 800;
+		font-size: 0.85rem;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		margin-top: 0.1rem;
+	}
+	.faq-q h3 {
+		font-size: 1.05rem;
+		color: #0f172a;
+		font-weight: 700;
+		line-height: 1.5;
+	}
+
+	.faq-a {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding-top: 0.5rem;
+		border-top: 1px dashed #cbd5e1;
+	}
+	.a-badge {
+		background: #e0f2fe;
+		color: #0369a1;
+		font-weight: 800;
+		font-size: 0.85rem;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		margin-top: 0.1rem;
+	}
+	.faq-a p {
+		color: #475569;
+		font-size: 0.95rem;
+		line-height: 1.7;
+	}
+
+	/* 組織概要リスト */
 	.profile-box {
 		margin-bottom: 2rem;
 	}
 	.profile-dl {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 1.25rem;
 		background: #f8fafc;
-		padding: 1.25rem;
+		padding: 1.25rem 1.5rem;
 		border-radius: 12px;
 		border: 1px solid #e2e8f0;
 	}
@@ -118,7 +238,7 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.5;
 	}
 
-	/* お問い合わせボックス（ABOUTのハイライトボックス調に統一） */
+	/* お問い合わせボックス */
 	.contact-box {
 		background: #f0f9ff;
 		border: 1px solid #bae6fd;
@@ -139,7 +259,7 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.7;
 	}
 
-	/* メールアドレスリンク（モダンなボタン風へアップデート） */
+	/* メールアドレスリンク */
 	.email-link {
 		display: inline-block;
 		font-size: 1.05rem;
@@ -163,6 +283,9 @@ import Layout from '../layouts/Layout.astro';
 	@media (max-width: 640px) {
 		.card {
 			padding: 1.75rem 1.25rem;
+		}
+		.faq-item {
+			padding: 1rem;
 		}
 		.contact-box {
 			padding: 1.5rem 1rem;
