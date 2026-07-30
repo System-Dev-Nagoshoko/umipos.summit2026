@@ -5,6 +5,18 @@ interface Props {
 
 const { title } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
+
+// 現在表示しているページのパスを取得
+const currentPath = Astro.url.pathname;
+
+// アクティブ判定関数（末尾スラッシュやベースURLの違いに対応）
+const isActive = (path: string) => {
+	const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
+	if (path === '') {
+		return currentPath === baseUrl || currentPath === `${baseUrl}/`;
+	}
+	return currentPath.includes(target);
+};
 ---
 
 <!doctype html>
@@ -31,10 +43,30 @@ const baseUrl = import.meta.env.BASE_URL;
 				</a>
 
 				<nav class="nav">
-					<a href={baseUrl} class="nav-item">TOP</a>
-					<a href={`${baseUrl}about/`} class="nav-item">ABOUT</a>
-					<a href={`${baseUrl}sns/`} class="nav-item">SNS</a>
-					<a href={`${baseUrl}contact/`} class="nav-item nav-item-cta">CONTACT</a>
+					<a 
+						href={baseUrl} 
+						class:list={["nav-item", { active: isActive('') }]}
+					>
+						TOP
+					</a>
+					<a 
+						href={`${baseUrl}about/`} 
+						class:list={["nav-item", { active: isActive('about') }]}
+					>
+						ABOUT
+					</a>
+					<a 
+						href={`${baseUrl}sns/`} 
+						class:list={["nav-item", { active: isActive('sns') }]}
+					>
+						SNS
+					</a>
+					<a 
+						href={`${baseUrl}contact/`} 
+						class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}
+					>
+						CONTACT
+					</a>
 				</nav>
 			</div>
 		</header>
@@ -96,7 +128,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		padding: 0 1.5rem;
 	}
 
-	/* ヘッダー構造（ガラスモフィズムと浮かび上がるようなシャドウ） */
+	/* ヘッダー構造（ガラスモフィズム） */
 	.site-header {
 		background: rgba(255, 255, 255, 0.85);
 		backdrop-filter: blur(12px);
@@ -147,7 +179,9 @@ const baseUrl = import.meta.env.BASE_URL;
 		align-items: center;
 	}
 
-	.nav-item {
+	/* 通常のナビ項目（訪問済み色の影響を受けないよう統一） */
+	.nav-item,
+	.nav-item:visited {
 		text-decoration: none;
 		color: var(--text-muted);
 		font-weight: 700;
@@ -162,18 +196,32 @@ const baseUrl = import.meta.env.BASE_URL;
 		background-color: var(--accent-bg);
 	}
 
-	/* CONTACTボタンをアクセント調に */
-	.nav-item-cta {
-		background-color: var(--primary);
-		color: #ffffff !important;
+	/* 通常メニューのアクティブ状態（TOP / ABOUT / SNS） */
+	.nav-item.active:not(.nav-item-cta) {
+		color: var(--primary);
+		background-color: #e0f2fe;
+		font-weight: 900;
+	}
+
+	/* CONTACTボタン（通常時はアウトライン風にして「常に選択中」に見えるのを防止） */
+	.nav-item-cta,
+	.nav-item-cta:visited {
+		border: 1.5px solid var(--primary);
+		color: var(--primary) !important;
+		background-color: transparent;
 		margin-left: 0.5rem;
-		box-shadow: 0 2px 10px rgba(2, 132, 199, 0.2);
 	}
 
 	.nav-item-cta:hover {
-		background-color: var(--primary-hover);
-		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+		background-color: var(--accent-bg);
 		transform: translateY(-1px);
+	}
+
+	/* CONTACTページが開いている時のみ塗りつぶし表示 */
+	.nav-item-cta.active {
+		background-color: var(--primary) !important;
+		color: #ffffff !important;
+		box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
 	}
 
 	/* フッター構造 */
