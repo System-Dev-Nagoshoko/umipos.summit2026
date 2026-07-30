@@ -12,7 +12,7 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<section class="section">
-			<div class="container">
+			<div class="container flex-container">
 				<div class="card">
 					<h2>企画の背景と目的</h2>
 					
@@ -30,6 +30,66 @@ import Layout from '../layouts/Layout.astro';
 						<h3>🚀 本イベントの狙い</h3>
 						<p>地元の主体的な中高生（NYC）が中心となり、地域の大人たちや企業、行政と手を取り合うことで、若者主導による新しい地方創生のモデルケースを確立します。</p>
 						<p>絶景のビジネス拠点「名護サンセットオフィス MsiX」を舞台に、最先端のユースカルチャーと地域経済を融合させます。</p>
+					</div>
+				</div>
+
+				<div class="card">
+					<h2>主催団体：Nago city Youth Creative PROJECTs（NYC）</h2>
+					<p class="card-intro">
+						NYCは、名護市の魅力を高校生の視点から発信し、観光促進・地域活性化・若者の地域参画を目的として活動する学生主体の地域PR団体です [cite: 8, 9, 10]。
+					</p>
+
+					<div class="block">
+						<h3>🎯 主な活動目的</h3>
+						<ul class="styled-list">
+							<li>名護市の魅力を若い世代から発信し、新しい視点を提供 [cite: 29]</li>
+							<li>観光促進・地域活性化につながる情報を高校生の感性で創出 [cite: 30]</li>
+							<li>若者が地域とつながり、地域に貢献するきっかけ作り [cite: 31]</li>
+							<li>魅力をデジタルコンテンツとして可視化し、継続的に発信する仕組みを構築 [cite: 32]</li>
+						</ul>
+					</div>
+
+					<div class="block">
+						<h3>📌 主な活動内容</h3>
+						<div class="grid-list">
+							<div class="grid-item">
+								<strong>1. 名護フォトコンテスト</strong>
+								<p>中高生対象のフォトコンテスト企画・運営と作品発信 [cite: 14, 15, 16]。</p>
+							</div>
+							<div class="grid-item">
+								<strong>2. 30秒ショート動画PR</strong>
+								<p>スポットや商店街の魅力を高校生目線で撮影・編集・SNS公開 [cite: 17, 18, 19]。</p>
+							</div>
+							<div class="grid-item">
+								<strong>3. 観光ルート案内制作</strong>
+								<p>名所・絶景・飲食店を結ぶ「歩いて楽しめるリアルなルート」を作成 [cite: 20, 21, 22]。</p>
+							</div>
+							<div class="grid-item">
+								<strong>4. 地域コラボ・広報</strong>
+								<p>名護市・地域団体・企業とのコラボ企画やSNS（Instagram/TikTok）を活用した情報発信 [cite: 23, 24, 25, 26]。</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="profile-box">
+						<dl class="profile-dl">
+							<div>
+								<dt>設立</dt>
+								<dd>2025年11月30日 [cite: 1]</dd>
+							</div>
+							<div>
+								<dt>代表者</dt>
+								<dd>高江洲 義心（高校2年） [cite: 3]</dd>
+							</div>
+							<div>
+								<dt>メンバー</dt>
+								<dd>名護市内の名護市中高生複数人 [cite: 4]</dd>
+							</div>
+							<div>
+								<dt>SNS</dt>
+								<dd>Instagram: <a href="https://instagram.com/nago.creativep" target="_blank" rel="noopener">@nago.creativep</a> [cite: 5]</dd>
+							</div>
+						</dl>
 					</div>
 				</div>
 			</div>
@@ -56,6 +116,11 @@ import Layout from '../layouts/Layout.astro';
 	.section {
 		padding: 3rem 0;
 	}
+	.flex-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
 	.card {
 		background: white;
 		border-radius: 16px;
@@ -63,6 +128,7 @@ import Layout from '../layouts/Layout.astro';
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
 		max-width: 800px;
 		margin: 0 auto;
+		width: 100%;
 		border: 1px solid #f1f5f9;
 	}
 	.card h2 {
@@ -70,6 +136,11 @@ import Layout from '../layouts/Layout.astro';
 		color: #0f172a;
 		border-bottom: 2px solid #bae6fd;
 		padding-bottom: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+	.card-intro {
+		color: #334155;
+		line-height: 1.8;
 		margin-bottom: 1.5rem;
 	}
 	.block {
@@ -89,5 +160,81 @@ import Layout from '../layouts/Layout.astro';
 		border: 1px solid #bae6fd;
 		padding: 1.5rem;
 		border-radius: 12px;
+	}
+	.highlight-block p + p {
+		margin-top: 0.75rem;
+	}
+
+	/* リストスタイル */
+	.styled-list {
+		list-style: none;
+		padding-left: 0;
+	}
+	.styled-list li {
+		position: relative;
+		padding-left: 1.25rem;
+		color: #475569;
+		line-height: 1.7;
+		margin-bottom: 0.4rem;
+	}
+	.styled-list li::before {
+		content: "•";
+		color: #0284c7;
+		font-weight: bold;
+		position: absolute;
+		left: 0.25rem;
+	}
+
+	/* グリッド風の活動内容 */
+	.grid-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 1rem;
+		margin-top: 0.75rem;
+	}
+	.grid-item {
+		background: #f8fafc;
+		padding: 1rem;
+		border-radius: 8px;
+		border: 1px solid #e2e8f0;
+	}
+	.grid-item strong {
+		display: block;
+		color: #0369a1;
+		font-size: 0.95rem;
+		margin-bottom: 0.25rem;
+	}
+	.grid-item p {
+		font-size: 0.875rem;
+		line-height: 1.5;
+	}
+
+	/* 団体プロフィール欄 */
+	.profile-box {
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px dashed #cbd5e1;
+	}
+	.profile-dl {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 1rem;
+	}
+	.profile-dl dt {
+		font-size: 0.8rem;
+		color: #64748b;
+		font-weight: bold;
+	}
+	.profile-dl dd {
+		font-size: 0.95rem;
+		color: #0f172a;
+		font-weight: 500;
+	}
+	.profile-dl a {
+		color: #0284c7;
+		text-decoration: none;
+	}
+	.profile-dl a:hover {
+		text-decoration: underline;
 	}
 </style>
