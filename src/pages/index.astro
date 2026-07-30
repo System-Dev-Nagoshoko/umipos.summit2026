@@ -213,6 +213,12 @@ import Layout from '../layouts/Layout.astro';
 		width: 100%;
 		border: 1px solid #f1f5f9;
 	}
+
+	/* ✨ アクセスカードのみ横広（1000px）に拡張 ✨ */
+	.card.access-card {
+		max-width: 1000px;
+	}
+
 	.status-tag {
 		display: inline-block;
 		background: #f0f9ff;
@@ -321,7 +327,7 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.6;
 	}
 
-	/* ✨ 会場アクセス（横型スタイル） ✨ */
+	/* 会場アクセス（横型スタイル） */
 	.access-horizontal-container {
 		display: flex;
 		gap: 1.5rem;
@@ -330,7 +336,7 @@ import Layout from '../layouts/Layout.astro';
 
 	/* 左側テキスト領域 */
 	.access-text-side {
-		flex: 1;
+		flex: 1.1; /* テキスト側を少しだけ広めに */
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
@@ -394,7 +400,7 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0;
 	}
 	.route-box li {
-		font-size: 0.825rem;
+		font-size: 0.85rem;
 		color: #475569;
 		line-height: 1.5;
 		position: relative;
@@ -423,12 +429,12 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	/* スマホ表示対応（縦並びに自動切り替え） */
-	@media (max-width: 768px) {
+	@media (max-width: 860px) {
 		.access-horizontal-container {
 			flex-direction: column;
 		}
 		.access-map-side {
-			min-height: 260px;
+			min-height: 280px;
 		}
 	}
 
