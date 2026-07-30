@@ -15,7 +15,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		<link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 		<title>{title}</title>
 	</head>
 	<body>
@@ -31,10 +31,10 @@ const baseUrl = import.meta.env.BASE_URL;
 				</a>
 
 				<nav class="nav">
-					<a href={baseUrl}>TOP</a>
-					<a href={`${baseUrl}about/`}>ABOUT</a>
-					<a href={`${baseUrl}sns/`}>SNS</a>
-					<a href={`${baseUrl}contact/`}>CONTACT</a>
+					<a href={baseUrl} class="nav-item">TOP</a>
+					<a href={`${baseUrl}about/`} class="nav-item">ABOUT</a>
+					<a href={`${baseUrl}sns/`} class="nav-item">SNS</a>
+					<a href={`${baseUrl}contact/`} class="nav-item nav-item-cta">CONTACT</a>
 				</nav>
 			</div>
 		</header>
@@ -44,8 +44,8 @@ const baseUrl = import.meta.env.BASE_URL;
 		</main>
 
 		<footer class="site-footer">
-			<div class="container">
-				<p>&copy; 2026 Nago Youth Future Summit & うみぽす甲子園ファイナリストの企画イベント All rights reserved.</p>
+			<div class="container footer-container">
+				<p class="copyright">&copy; 2026 Nago Youth Future Summit & うみぽす甲子園ファイナリストの企画イベント All rights reserved.</p>
 			</div>
 		</footer>
 	</body>
@@ -54,101 +54,166 @@ const baseUrl = import.meta.env.BASE_URL;
 <style is:global>
 	:root {
 		--primary: #0284c7;
-		--text: #0f172a;
-		--bg: #f8fafc;
+		--primary-hover: #0369a1;
+		--accent-bg: #f0f9ff;
+		--text: #1e293b;
+		--text-muted: #64748b;
+		--bg: #fafafa;
+		--border: #e2e8f0;
+		--shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.05);
 	}
+
 	* {
 		box-sizing: border-box;
 		margin: 0;
 		padding: 0;
 	}
+
 	html, body {
 		width: 100%;
 		overflow-x: hidden;
 	}
+
 	body {
-		font-family: 'Noto Sans JP', sans-serif;
+		font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 		color: var(--text);
 		background: var(--bg);
-		line-height: 1.6;
+		line-height: 1.7;
+		letter-spacing: 0.03em;
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
 	}
+
 	.main-content {
 		flex: 1;
 	}
+
 	.container {
 		width: 100%;
-		max-width: 1000px;
+		max-width: 1100px;
 		margin: 0 auto;
-		padding: 0 1rem;
+		padding: 0 1.5rem;
 	}
 
-	/* ヘッダー構造 */
+	/* ヘッダー構造（ガラスモフィズムと浮かび上がるようなシャドウ） */
 	.site-header {
-		background: #ffffff;
-		border-bottom: 1px solid #e2e8f0;
+		background: rgba(255, 255, 255, 0.85);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-bottom: 1px solid rgba(226, 232, 240, 0.8);
 		position: sticky;
 		top: 0;
 		z-index: 50;
+		transition: all 0.3s ease;
 	}
+
 	.header-container {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.75rem 1rem;
-		gap: 1rem;
+		height: 72px;
 	}
 
 	.logo-link {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		text-decoration: none;
 		flex-shrink: 0;
+		transition: opacity 0.2s ease;
 	}
+
+	.logo-link:hover {
+		opacity: 0.85;
+	}
+
 	.logo-img {
-		height: 36px;
+		height: 38px;
 		width: auto;
 		object-fit: contain;
 	}
+
 	.logo-text {
-		font-weight: 900;
+		font-weight: 700;
 		color: var(--primary);
-		font-size: 1rem;
+		font-size: 1.05rem;
+		letter-spacing: 0.02em;
 	}
 
 	.nav {
 		display: flex;
-		gap: 1rem;
+		gap: 0.5rem;
 		align-items: center;
-		flex-wrap: wrap;
 	}
-	.nav a {
+
+	.nav-item {
 		text-decoration: none;
-		color: #475569;
+		color: var(--text-muted);
 		font-weight: 700;
-		font-size: 0.9rem;
+		font-size: 0.875rem;
+		padding: 0.5rem 1rem;
+		border-radius: 9999px;
+		transition: all 0.2s ease;
 	}
 
-	/* スマホサイズ調整 */
-	@media (max-width: 640px) {
-		.header-container {
-			flex-direction: column;
-			text-align: center;
-		}
-		.nav {
-			justify-content: center;
-		}
+	.nav-item:hover {
+		color: var(--primary);
+		background-color: var(--accent-bg);
 	}
 
+	/* CONTACTボタンをアクセント調に */
+	.nav-item-cta {
+		background-color: var(--primary);
+		color: #ffffff !important;
+		margin-left: 0.5rem;
+		box-shadow: 0 2px 10px rgba(2, 132, 199, 0.2);
+	}
+
+	.nav-item-cta:hover {
+		background-color: var(--primary-hover);
+		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+		transform: translateY(-1px);
+	}
+
+	/* フッター構造 */
 	.site-footer {
 		text-align: center;
-		padding: 2rem 0;
-		color: #64748b;
+		padding: 3rem 0;
+		color: var(--text-muted);
 		font-size: 0.85rem;
-		border-top: 1px solid #e2e8f0;
+		border-top: 1px solid var(--border);
 		background: #ffffff;
+		margin-top: 4rem;
+	}
+
+	.copyright {
+		line-height: 1.8;
+	}
+
+	/* レスポンシブ調整 */
+	@media (max-width: 640px) {
+		.header-container {
+			height: auto;
+			padding-top: 0.875rem;
+			padding-bottom: 0.875rem;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.nav {
+			width: 100%;
+			justify-content: center;
+			gap: 0.25rem;
+		}
+
+		.nav-item {
+			padding: 0.4rem 0.75rem;
+			font-size: 0.8rem;
+		}
+
+		.nav-item-cta {
+			margin-left: 0;
+		}
 	}
 </style>
