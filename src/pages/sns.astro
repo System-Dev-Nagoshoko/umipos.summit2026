@@ -12,25 +12,26 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<section class="section">
-			<div class="container">
-				<div class="card-container">
+			<div class="container flex-container">
+				<div class="card">
 					<p class="intro-text">
 						Nago Youth Future Summit 2026 および うみポスに関する最新情報、活動の裏側、記事や動画コンテンツを発信中・順次公開予定です！
 					</p>
 
 					<div class="sns-grid">
-						<a href="https://www.instagram.com/nagocity_yc/" target="_blank" rel="noopener noreferrer" class="sns-card instagram">
+						<a href="https://www.instagram.com/nago.creativep" target="_blank" rel="noopener noreferrer" class="sns-card instagram">
 							<div class="sns-icon">📸</div>
 							<div class="sns-info">
 								<div class="sns-header">
 									<h3>Nago city Youth Creative Instagram</h3>
 									<span class="badge active">公式</span>
 								</div>
+								<p class="sns-id">@nago.creativep</p>
 							</div>
 							<span class="arrow">↗</span>
 						</a>
 
-						<a href="#" class="sns-card instagram disabled">
+						<div class="sns-card instagram disabled">
 							<div class="sns-icon">🌊</div>
 							<div class="sns-info">
 								<div class="sns-header">
@@ -39,9 +40,9 @@ import Layout from '../layouts/Layout.astro';
 								</div>
 							</div>
 							<span class="arrow">🔒</span>
-						</a>
+						</div>
 
-						<a href="#" class="sns-card note disabled">
+						<div class="sns-card note disabled">
 							<div class="sns-icon">📝</div>
 							<div class="sns-info">
 								<div class="sns-header">
@@ -50,9 +51,9 @@ import Layout from '../layouts/Layout.astro';
 								</div>
 							</div>
 							<span class="arrow">🔒</span>
-						</a>
+						</div>
 
-						<a href="#" class="sns-card youtube disabled">
+						<div class="sns-card youtube disabled">
 							<div class="sns-icon">▶️</div>
 							<div class="sns-info">
 								<div class="sns-header">
@@ -61,7 +62,7 @@ import Layout from '../layouts/Layout.astro';
 								</div>
 							</div>
 							<span class="arrow">🔒</span>
-						</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -70,6 +71,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
+	/* ページヘッダー（全ページ共通） */
 	.page-header {
 		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
 		color: white;
@@ -77,32 +79,46 @@ import Layout from '../layouts/Layout.astro';
 		text-align: center;
 	}
 	.page-header h1 {
-		font-size: 2.25rem;
+		font-size: 2.5rem;
 		font-weight: 800;
+		letter-spacing: 0.05em;
 	}
 	.page-header p {
 		color: #93c5fd;
 		font-size: 1rem;
 		margin-top: 0.5rem;
 	}
+
+	/* メインコンテンツ配置 */
 	.section {
 		padding: 3rem 0;
 	}
-	.card-container {
+	.flex-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	/* メインカード */
+	.card {
 		background: white;
 		border-radius: 16px;
 		padding: 2.5rem 2rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
 		max-width: 800px;
 		margin: 0 auto;
+		width: 100%;
 		border: 1px solid #f1f5f9;
 	}
 	.intro-text {
 		text-align: center;
 		color: #475569;
 		line-height: 1.8;
+		font-size: 0.975rem;
 		margin-bottom: 2rem;
 	}
+
+	/* SNSカードグリッド */
 	.sns-grid {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -112,7 +128,7 @@ import Layout from '../layouts/Layout.astro';
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;
-		padding: 1rem 1.25rem;
+		padding: 1.25rem 1.5rem;
 		border-radius: 12px;
 		border: 1px solid #e2e8f0;
 		background: #f8fafc;
@@ -120,15 +136,33 @@ import Layout from '../layouts/Layout.astro';
 		color: inherit;
 		transition: all 0.2s ease;
 	}
-	.sns-card:not(.disabled):hover {
+	a.sns-card:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+		box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
 		border-color: #bae6fd;
 		background: #ffffff;
 	}
 	.sns-card.disabled {
-		opacity: 0.85;
-		cursor: default;
+		opacity: 0.75;
+		cursor: not-allowed;
+	}
+
+	.sns-icon {
+		font-size: 1.5rem;
+		width: 48px;
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #ffffff;
+		border-radius: 10px;
+		border: 1px solid #e2e8f0;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+		flex-shrink: 0;
+	}
+
+	.sns-info {
+		flex: 1;
 	}
 	.sns-header {
 		display: flex;
@@ -136,30 +170,24 @@ import Layout from '../layouts/Layout.astro';
 		gap: 0.75rem;
 		flex-wrap: wrap;
 	}
-	.sns-icon {
-		font-size: 1.5rem;
-		width: 44px;
-		height: 44px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: #ffffff;
-		border-radius: 10px;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-		flex-shrink: 0;
-	}
-	.sns-info {
-		flex: 1;
-	}
 	.sns-info h3 {
 		font-size: 1.05rem;
+		font-weight: 700;
 		color: #0f172a;
 		margin: 0;
 	}
+	.sns-id {
+		font-size: 0.85rem;
+		color: #0284c7;
+		font-weight: 500;
+		margin-top: 0.2rem;
+	}
+
+	/* バッジ */
 	.badge {
 		font-size: 0.75rem;
 		font-weight: 700;
-		padding: 0.2rem 0.6rem;
+		padding: 0.2rem 0.65rem;
 		border-radius: 9999px;
 	}
 	.badge.active {
@@ -171,6 +199,8 @@ import Layout from '../layouts/Layout.astro';
 		color: #64748b;
 		border: 1px solid #cbd5e1;
 	}
+
+	/* 矢印・ロックアイコン */
 	.arrow {
 		font-size: 1.25rem;
 		color: #0284c7;
@@ -179,5 +209,24 @@ import Layout from '../layouts/Layout.astro';
 	.disabled .arrow {
 		color: #94a3b8;
 		font-size: 1rem;
+	}
+
+	/* スマホ表示対応 */
+	@media (max-width: 640px) {
+		.card {
+			padding: 1.75rem 1.25rem;
+		}
+		.sns-card {
+			padding: 1rem;
+			gap: 0.85rem;
+		}
+		.sns-icon {
+			width: 40px;
+			height: 40px;
+			font-size: 1.25rem;
+		}
+		.sns-info h3 {
+			font-size: 0.95rem;
+		}
 	}
 </style>
