@@ -70,7 +70,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 
 					<div class="info-box">
-						<p>📢 プログラムの詳細や出展・参加申し込みなどの最新情報は、本サイトにて順次発表してまいります！</p>
+						<p>📢 プログラムの詳細や出展・参加申し込みなどの最新情報は、本サイトにて順次発表してまいらいします！</p>
 					</div>
 				</div>
 
@@ -202,21 +202,16 @@ import Layout from '../layouts/Layout.astro';
 		gap: 2.5rem;
 	}
 
-	/* カード共通スタイル */
+	/* ✨ 全カード共通で 1000px 幅に統一 ✨ */
 	.card {
 		background: #ffffff;
 		border-radius: 16px;
-		padding: 2.5rem 2rem;
+		padding: 2.5rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid #f1f5f9;
-	}
-
-	/* ✨ アクセスカードのみ横広（1000px）に拡張 ✨ */
-	.card.access-card {
-		max-width: 1000px;
 	}
 
 	.status-tag {
@@ -263,7 +258,7 @@ import Layout from '../layouts/Layout.astro';
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 1.25rem;
 		background: #f8fafc;
-		padding: 1.25rem;
+		padding: 1.5rem;
 		border-radius: 12px;
 		border: 1px solid #e2e8f0;
 	}
@@ -287,14 +282,14 @@ import Layout from '../layouts/Layout.astro';
 	/* 特徴グリッド */
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.25rem;
 		margin-bottom: 2rem;
 	}
 	.grid-card {
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
-		padding: 1.25rem;
+		padding: 1.5rem;
 		border-radius: 12px;
 		transition: all 0.2s ease;
 	}
@@ -311,7 +306,7 @@ import Layout from '../layouts/Layout.astro';
 	.grid-card p {
 		font-size: 0.875rem;
 		color: #475569;
-		line-height: 1.6;
+		line-height: 1.65;
 	}
 
 	/* アナウンスボックス */
@@ -336,7 +331,7 @@ import Layout from '../layouts/Layout.astro';
 
 	/* 左側テキスト領域 */
 	.access-text-side {
-		flex: 1.1; /* テキスト側を少しだけ広めに */
+		flex: 1.1;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
