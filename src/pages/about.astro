@@ -54,7 +54,7 @@ import Layout from '../layouts/Layout.astro';
 						<div class="grid-list">
 							<div class="grid-item">
 								<strong>1. 名護フォトコンテスト</strong>
-								<p>中高生対象のフォトコンテスト企画・運営と作品発信 。</p>
+								<p>中高生対象のフォトコンテスト企画・運営と作品発信。</p>
 							</div>
 							<div class="grid-item">
 								<strong>2. 30秒ショート動画PR</strong>
@@ -94,6 +94,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
+	/* ページヘッダー */
 	.page-header {
 		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
 		color: white;
@@ -103,12 +104,15 @@ import Layout from '../layouts/Layout.astro';
 	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 800;
+		letter-spacing: 0.05em;
 	}
 	.page-header p {
 		color: #93c5fd;
 		font-size: 1rem;
 		margin-top: 0.5rem;
 	}
+
+	/* メインレイアウト */
 	.section {
 		padding: 3rem 0;
 	}
@@ -117,12 +121,14 @@ import Layout from '../layouts/Layout.astro';
 		flex-direction: column;
 		gap: 2.5rem;
 	}
+
+	/* ✨ 全ページで統一した 1000px 幅のカード ✨ */
 	.card {
 		background: white;
 		border-radius: 16px;
-		padding: 2.5rem 2rem;
+		padding: 2.5rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid #f1f5f9;
@@ -133,24 +139,30 @@ import Layout from '../layouts/Layout.astro';
 		border-bottom: 2px solid #bae6fd;
 		padding-bottom: 0.5rem;
 		margin-bottom: 1.5rem;
+		font-weight: 700;
 	}
 	.card-intro {
 		color: #334155;
 		line-height: 1.8;
 		margin-bottom: 1.5rem;
+		font-size: 0.975rem;
 	}
 	.block {
 		margin-bottom: 1.5rem;
 	}
 	.block h3 {
-		font-size: 1.1rem;
+		font-size: 1.15rem;
 		color: #0369a1;
 		margin-bottom: 0.5rem;
+		font-weight: 700;
 	}
 	.block p {
 		color: #475569;
 		line-height: 1.8;
+		font-size: 0.975rem;
 	}
+
+	/* ハイライトボックス */
 	.highlight-block {
 		background: #f0f9ff;
 		border: 1px solid #bae6fd;
@@ -172,6 +184,7 @@ import Layout from '../layouts/Layout.astro';
 		color: #475569;
 		line-height: 1.7;
 		margin-bottom: 0.4rem;
+		font-size: 0.95rem;
 	}
 	.styled-list li::before {
 		content: "•";
@@ -184,53 +197,68 @@ import Layout from '../layouts/Layout.astro';
 	/* グリッド風の活動内容 */
 	.grid-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 1rem;
 		margin-top: 0.75rem;
 	}
 	.grid-item {
 		background: #f8fafc;
-		padding: 1rem;
-		border-radius: 8px;
+		padding: 1.25rem;
+		border-radius: 12px;
 		border: 1px solid #e2e8f0;
 	}
 	.grid-item strong {
 		display: block;
 		color: #0369a1;
 		font-size: 0.95rem;
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.35rem;
 	}
 	.grid-item p {
 		font-size: 0.875rem;
-		line-height: 1.5;
+		line-height: 1.6;
 	}
 
-	/* 団体プロフィール欄 */
+	/* プロフィールボックス（CONTACT・TOPと同一の構造） */
 	.profile-box {
 		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px dashed #cbd5e1;
 	}
 	.profile-dl {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 1.25rem;
+		background: #f8fafc;
+		padding: 1.25rem 1.5rem;
+		border-radius: 12px;
+		border: 1px solid #e2e8f0;
 	}
 	.profile-dl dt {
-		font-size: 0.8rem;
-		color: #64748b;
-		font-weight: bold;
+		font-size: 0.85rem;
+		color: #0284c7;
+		font-weight: 700;
+		margin-bottom: 0.25rem;
 	}
 	.profile-dl dd {
 		font-size: 0.95rem;
-		color: #0f172a;
+		color: #1e293b;
 		font-weight: 500;
 	}
 	.profile-dl a {
 		color: #0284c7;
 		text-decoration: none;
+		font-weight: 700;
 	}
 	.profile-dl a:hover {
 		text-decoration: underline;
+	}
+
+	/* スマホ表示対応 */
+	@media (max-width: 640px) {
+		.card {
+			padding: 1.75rem 1.25rem;
+		}
+		.profile-dl {
+			grid-template-columns: 1fr;
+			padding: 1rem;
+		}
 	}
 </style>
