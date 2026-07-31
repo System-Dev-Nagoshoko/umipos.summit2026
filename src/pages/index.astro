@@ -47,10 +47,70 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
+				<div class="card blog-card">
+					<div class="blog-header">
+						<h2>📝 最新活動ブログ（明日の地図）</h2>
+						<a 
+							href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/" 
+							target="_blank" 
+							rel="noopener noreferrer" 
+							class="all-posts-link"
+						>
+							ブログ一覧を見る ↗
+						</a>
+					</div>
+
+					<div id="blog-list-container" class="blog-list">
+						<p class="loading-text">最新記事を読み込み中...</p>
+					</div>
+				</div>
+
 			</div>
 		</section>
 	</main>
 </Layout>
+
+<script>
+	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
+	// CORS回避用プロキシ
+	const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+
+	async function fetchLatestPosts() {
+		const container = document.getElementById('blog-list-container');
+		if (!container) return;
+
+		try {
+			const res = await fetch(API_URL);
+			const data = await res.json();
+
+			if (data.status === 'ok' && data.items && data.items.length > 0) {
+				const postsHtml = data.items.slice(0, 3).map((item: any) => {
+					// 日付フォーマット (YYYY.MM.DD)
+					const dateObj = new Date(item.pubDate);
+					const formattedDate = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
+
+					return `
+						<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
+							<div class="blog-date">${formattedDate}</div>
+							<div class="blog-title">${item.title}</div>
+							<div class="blog-arrow">↗</div>
+						</a>
+					`;
+				}).join('');
+
+				container.innerHTML = postsHtml;
+			} else {
+				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
+			}
+		} catch (error) {
+			console.error('RSS読み込みエラー:', error);
+			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
+		}
+	}
+
+	// ページロード時に即時実行
+	fetchLatestPosts();
+</script>
 
 <style>
 	/* ヒーローエリア */
@@ -210,12 +270,103 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.6;
 	}
 
+	/* RSSブログ一覧スタイル */
+	.blog-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.25rem;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.blog-header h2 {
+		margin-bottom: 0;
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+	.all-posts-link {
+		font-size: 0.85rem;
+		color: #0284c7;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.all-posts-link:hover {
+		text-decoration: underline;
+	}
+
+	.blog-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	/* 動的生成されるブログアイテム */
+	:global(.blog-item) {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.25rem;
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 10px;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+	:global(.blog-item:hover) {
+		background: #ffffff;
+		border-color: #bae6fd;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+	}
+	:global(.blog-date) {
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #0284c7;
+		background: #e0f2fe;
+		padding: 0.25rem 0.6rem;
+		border-radius: 6px;
+		flex-shrink: 0;
+	}
+	:global(.blog-title) {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #1e293b;
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	:global(.blog-arrow) {
+		font-weight: bold;
+		color: #0284c7;
+		flex-shrink: 0;
+	}
+
+	.loading-text,
+	.no-posts {
+		color: #64748b;
+		font-size: 0.9rem;
+		text-align: center;
+		padding: 1.5rem 0;
+	}
+
 	@media (max-width: 640px) {
 		.hero-title {
 			font-size: 2.1rem;
 		}
 		.card {
 			padding: 1.75rem 1.25rem;
+		}
+		:global(.blog-item) {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+		:global(.blog-title) {
+			white-space: normal;
+		}
+		:global(.blog-arrow) {
+			display: none;
 		}
 	}
 </style>
