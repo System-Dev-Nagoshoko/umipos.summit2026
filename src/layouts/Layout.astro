@@ -56,6 +56,12 @@ const isActive = (path: string) => {
 						ABOUT
 					</a>
 					<a 
+						href={`${baseUrl}event/`} 
+						class:list={["nav-item", { active: isActive('event') }]}
+					>
+						EVENT
+					</a>
+					<a 
 						href={`${baseUrl}sns/`} 
 						class:list={["nav-item", { active: isActive('sns') }]}
 					>
@@ -77,7 +83,7 @@ const isActive = (path: string) => {
 
 		<footer class="site-footer">
 			<div class="container footer-container">
-				<p class="copyright">&copy; 2026 Nago Youth Future Summit & 海のサインプロジェクト All rights reserved.</p>
+				<p class="copyright">&copy; 2026 海のサインプロジェクト All rights reserved.</p>
 			</div>
 		</footer>
 	</body>
@@ -196,7 +202,7 @@ const isActive = (path: string) => {
 		background-color: var(--accent-bg);
 	}
 
-	/* 通常メニューのアクティブ状態（TOP / ABOUT / SNS） */
+	/* 通常メニューのアクティブ状態（TOP / ABOUT / EVENT / SNS） */
 	.nav-item.active:not(.nav-item-cta) {
 		color: var(--primary);
 		background-color: #e0f2fe;
@@ -253,11 +259,12 @@ const isActive = (path: string) => {
 			width: 100%;
 			justify-content: center;
 			gap: 0.25rem;
+			flex-wrap: wrap;
 		}
 
 		.nav-item {
-			padding: 0.4rem 0.75rem;
-			font-size: 0.8rem;
+			padding: 0.4rem 0.6rem;
+			font-size: 0.775rem;
 		}
 
 		.nav-item-cta {
