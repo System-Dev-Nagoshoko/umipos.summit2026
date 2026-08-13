@@ -78,25 +78,42 @@ import Layout from '../layouts/Layout.astro';
 		const container = document.getElementById('blog-list-container');
 		if (!container) return;
 
-		// キャッシュを一切利かせないためタイムスタンプ付与
 		const cacheBuster = Date.now();
 		
-		// CORS回避用の高速プロキシ（キャッシュを行わず生のXMLを取得）
-		const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`;
+		// 安定性の高い複数のCORSプロキシリスト（1つ目が失敗しても2つ目を自動使用）
+		const proxyServices = [
+			`https://api.allorigins.win/raw?url=${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`,
+			`https://corsproxy.io/?${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`
+		];
+
+		let xmlText = '';
+
+		for (const proxyUrl of proxyServices) {
+			try {
+				const res = await fetch(proxyUrl, { cache: 'no-store' });
+				if (res.ok) {
+					xmlText = await res.text();
+					if (xmlText && xmlText.includes('<item>')) {
+						break; // 正常にXMLが取得できたらループを抜ける
+					}
+				}
+			} catch (e) {
+				console.warn('プロキシエラー、次のプロキシを試行します:', proxyUrl, e);
+			}
+		}
+
+		if (!xmlText) {
+			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
+			return;
+		}
 
 		try {
-			const res = await fetch(proxyUrl, { cache: 'no-store' });
-			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-			
-			const xmlText = await res.text();
-			
-			// XMLをブラウザで直接パース
+			// XMLをブラウザでパース
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
 			const itemElements = Array.from(xmlDoc.querySelectorAll('item'));
 
 			if (itemElements.length > 0) {
-				// 記事データを抽出
 				const posts = itemElements.map((item) => {
 					const title = item.querySelector('title')?.textContent?.trim() || '無題';
 					const link = item.querySelector('link')?.textContent?.trim() || '#';
@@ -114,7 +131,7 @@ import Layout from '../layouts/Layout.astro';
 				// 最新日付順に並び替え
 				posts.sort((a, b) => b.dateObj.getTime() - a.dateObj.getTime());
 
-				// 上位3件をHTMLに挿入
+				// 最大3件表示
 				const postsHtml = posts.slice(0, 3).map((post) => `
 					<a href="${post.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
 						<div class="blog-date">${post.formattedDate}</div>
@@ -128,12 +145,12 @@ import Layout from '../layouts/Layout.astro';
 				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
 			}
 		} catch (error) {
-			console.error('RSS取得・解析エラー:', error);
-			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
+			console.error('XMLパースエラー:', error);
+			container.innerHTML = '<p class="no-posts">記事の解析に失敗しました。</p>';
 		}
 	}
 
-	// ページアクセス時に取得
+	// アクセス時に実行
 	fetchLatestPosts();
 </script>
 
