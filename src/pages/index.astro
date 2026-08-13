@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// RSSフィードURL
 const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
 
 interface Post {
@@ -13,34 +12,56 @@ interface Post {
 let posts: Post[] = [];
 
 try {
-	// サーバーサイドで直接取得（CORSの影響を受けない）
 	const res = await fetch(RSS_URL, { cache: 'no-store' });
 	if (res.ok) {
 		const xmlText = await res.text();
 
-		// RSSの <item> からタイトル・リンク・日付を抽出
-		const itemMatches = xmlText.match(/<item>[\s\S]*?<\/item>/g) || [];
+		// <item> タグブロックを抽出（大文字小文字・改行に対応）
+		const itemRegex = /<item[\s\S]*?>([\s\S]*?)<\/item>/gi;
+		let match;
 
-		posts = itemMatches.slice(0, 3).map((itemXml) => {
-			const titleMatch = itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) || itemXml.match(/<title>([\s\S]*?)<\/title>/);
-			const linkMatch = itemXml.match(/<link>([\s\S]*?)<\/link>/);
-			const dateMatch = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+		while ((match = itemRegex.exec(xmlText)) !== null && posts.length < 3) {
+			const itemContent = match[1];
 
+			// タイトル取得（CDATAおよび通常のタグ両対応）
+			const titleMatch = itemContent.match(/<title>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/title>/i);
+			let rawTitle = titleMatch ? (titleMatch[1] || titleMatch[2]) : '無題';
+
+			// リンク取得
+			const linkMatch = itemContent.match(/<link>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/link>/i);
+			const rawLink = linkMatch ? (linkMatch[1] || linkMatch[2]) : '#';
+
+			// 公開日付取得
+			const dateMatch = itemContent.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
 			const rawDate = dateMatch ? dateMatch[1] : '';
+
 			let formattedDate = '';
 			if (rawDate) {
 				const d = new Date(rawDate);
-				formattedDate = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+				if (!isNaN(d.getTime())) {
+					formattedDate = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+				}
 			}
 
-			const title = titleMatch ? titleMatch[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim() : '無題';
+			// HTML特殊文字・エスケープのクリーンアップ
+			const cleanTitle = rawTitle
+				.replace(/<!\[CDATA\[/g, '')
+				.replace(/\]\]>/g, '')
+				.replace(/&amp;/g, '&')
+				.replace(/&lt;/g, '<')
+				.replace(/&gt;/g, '>')
+				.replace(/&#8211;/g, '–')
+				.replace(/&#8217;/g, "'")
+				.replace(/&#8220;/g, '"')
+				.replace(/&#8221;/g, '"')
+				.trim();
 
-			return {
-				title,
-				link: linkMatch ? linkMatch[1].trim() : '#',
-				formattedDate,
-			};
-		});
+			posts.push({
+				title: cleanTitle,
+				link: rawLink.trim(),
+				formattedDate
+			});
+		}
 	}
 } catch (e) {
 	console.error('RSSの取得に失敗しました:', e);
@@ -92,7 +113,7 @@ try {
 					</div>
 				</div>
 
-				<!-- 📝 安定・高速に取得される「明日の地図」公式ブログカード -->
+				<!-- 📝 「明日の地図」公式ブログカード -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📝 最新活動ブログ（明日の地図）</h2>
