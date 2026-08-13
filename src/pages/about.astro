@@ -6,15 +6,7 @@ const baseUrl = import.meta.env.BASE_URL;
 <Layout title="ABOUT | 海のサインプロジェクト">
 	<main>
 		<section class="page-header">
-			<div class="container header-inner">
-				<!-- ヘッダーエリアへのロゴ配置 -->
-				<div class="header-logo-wrapper">
-					<img 
-						src={`${baseUrl}logo.png`} 
-						alt="海のサインプロジェクト ロゴ" 
-						class="header-logo-img" 
-					/>
-				</div>
+			<div class="container">
 				<h1>ABOUT</h1>
 				<p>海のサインプロジェクト について</p>
 			</div>
@@ -22,37 +14,47 @@ const baseUrl = import.meta.env.BASE_URL;
 
 		<section class="section">
 			<div class="container flex-container">
-				<div class="card">
-					<h2>プロジェクトの背景と目的</h2>
+				
+				<!-- ブランドカード  -->
+				<div class="card main-card">
 					
-					<div class="block">
-						<h3>🔴 海岸注意看板の課題</h3>
-						<p>普段何気なく目にしている海岸の注意看板。しかし、「文字が小さくて読みづらい」「危険な場所や注意すべきポイントが一目で伝わりにくい」といった課題が存在しています。</p>
+					<!--  ロゴ＆チーム名のフィーチャーエリア  -->
+					<div class="brand-banner">
+						<div class="brand-logo-container">
+							<img 
+								src={`${baseUrl}logo.png`} 
+								alt="海のサインプロジェクト ロゴ" 
+								class="brand-logo-img" 
+							/>
+						</div>
+						<div class="brand-text">
+							<span class="brand-sub">海を守る若者たちの挑戦</span>
+							<h2 class="brand-title">海のサインプロジェクト</h2>
+						</div>
 					</div>
 
-					<div class="block">
-						<h3>🔴 「見る看板」から「伝わる看板」へ</h3>
-						<p>事故を未然に防ぐためには、ただ設置されているだけの看板ではなく、子どもからお年寄り、海外から訪れる方まで、誰もが一瞬で直感的に危険を理解できる看板が必要です。</p>
-					</div>
+					<div class="card-content">
+						<div class="block">
+							<h3>🔴 海岸注意看板の課題</h3>
+							<p>普段何気なく目にしている海岸の注意看板。しかし、「文字が小さくて読みづらい」「危険な場所や注意すべきポイントが一目で伝わりにくい」といった課題が存在しています。</p>
+						</div>
 
-					<div class="block highlight-block">
-						<h3>🚀 本プロジェクトの狙い</h3>
-						<p>私たちは実際に名護市の海岸を調査し、危険箇所の把握やデザインの検討を行っています。</p>
-						<p>名護市の美しい海を、地域の方々や観光客の皆さんが「より安全に、安心して笑顔で楽しめる場所」にするため、伝わるデザインの模索・制作に取り組んでいます。</p>
+						<div class="block">
+							<h3>🔴 「見る看板」から「伝わる看板」へ</h3>
+							<p>事故を未然に防ぐためには、ただ設置されているだけの看板ではなく、子どもからお年寄り、海外から訪れる方まで、誰もが一瞬で直感的に危険を理解できる看板が必要です。</p>
+						</div>
+
+						<div class="block highlight-block">
+							<h3>🚀 本プロジェクトの狙い</h3>
+							<p>私たちは実際に名護市の海岸を調査し、危険箇所の把握やデザインの検討を行っています。</p>
+							<p>名護市の美しい海を、地域の方々や観光客の皆さんが「より安全に、安心して笑顔で楽しめる場所」にするため、伝わるデザインの模索・制作に取り組んでいます。</p>
+						</div>
 					</div>
 				</div>
 
-				<div class="card card-with-logo">
-					<!-- ✨ 2. 体制カードへのワンポイントロゴ配置 ✨ -->
-					<div class="card-header-flex">
-						<h2>体制・取り組みについて</h2>
-						<img 
-							src={`${baseUrl}logo.png`} 
-							alt="海のサインプロジェクト ロゴ" 
-							class="card-corner-logo" 
-						/>
-					</div>
-
+				<!-- カード2：体制・取り組み -->
+				<div class="card">
+					<h2>体制・取り組みについて</h2>
 					<p class="card-intro">
 						「うみぽす甲子園2026」のファイナリストとして、名護市の海を守るための活動を展開しています。
 					</p>
@@ -93,7 +95,10 @@ const baseUrl = import.meta.env.BASE_URL;
 						<dl class="profile-dl">
 							<div>
 								<dt>主催</dt>
-								<dd>海のサインプロジェクト</dd>
+								<dd class="dd-with-logo">
+									<span>海のサインプロジェクト</span>
+									<img src={`${baseUrl}logo.png`} alt="ロゴ" class="profile-logo" />
+								</dd>
 							</div>
 							<div>
 								<dt>協力</dt>
@@ -106,6 +111,7 @@ const baseUrl = import.meta.env.BASE_URL;
 						</dl>
 					</div>
 				</div>
+
 			</div>
 		</section>
 	</main>
@@ -116,34 +122,9 @@ const baseUrl = import.meta.env.BASE_URL;
 	.page-header {
 		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
 		color: white;
-		padding: 3.5rem 0 4rem;
+		padding: 4rem 0;
 		text-align: center;
 	}
-	.header-inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	
-	/* ヘッダーロゴのスタイリング */
-	.header-logo-wrapper {
-		width: 72px;
-		height: 72px;
-		background: #ffffff;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 8px;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-		margin-bottom: 1.25rem;
-	}
-	.header-logo-img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-
 	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 800;
@@ -152,7 +133,7 @@ const baseUrl = import.meta.env.BASE_URL;
 	.page-header p {
 		color: #93c5fd;
 		font-size: 1rem;
-		margin-top: 0.25rem;
+		margin-top: 0.5rem;
 	}
 
 	/* メインレイアウト */
@@ -175,26 +156,56 @@ const baseUrl = import.meta.env.BASE_URL;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid #f1f5f9;
+		overflow: hidden;
 	}
 
-	/* カードヘッダー＋ロゴレイアウト */
-	.card-header-flex {
+	/*  ブランドバナー（ロゴフィーチャーセクション）  */
+	.brand-banner {
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
-		border-bottom: 2px solid #bae6fd;
-		padding-bottom: 0.5rem;
-		margin-bottom: 1.5rem;
+		gap: 2rem;
+		background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+		border: 1px solid #bae6fd;
+		padding: 1.75rem 2rem;
+		border-radius: 12px;
+		margin-bottom: 2rem;
 	}
-	.card-header-flex h2 {
-		border-bottom: none;
-		padding-bottom: 0;
-		margin-bottom: 0;
+	.brand-logo-container {
+		width: 110px;
+		height: 110px;
+		background: #ffffff;
+		border-radius: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 12px;
+		box-shadow: 0 4px 15px rgba(2, 132, 199, 0.12);
+		flex-shrink: 0;
 	}
-	.card-corner-logo {
-		height: 42px;
-		width: auto;
+	.brand-logo-img {
+		width: 100%;
+		height: 100%;
 		object-fit: contain;
+	}
+	.brand-text {
+		flex: 1;
+	}
+	.brand-sub {
+		display: inline-block;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #0284c7;
+		margin-bottom: 0.25rem;
+		letter-spacing: 0.05em;
+	}
+	.brand-title {
+		font-size: 1.85rem;
+		font-weight: 900;
+		color: #0f172a;
+		line-height: 1.25;
+		margin: 0;
+		border: none !important;
+		padding: 0 !important;
 	}
 
 	.card h2 {
@@ -308,22 +319,40 @@ const baseUrl = import.meta.env.BASE_URL;
 		font-weight: 500;
 	}
 
-	/* スマホ表示対応 */
+	/* 主催者欄のロゴ */
+	.dd-with-logo {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	.profile-logo {
+		height: 28px;
+		width: auto;
+		object-fit: contain;
+	}
+
+	/*  スマホ表示対応  */
 	@media (max-width: 640px) {
 		.card {
-			padding: 1.75rem 1.25rem;
+			padding: 1.5rem 1.25rem;
+		}
+		.brand-banner {
+			flex-direction: column;
+			text-align: center;
+			gap: 1rem;
+			padding: 1.5rem 1rem;
+		}
+		.brand-logo-container {
+			width: 90px;
+			height: 90px;
+			padding: 10px;
+		}
+		.brand-title {
+			font-size: 1.45rem;
 		}
 		.profile-dl {
 			grid-template-columns: 1fr;
 			padding: 1rem;
-		}
-		.header-logo-wrapper {
-			width: 60px;
-			height: 60px;
-			padding: 6px;
-		}
-		.card-corner-logo {
-			height: 32px;
 		}
 	}
 </style>
