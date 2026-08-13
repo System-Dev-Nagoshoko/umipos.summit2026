@@ -73,12 +73,14 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
-	// CORS回避用プロキシAPI（アクセス時の最新RSSをJSON形式で受け取る）
-	const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
 
 	async function fetchLatestPosts() {
 		const container = document.getElementById('blog-list-container');
 		if (!container) return;
+
+		// キャッシュ回避のため現在時刻のタイムスタンプを付与
+		const cacheBuster = new Date().getTime();
+		const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`;
 
 		try {
 			const res = await fetch(API_URL);
@@ -86,7 +88,6 @@ import Layout from '../layouts/Layout.astro';
 
 			if (data.status === 'ok' && data.items && data.items.length > 0) {
 				const postsHtml = data.items.slice(0, 3).map((item: any) => {
-					// 日付フォーマット (YYYY.MM.DD)
 					const dateObj = new Date(item.pubDate);
 					const formattedDate = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
 
@@ -101,15 +102,56 @@ import Layout from '../layouts/Layout.astro';
 
 				container.innerHTML = postsHtml;
 			} else {
-				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
+				// バックアップ：直接XMLを取得して解析
+				await fetchDirectXML(container);
 			}
 		} catch (error) {
-			console.error('RSS読み込みエラー:', error);
+			console.error('RSS JSON読み込みエラー、直接パースを試みます:', error);
+			await fetchDirectXML(container);
+		}
+	}
+
+	// フォールバック：直接RSSを取得してDOMParserで記事抽出
+	async function fetchDirectXML(container: HTMLElement) {
+		try {
+			const cacheBuster = new Date().getTime();
+			const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`);
+			const xmlText = await res.text();
+			const parser = new DOMParser();
+			const xml = parser.parseFromString(xmlText, 'text/xml');
+			const items = Array.from(xml.querySelectorAll('item')).slice(0, 3);
+
+			if (items.length > 0) {
+				const postsHtml = items.map((item) => {
+					const title = item.querySelector('title')?.textContent || '無題';
+					const link = item.querySelector('link')?.textContent || '#';
+					const pubDateText = item.querySelector('pubDate')?.textContent || '';
+					
+					let formattedDate = '';
+					if (pubDateText) {
+						const dateObj = new Date(pubDateText);
+						formattedDate = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
+					}
+
+					return `
+						<a href="${link}" target="_blank" rel="noopener noreferrer" class="blog-item">
+							<div class="blog-date">${formattedDate}</div>
+							<div class="blog-title">${title}</div>
+							<div class="blog-arrow">↗</div>
+						</a>
+					`;
+				}).join('');
+
+				container.innerHTML = postsHtml;
+			} else {
+				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
+			}
+		} catch (e) {
+			console.error('直接パースエラー:', e);
 			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
 		}
 	}
 
-	// 画面読み込み時に即時実行
 	fetchLatestPosts();
 </script>
 
