@@ -47,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
-				<!-- 📝 リアルタイム自動更新される「明日の地図」公式ブログカード -->
+				<!-- 📝 リアルタイム即時反映される「明日の地図」公式ブログカード -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📝 最新活動ブログ（明日の地図）</h2>
@@ -78,80 +78,62 @@ import Layout from '../layouts/Layout.astro';
 		const container = document.getElementById('blog-list-container');
 		if (!container) return;
 
-		// キャッシュ回避のため現在時刻のタイムスタンプを付与
-		const cacheBuster = new Date().getTime();
-		const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`;
+		// キャッシュを一切利かせないためタイムスタンプ付与
+		const cacheBuster = Date.now();
+		
+		// CORS回避用の高速プロキシ（キャッシュを行わず生のXMLを取得）
+		const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`;
 
 		try {
-			const res = await fetch(API_URL);
-			const data = await res.json();
-
-			if (data.status === 'ok' && data.items && data.items.length > 0) {
-				const postsHtml = data.items.slice(0, 3).map((item: any) => {
-					const dateObj = new Date(item.pubDate);
-					const formattedDate = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
-
-					return `
-						<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
-							<div class="blog-date">${formattedDate}</div>
-							<div class="blog-title">${item.title}</div>
-							<div class="blog-arrow">↗</div>
-						</a>
-					`;
-				}).join('');
-
-				container.innerHTML = postsHtml;
-			} else {
-				// バックアップ：直接XMLを取得して解析
-				await fetchDirectXML(container);
-			}
-		} catch (error) {
-			console.error('RSS JSON読み込みエラー、直接パースを試みます:', error);
-			await fetchDirectXML(container);
-		}
-	}
-
-	// フォールバック：直接RSSを取得してDOMParserで記事抽出
-	async function fetchDirectXML(container: HTMLElement) {
-		try {
-			const cacheBuster = new Date().getTime();
-			const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(RSS_URL)}&_t=${cacheBuster}`);
+			const res = await fetch(proxyUrl, { cache: 'no-store' });
+			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+			
 			const xmlText = await res.text();
+			
+			// XMLをブラウザで直接パース
 			const parser = new DOMParser();
-			const xml = parser.parseFromString(xmlText, 'text/xml');
-			const items = Array.from(xml.querySelectorAll('item')).slice(0, 3);
+			const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+			const itemElements = Array.from(xmlDoc.querySelectorAll('item'));
 
-			if (items.length > 0) {
-				const postsHtml = items.map((item) => {
-					const title = item.querySelector('title')?.textContent || '無題';
-					const link = item.querySelector('link')?.textContent || '#';
-					const pubDateText = item.querySelector('pubDate')?.textContent || '';
-					
+			if (itemElements.length > 0) {
+				// 記事データを抽出
+				const posts = itemElements.map((item) => {
+					const title = item.querySelector('title')?.textContent?.trim() || '無題';
+					const link = item.querySelector('link')?.textContent?.trim() || '#';
+					const pubDateStr = item.querySelector('pubDate')?.textContent?.trim() || '';
+
 					let formattedDate = '';
-					if (pubDateText) {
-						const dateObj = new Date(pubDateText);
+					let dateObj = new Date(pubDateStr);
+					if (!isNaN(dateObj.getTime())) {
 						formattedDate = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
 					}
 
-					return `
-						<a href="${link}" target="_blank" rel="noopener noreferrer" class="blog-item">
-							<div class="blog-date">${formattedDate}</div>
-							<div class="blog-title">${title}</div>
-							<div class="blog-arrow">↗</div>
-						</a>
-					`;
-				}).join('');
+					return { title, link, dateObj, formattedDate };
+				});
+
+				// 最新日付順に並び替え
+				posts.sort((a, b) => b.dateObj.getTime() - a.dateObj.getTime());
+
+				// 上位3件をHTMLに挿入
+				const postsHtml = posts.slice(0, 3).map((post) => `
+					<a href="${post.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
+						<div class="blog-date">${post.formattedDate}</div>
+						<div class="blog-title">${post.title}</div>
+						<div class="blog-arrow">↗</div>
+					</a>
+				`).join('');
 
 				container.innerHTML = postsHtml;
 			} else {
 				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
 			}
-		} catch (e) {
-			console.error('直接パースエラー:', e);
+		} catch (error) {
+			console.error('RSS取得・解析エラー:', error);
 			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
 		}
 	}
 
+	// ページアクセス時に取得
 	fetchLatestPosts();
 </script>
 
