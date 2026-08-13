@@ -1,11 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <Layout title="ABOUT | 海のサインプロジェクト">
 	<main>
 		<section class="page-header">
-			<div class="container">
+			<div class="container header-inner">
+				<!-- ヘッダーエリアへのロゴ配置 -->
+				<div class="header-logo-wrapper">
+					<img 
+						src={`${baseUrl}logo.png`} 
+						alt="海のサインプロジェクト ロゴ" 
+						class="header-logo-img" 
+					/>
+				</div>
 				<h1>ABOUT</h1>
 				<p>海のサインプロジェクト について</p>
 			</div>
@@ -33,8 +42,17 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
-				<div class="card">
-					<h2>体制・取り組みについて</h2>
+				<div class="card card-with-logo">
+					<!-- ✨ 2. 体制カードへのワンポイントロゴ配置 ✨ -->
+					<div class="card-header-flex">
+						<h2>体制・取り組みについて</h2>
+						<img 
+							src={`${baseUrl}logo.png`} 
+							alt="海のサインプロジェクト ロゴ" 
+							class="card-corner-logo" 
+						/>
+					</div>
+
 					<p class="card-intro">
 						「うみぽす甲子園2026」のファイナリストとして、名護市の海を守るための活動を展開しています。
 					</p>
@@ -98,9 +116,34 @@ import Layout from '../layouts/Layout.astro';
 	.page-header {
 		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
 		color: white;
-		padding: 4rem 0;
+		padding: 3.5rem 0 4rem;
 		text-align: center;
 	}
+	.header-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	/* ヘッダーロゴのスタイリング */
+	.header-logo-wrapper {
+		width: 72px;
+		height: 72px;
+		background: #ffffff;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 8px;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+		margin-bottom: 1.25rem;
+	}
+	.header-logo-img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
 	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 800;
@@ -109,7 +152,7 @@ import Layout from '../layouts/Layout.astro';
 	.page-header p {
 		color: #93c5fd;
 		font-size: 1rem;
-		margin-top: 0.5rem;
+		margin-top: 0.25rem;
 	}
 
 	/* メインレイアウト */
@@ -133,6 +176,27 @@ import Layout from '../layouts/Layout.astro';
 		width: 100%;
 		border: 1px solid #f1f5f9;
 	}
+
+	/* カードヘッダー＋ロゴレイアウト */
+	.card-header-flex {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 2px solid #bae6fd;
+		padding-bottom: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+	.card-header-flex h2 {
+		border-bottom: none;
+		padding-bottom: 0;
+		margin-bottom: 0;
+	}
+	.card-corner-logo {
+		height: 42px;
+		width: auto;
+		object-fit: contain;
+	}
+
 	.card h2 {
 		font-size: 1.5rem;
 		color: #0f172a;
@@ -252,6 +316,14 @@ import Layout from '../layouts/Layout.astro';
 		.profile-dl {
 			grid-template-columns: 1fr;
 			padding: 1rem;
+		}
+		.header-logo-wrapper {
+			width: 60px;
+			height: 60px;
+			padding: 6px;
+		}
+		.card-corner-logo {
+			height: 32px;
 		}
 	}
 </style>
