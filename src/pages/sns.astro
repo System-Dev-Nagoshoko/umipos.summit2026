@@ -54,18 +54,6 @@ import Layout from '../layouts/Layout.astro';
 							</div>
 							<span class="arrow">↗</span>
 						</a>
-
-						<div class="sns-card youtube disabled">
-							<div class="sns-icon">▶️</div>
-							<div class="sns-info">
-								<div class="sns-header">
-									<h3>公式 YouTube</h3>
-									<span class="badge coming-soon">開設予定</span>
-								</div>
-								<p class="sns-id">準備中</p>
-							</div>
-							<span class="arrow">🔒</span>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -145,10 +133,6 @@ import Layout from '../layouts/Layout.astro';
 		border-color: #bae6fd;
 		background: #ffffff;
 	}
-	.sns-card.disabled {
-		opacity: 0.75;
-		cursor: not-allowed;
-	}
 
 	.sns-icon {
 		font-size: 1.5rem;
@@ -197,21 +181,12 @@ import Layout from '../layouts/Layout.astro';
 		background: #e0f2fe;
 		color: #0369a1;
 	}
-	.badge.coming-soon {
-		background: #f1f5f9;
-		color: #64748b;
-		border: 1px solid #cbd5e1;
-	}
 
-	/* 矢印・ロックアイコン */
+	/* 矢印アイコン */
 	.arrow {
 		font-size: 1.25rem;
 		color: #0284c7;
 		font-weight: bold;
-	}
-	.disabled .arrow {
-		color: #94a3b8;
-		font-size: 1rem;
 	}
 
 	/* スマホ表示対応 */
