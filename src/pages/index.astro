@@ -47,6 +47,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
+				<!-- 📝 リアルタイム自動更新される「明日の地図」公式ブログカード -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📝 最新活動ブログ（明日の地図）</h2>
@@ -72,7 +73,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
-	// CORS回避用プロキシ
+	// CORS回避用プロキシAPI（アクセス時の最新RSSをJSON形式で受け取る）
 	const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
 
 	async function fetchLatestPosts() {
@@ -108,7 +109,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
-	// ページロード時に即時実行
+	// 画面読み込み時に即時実行
 	fetchLatestPosts();
 </script>
 
