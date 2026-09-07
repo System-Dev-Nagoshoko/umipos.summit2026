@@ -18,7 +18,7 @@ import Layout from '../layouts/Layout.astro';
 				
 				<!-- 🤝 協力・パートナー募集セクション -->
 				<div class="card">
-					<h2>🤝 応援・パートナー団体・企業様募集</h2>
+					<h2>🤝 応援・パートナー募集</h2>
 					<p class="section-desc">
 						「名護の海をもっと安全に、笑顔で楽しめる場所にしたい」という想いに賛同し、活動を後押ししてくださる企業・団体・地域の皆様を募集しています。まだ始まったばかりの挑戦ですが、ぜひ力をお貸しください。
 					</p>
@@ -108,7 +108,15 @@ import Layout from '../layouts/Layout.astro';
 								<dd>うみぽす甲子園2026 ファイナリスト</dd>
 							</div>
 							<div>
-								<dt>協力・連携</dt>
+								<dt>協力団体</dt>
+								<dd>
+									<a href="https://nagoyc.stki.org/" target="_blank" rel="noopener noreferrer" class="partner-link">
+										名護若者未来サミット（Nago Youth Creation）↗
+									</a>
+								</dd>
+							</div>
+							<div>
+								<dt>連携</dt>
 								<dd>名護市内外の連携企業・地域団体の皆様（随時拡大中）</dd>
 							</div>
 						</dl>
@@ -120,7 +128,6 @@ import Layout from '../layouts/Layout.astro';
 							プロジェクトへの応援メッセージ、取材依頼、協賛・設置場所のご相談など、下記アドレスまでお気軽にお送りください。
 						</p>
 						
-						<!-- 件名（subject）をあらかじめセットしてタップしやすく改善 -->
 						<a 
 							href="mailto:nyc.summit.umipos@outlook.jp?subject=%E3%80%90%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E3%80%91%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%AE%9B%E3%81%A6" 
 							class="email-link"
@@ -326,6 +333,18 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 500;
 		line-height: 1.5;
 		margin: 0;
+	}
+	.partner-link {
+		color: #0284c7;
+		text-decoration: none;
+		font-weight: 600;
+		display: inline-flex;
+		align-items: center;
+		transition: color 0.2s ease;
+	}
+	.partner-link:hover {
+		color: #0369a1;
+		text-decoration: underline;
 	}
 
 	/* --- メールお問い合わせボックス --- */
