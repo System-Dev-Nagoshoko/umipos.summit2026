@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// 共催団体（一緒に主催・運営する団体）
+const coOrganizers = [
+  { name: 'Nago city Youth Creative PROJECTs', logo: '/logo.png', url: 'https://www.instagram.com/nago.creativep/' },
+];
+
+// 後援団体・自治体（名義後援・学校関係など）
+const supporters = [
+  { name: '名護市（申請中）', category: '自治体' },
+  { name: '名護市教育委員会（申請予定）', category: '教育' },
+  { name: '地元観光協会・関係団体 様', category: '地域' },
+];
+
+// 協力・協賛企業・団体（資材提供やアドバイス、掲示協力など）
+const partners = [
+  { name: '協力企業・店舗様 A', role: 'ポスター掲示・周知協力', logo: '/logo.png', url: '#' },
+  { name: '協力企業・団体様 B', role: '看板資材・技術協力', logo: '/logo.png', url: '#' },
+];
+
+// 個人サポーター・協力者（アドバイザーや活動協力者など）
+const personalSupporters = [
+  '地域アドバイザー 様',
+  '海岸清掃協力者 有志一同 様',
+  '名護 応援サポーター 様',
+];
+---
+
+<Layout title="連携・後援・協力パートナー | 海のサインプロジェクト">
+  <main class="bg-slate-50 min-h-screen pb-20">
+    
+    <!-- ヒーローヘッダー -->
+    <section class="bg-gradient-to-br from-sky-800 via-sky-700 to-slate-900 text-white py-16 px-4 text-center">
+      <div class="max-w-3xl mx-auto">
+        <span class="inline-block bg-sky-400/20 border border-sky-300/30 text-sky-200 text-xs font-bold px-3 py-1 rounded-full mb-4">
+          PARTNERS & SUPPORTERS
+        </span>
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">
+          連携・後援・協力パートナー
+        </h1>
+        <p class="text-sky-100 text-sm md:text-base leading-relaxed">
+          名護の海を「誰もが安心して楽しめる海」へ。<br class="hidden sm:inline" />
+          当プロジェクトは金銭的な協賛金を集めることは行わず、資材や技術のご協力、周知活動などを通じて地域の皆さまと共に進めています。
+        </p>
+      </div>
+    </section>
+
+    <div class="max-w-4xl mx-auto px-4 -mt-6 space-y-10">
+
+      <!-- ▼ 私たちのポリシー（金銭を受け取らない方針） -->
+      <section class="bg-white rounded-2xl p-6 border border-sky-100 shadow-sm bg-sky-50/30">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg shrink-0">
+            i
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-800 mb-1">支援・ご協力に関する方針</h2>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              高校生主体の探究・地域貢献アクションとして運営しているため、<strong>個人・企業を問わず金銭的な協賛金・支援金の募集は一切行っておりません。</strong>
+              看板の制作アドバイスや資材の提供、ポスターの掲示場所のご提供、活動の周知といった形でのサポートをお願いしております。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ▼ 1. 共催・連携団体セクション -->
+      <section class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+        <div class="text-center mb-6">
+          <span class="text-xs font-bold text-sky-600 tracking-widest uppercase block mb-1">CO-ORGANIZER</span>
+          <h2 class="text-xl font-black text-slate-900">共催・連携団体</h2>
+          <p class="text-slate-500 text-xs mt-1">企画・運営を共に進めているパートナー団体です</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+          {coOrganizers.map((item) => (
+            <a 
+              href={item.url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="flex items-center gap-4 p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:bg-white hover:border-sky-300 hover:shadow-sm transition duration-200"
+            >
+              <img src={item.logo} alt={item.name} class="w-12 h-12 object-contain rounded-lg border border-slate-200 bg-white p-1" />
+              <div class="text-left">
+                <span class="text-[10px] font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded border border-sky-100">共催</span>
+                <h3 class="text-sm font-bold text-slate-800 mt-1">{item.name}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- ▼ 2. 後援（自治体・教育委員会・メディアなど）セクション -->
+      <section class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+        <div class="text-center mb-6">
+          <span class="text-xs font-bold text-sky-600 tracking-widest uppercase block mb-1">ENDORSEMENT</span>
+          <h2 class="text-xl font-black text-slate-900">後援</h2>
+          <p class="text-slate-500 text-xs mt-1">本プロジェクトの趣旨にご賛同・後援いただいている機関・団体です</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {supporters.map((item) => (
+            <div class="flex items-center justify-between p-3.5 border border-slate-100 rounded-xl bg-slate-50">
+              <span class="text-xs font-bold text-slate-800">{item.name}</span>
+              <span class="text-[10px] text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded font-mono">
+                {item.category}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ▼ 3. 協力企業・地域団体（物品・技術・周知協力など） -->
+      <section class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm">
+        <div class="text-center mb-6">
+          <span class="text-xs font-bold text-sky-600 tracking-widest uppercase block mb-1">COOPERATION</span>
+          <h2 class="text-xl font-black text-slate-900">協力企業・地域パートナー</h2>
+          <p class="text-slate-500 text-xs mt-1">資材や専門的な知見のご提供、周知協力などで支えてくださっている皆様です</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          {partners.map((partner) => (
+            <div class="flex items-center gap-3 p-4 border border-slate-100 rounded-xl bg-slate-50/50">
+              <img src={partner.logo} alt={partner.name} class="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-white p-1" />
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">{partner.name}</h3>
+                <p class="text-[11px] text-sky-600 font-medium">{partner.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- 個人協力者・サポーター枠 -->
+        <div class="border-t border-slate-100 pt-6">
+          <div class="text-center mb-4">
+            <h3 class="text-sm font-bold text-slate-700">個人協力者・アドバイザー</h3>
+            <p class="text-slate-400 text-xs mt-0.5">現場調査やアドバイス等でサポートしてくださった皆さま</p>
+          </div>
+          <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+            {personalSupporters.map((supporter) => (
+              <span class="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded-md font-medium">
+                {supporter}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ▼ 4. 協力・連携のお問い合わせ（金銭以外の協力募集） -->
+      <section class="bg-gradient-to-r from-sky-900 to-slate-900 rounded-2xl p-6 md:p-10 text-white shadow-lg text-center">
+        <h2 class="text-2xl font-bold mb-3">活動へのご協力・後援のご相談</h2>
+        <p class="text-xs md:text-sm text-sky-200 max-w-2xl mx-auto mb-6 leading-relaxed">
+          「看板やポスターを店舗・施設に掲示してもいい」「海の安全に関する知識や専門的なアドバイスができる」「活動を取材したい」など、金銭以外の形での温かい連携やサポートを随時お待ちしております。
+        </p>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+          <a
+            href="https://forms.gle/YOUR_GOOGLE_FORM_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-sky-500 hover:bg-sky-400 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md transition"
+          >
+            ご協力・連携のご連絡フォーム ➔
+          </a>
+          <a
+            href="mailto:contact@nagoyc.stki.org"
+            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm px-6 py-3 rounded-xl backdrop-blur-sm transition"
+          >
+            メールでお問い合わせ
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</Layout>
