@@ -15,7 +15,7 @@ const partners = [
   { 
     name: 'NSF PROJECTs', 
     role: '活動・プロジェクト連携協力', 
-    logo: '/nsf.jpg', // ← ここを /nsf.jpg に更新しました
+    logo: '/nsf.jpg', 
     url: 'https://nsf.stki.org/' 
   },
 ];
@@ -23,3 +23,379 @@ const partners = [
 // 後援団体（※正式決定後に順次追加）
 const supporters: { name: string; category: string }[] = [];
 ---
+
+<Layout title="連携・協力パートナー | 海のサインプロジェクト">
+  <main class="page-wrapper">
+    <!-- ヒーローエリア -->
+    <section class="hero-section">
+      <div class="hero-inner">
+        <span class="sub-badge">PARTNERS & SUPPORTERS</span>
+        <h1 class="page-title">連携・協力パートナー</h1>
+        <p class="hero-desc">
+          名護の海を「誰もが安心して楽しめる海」へ。<br />
+          当プロジェクトは金銭的な協賛金を集めることは行わず、資材や技術のご協力、周知活動などを通じて地域のパートナーの皆さまと共に進めています。
+        </p>
+      </div>
+    </section>
+
+    <div class="content-container">
+      <!-- ポリシー -->
+      <section class="policy-card">
+        <div class="info-icon">i</div>
+        <div class="policy-text">
+          <h2>支援・ご協力に関する方針</h2>
+          <p>
+            高校生主体の探究・地域貢献アクションとして運営しているため、<strong>個人・企業を問わず金銭的な協賛金・支援金の募集は一切行っておりません。</strong>
+            看板の制作アドバイスや資材の提供、ポスターの掲示場所のご提供、活動の周知といった形でのサポートをお願いしております。
+          </p>
+        </div>
+      </section>
+
+      <!-- 共催団体 -->
+      <section class="card">
+        <div class="card-header">
+          <span class="section-label">CO-ORGANIZER</span>
+          <h2>共催・連携団体</h2>
+          <p class="section-sub">企画・運営を共に進めているパートナー団体です</p>
+        </div>
+        <div class="partner-grid">
+          {coOrganizers.map((item) => (
+            <a href={item.url} target="_blank" rel="noopener noreferrer" class="partner-item">
+              <img src={item.logo} alt={item.name} class="partner-logo" />
+              <div class="partner-info">
+                <span class="tag-role">共催</span>
+                <h3>{item.name}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- 協力パートナー -->
+      <section class="card">
+        <div class="card-header">
+          <span class="section-label">COOPERATION</span>
+          <h2>協力パートナー</h2>
+          <p class="section-sub">活動連携や知見のご提供、周知協力などで支えてくださっているパートナーです</p>
+        </div>
+        <div class="partner-grid">
+          {partners.map((partner) => (
+            <a href={partner.url} target="_blank" rel="noopener noreferrer" class="partner-item">
+              <img src={partner.logo} alt={partner.name} class="partner-logo" />
+              <div class="partner-info">
+                <h3>{partner.name}</h3>
+                <p class="role-text">{partner.role}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- 後援（確定した段階で自動表示） -->
+      {supporters.length > 0 && (
+        <section class="card">
+          <div class="card-header">
+            <span class="section-label">ENDORSEMENT</span>
+            <h2>後援</h2>
+            <p class="section-sub">本プロジェクトの趣旨にご賛同・後援いただいている機関・団体です</p>
+          </div>
+          <div class="supporter-grid">
+            {supporters.map((item) => (
+              <div class="supporter-item">
+                <span class="supporter-name">{item.name}</span>
+                <span class="supporter-cat">{item.category}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- お問い合わせCTA -->
+      <section class="cta-card">
+        <h2>活動へのご協力・連携のご相談</h2>
+        <p>
+          「看板やポスターを店舗・施設に掲示してもいい」「海の安全に関する知識や専門的なアドバイスができる」「活動を取材したい」など、金銭以外の形での温かい連携やサポートを随時お待ちしております。
+        </p>
+        <div class="cta-buttons">
+          <a href="https://forms.gle/YOUR_GOOGLE_FORM_URL" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            ご協力・連携のご連絡フォーム ➔
+          </a>
+          <a href="mailto:contact@nagoyc.stki.org" class="btn-secondary">
+            メールでお問い合わせ
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .page-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    padding-bottom: 5rem;
+  }
+
+  /* ヒーローエリア */
+  .hero-section {
+    background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 50%, #0f172a 100%);
+    color: white;
+    padding: 4rem 1.5rem 5.5rem;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .sub-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.25rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .hero-desc {
+    color: #bae6fd;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* コンテンツ配置 */
+  .content-container {
+    max-width: 900px;
+    margin: -3rem auto 0;
+    padding: 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ポリシー */
+  .policy-card {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .info-icon {
+    width: 36px;
+    height: 36px;
+    background: #0284c7;
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .policy-text h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0369a1;
+    margin-bottom: 0.35rem;
+  }
+  .policy-text p {
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.65;
+  }
+
+  /* 一般カード */
+  .card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  }
+  .card-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+  .section-label {
+    color: #0284c7;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .card-header h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+  }
+  .section-sub {
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  /* パートナーリスト */
+  .partner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .partner-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+  .partner-item:hover {
+    background: white;
+    border-color: #7dd3fc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+  }
+  .partner-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+  .tag-role {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+  .partner-info h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .role-text {
+    font-size: 0.75rem;
+    color: #0284c7;
+    font-weight: 600;
+    margin-top: 0.15rem;
+  }
+
+  /* 後援グリッド */
+  .supporter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .supporter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+  }
+  .supporter-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .supporter-cat {
+    font-size: 0.7rem;
+    color: #64748b;
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  /* CTA */
+  .cta-card {
+    background: linear-gradient(135deg, #0369a1 0%, #0f172a 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+  }
+  .cta-card h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+  }
+  .cta-card p {
+    font-size: 0.85rem;
+    color: #bae6fd;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 0 auto 1.5rem;
+  }
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover {
+    background: #7dd3fc;
+  }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    .page-title {
+      font-size: 1.75rem;
+    }
+    .card {
+      padding: 1.25rem;
+    }
+    .cta-buttons {
+      flex-direction: column;
+    }
+  }
+</style>
