@@ -24,6 +24,7 @@ const isActive = (path: string) => {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="google-site-verification" content="KVn6U5oa5V8dqifZuNdJjkbSLWu8OtQqopHZuMZgKLo" />
 		<link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,6 +61,12 @@ const isActive = (path: string) => {
 						class:list={["nav-item", { active: isActive('event') }]}
 					>
 						EVENT
+					</a>
+					<a 
+						href={`${baseUrl}sponsor/`} 
+						class:list={["nav-item", { active: isActive('sponsor') }]}
+					>
+						PARTNER
 					</a>
 					<a 
 						href={`${baseUrl}sns/`} 
