@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
-		<!-- ヒーローエリア -->
+		<!-- ヒーローエリア: 文字の視認性を極限まで高めたオーシャングラデーション -->
 		<section class="hero">
 			<div class="container hero-inner">
 				<div class="badge">
@@ -13,11 +13,10 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				
 				<div class="hero-text-wrap">
-					<p class="hero-subline">
-						「見る看板」から
-					</p>
-					<h1 class="hero-mainline">
-						「<span class="contrast-blue">伝わる看板</span>」へ
+					<!-- 同サイズ・1セットの対比キャッチコピー -->
+					<h1 class="hero-catch-title">
+						<span class="line-from">「見る看板」から</span>
+						<span class="line-to">「<span class="highlight-aqua">伝わる看板</span>」へ</span>
 					</h1>
 					<p class="hero-caption">
 						名護の海を守る「海のサインプロジェクト」始動！
@@ -122,9 +121,10 @@ import Layout from '../layouts/Layout.astro';
 </script>
 
 <style>
-	/* ヒーローエリア */
+	/* ヒーローエリア: 白文字の視認性が最も際立つディープオーシャングラデーション */
 	.hero {
-		background: radial-gradient(circle at 50% 15%, #0f2438 0%, #09131d 75%, #04080e 100%);
+		background: radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%);
+		color: #ffffff;
 		padding: 5rem 1.25rem 6.5rem;
 		text-align: center;
 		position: relative;
@@ -133,7 +133,7 @@ import Layout from '../layouts/Layout.astro';
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		max-width: 860px;
+		max-width: 880px;
 		margin: 0 auto;
 	}
 
@@ -142,21 +142,25 @@ import Layout from '../layouts/Layout.astro';
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(255, 255, 255, 0.08);
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		padding: 0.35rem 1rem;
+		background: rgba(255, 255, 255, 0.12);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border: 1px solid rgba(255, 255, 255, 0.25);
+		padding: 0.4rem 1.15rem;
 		border-radius: 9999px;
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: #cbd5e1;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #ffffff;
 		letter-spacing: 0.04em;
 		margin-bottom: 2rem;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 	}
 	.badge-dot {
-		width: 7px;
-		height: 7px;
+		width: 8px;
+		height: 8px;
 		background-color: #38bdf8;
 		border-radius: 50%;
+		box-shadow: 0 0 8px #38bdf8;
 	}
 
 	/* キャッチコピー文字エリア */
@@ -164,71 +168,58 @@ import Layout from '../layouts/Layout.astro';
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.4rem;
+		gap: 0.85rem;
 	}
 
-	/* 1行目: オフホワイトで素直に読ませる */
-	.hero-subline {
-		font-size: clamp(1.2rem, 3vw, 1.55rem);
-		font-weight: 600;
-		color: #e2e8f0;
-		letter-spacing: 0.04em;
-		margin: 0;
-	}
-
-	/* 2行目 */
-	.hero-mainline {
-		font-size: clamp(2.3rem, 6vw, 3.6rem);
+	/* 1セットの見出し（上下ともに完全に同じフォントサイズ） */
+	.hero-catch-title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: clamp(2.1rem, 5.5vw, 3.3rem);
 		font-weight: 900;
-		color: #ffffff;
-		line-height: 1.25;
-		margin: 0.25rem 0 0.75rem;
+		line-height: 1.35;
+		margin: 0;
 		letter-spacing: 0.02em;
+		color: #ffffff;
+		/* 視認性を補強する落ち着いたドロップシャドウ */
+		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.6);
 	}
 
-	/* ▼ 青文字 ＋ 背後に反対色（アンバー・オレンジ）のバックライト演出 ▼ */
-	.contrast-blue {
+	/* 1行目: まとまりを感じるソフトホワイト */
+	.line-from {
+		color: #f0f9ff;
+	}
+
+	/* 2行目: クリアな純白 */
+	.line-to {
+		color: #ffffff;
+	}
+
+	/* 「伝わる看板」のアクセント: 文字の可読性を損なわない爽やかな下線グラデーション */
+	.highlight-aqua {
 		position: relative;
 		display: inline-block;
-		color: #38bdf8; /* 清涼感のあるオーシャンブルー */
-		font-weight: 900;
-		/* 青の反対色（オレンジ・アンバー）の柔らかな多重シャドウで文字輪郭を際立たせる */
-		text-shadow: 
-			0 0 10px rgba(249, 115, 22, 0.7),
-			0 0 24px rgba(245, 158, 11, 0.5),
-			0 0 45px rgba(234, 88, 12, 0.35);
+		color: #ffffff;
+		background: linear-gradient(transparent 62%, rgba(56, 189, 248, 0.5) 62%, rgba(14, 165, 233, 0.65) 100%);
 		padding: 0 0.15em;
+		border-radius: 2px;
 	}
 
-	/* 文字背後にふんわり敷く反対色のソフトグロー光体 */
-	.contrast-blue::before {
-		content: '';
-		position: absolute;
-		inset: -8% -15%;
-		background: radial-gradient(
-			ellipse at center,
-			rgba(245, 158, 11, 0.32) 0%,
-			rgba(234, 88, 12, 0.15) 50%,
-			transparent 75%
-		);
-		border-radius: 9999px;
-		filter: blur(12px);
-		z-index: -1;
-		pointer-events: none;
-	}
-
-	/* 3行目 */
+	/* サブタイトル */
 	.hero-caption {
-		font-size: clamp(0.95rem, 2.4vw, 1.15rem);
-		font-weight: 600;
-		color: #cbd5e1;
+		font-size: clamp(1rem, 2.4vw, 1.2rem);
+		font-weight: 700;
+		color: #e0f2fe;
 		letter-spacing: 0.03em;
-		margin: 0;
+		margin-top: 0.35rem;
+		text-shadow: 0 1px 4px rgba(8, 47, 73, 0.5);
 	}
 
 	/* メインレイアウト */
 	.section {
-		margin-top: -2.5rem;
+		margin-top: -3rem;
 		padding-bottom: 4rem;
 		position: relative;
 		z-index: 10;
@@ -236,15 +227,15 @@ import Layout from '../layouts/Layout.astro';
 	.flex-container {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 2.25rem;
 	}
 
 	.card {
 		background: #ffffff;
-		border-radius: 14px;
-		padding: 2.25rem;
-		box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-		max-width: 960px;
+		border-radius: 16px;
+		padding: 2.5rem;
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid #e2e8f0;
@@ -253,7 +244,7 @@ import Layout from '../layouts/Layout.astro';
 	.status-tag {
 		display: inline-block;
 		background: #f0f9ff;
-		color: #0369a1;
+		color: #0284c7;
 		border: 1px solid #bae6fd;
 		font-weight: 700;
 		font-size: 0.75rem;
@@ -262,7 +253,7 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1rem;
 	}
 	.card h2 {
-		font-size: 1.35rem;
+		font-size: 1.45rem;
 		font-weight: 700;
 		margin-bottom: 1rem;
 		color: #0f172a;
@@ -271,7 +262,7 @@ import Layout from '../layouts/Layout.astro';
 		padding-bottom: 0.5rem;
 	}
 	.desc {
-		color: #334155;
+		color: #475569;
 		line-height: 1.8;
 		font-size: 0.975rem;
 		margin-bottom: 1.75rem;
@@ -279,50 +270,50 @@ import Layout from '../layouts/Layout.astro';
 
 	.outline-box {
 		background: #f8fafc;
-		padding: 1.25rem 1.5rem;
-		border-radius: 10px;
+		padding: 1.35rem 1.5rem;
+		border-radius: 12px;
 		border: 1px solid #e2e8f0;
 		margin-bottom: 1.25rem;
 	}
 	.outline-box h3 {
 		font-size: 1.05rem;
-		color: #0369a1;
+		color: #0284c7;
 		margin-bottom: 0.5rem;
 		font-weight: 700;
 	}
 	.box-desc {
 		color: #334155;
 		line-height: 1.75;
-		font-size: 0.925rem;
+		font-size: 0.95rem;
 	}
 
 	.message-box {
 		background: #f0f9ff;
 		border-left: 4px solid #0284c7;
 		padding: 1.25rem 1.5rem;
-		border-radius: 6px;
+		border-radius: 8px;
 		margin-bottom: 1.5rem;
 	}
 	.message-box h3 {
-		font-size: 1rem;
-		color: #0369a1;
+		font-size: 1.05rem;
+		color: #0284c7;
 		margin-bottom: 0.35rem;
 		font-weight: 700;
 	}
 	.message-box p {
 		color: #1e293b;
 		line-height: 1.7;
-		font-size: 0.925rem;
+		font-size: 0.95rem;
 	}
 
 	.info-box {
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
-		border-radius: 10px;
+		border-radius: 12px;
 		padding: 1rem 1.25rem;
-		font-size: 0.9rem;
-		color: #0369a1;
-		font-weight: 600;
+		font-size: 0.925rem;
+		color: #0284c7;
+		font-weight: 700;
 		text-align: center;
 		line-height: 1.6;
 	}
@@ -343,7 +334,7 @@ import Layout from '../layouts/Layout.astro';
 	.all-posts-link {
 		font-size: 0.85rem;
 		color: #0284c7;
-		font-weight: 600;
+		font-weight: 700;
 		text-decoration: none;
 	}
 	.all-posts-link:hover {
@@ -353,36 +344,38 @@ import Layout from '../layouts/Layout.astro';
 	.blog-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.65rem;
+		gap: 0.75rem;
 	}
 
 	:global(.blog-item) {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		padding: 0.85rem 1.15rem;
+		padding: 0.95rem 1.25rem;
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		border-radius: 10px;
 		text-decoration: none;
-		transition: border-color 0.2s, background-color 0.2s;
+		transition: all 0.2s ease;
 	}
 	:global(.blog-item:hover) {
 		background: #ffffff;
 		border-color: #38bdf8;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
 	}
 	:global(.blog-date) {
-		font-size: 0.775rem;
-		font-weight: 600;
-		color: #0369a1;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #0284c7;
 		background: #e0f2fe;
-		padding: 0.2rem 0.55rem;
-		border-radius: 4px;
+		padding: 0.25rem 0.6rem;
+		border-radius: 6px;
 		flex-shrink: 0;
 	}
 	:global(.blog-title) {
-		font-size: 0.925rem;
-		font-weight: 600;
+		font-size: 0.95rem;
+		font-weight: 700;
 		color: #1e293b;
 		flex: 1;
 		white-space: nowrap;
@@ -390,30 +383,33 @@ import Layout from '../layouts/Layout.astro';
 		text-overflow: ellipsis;
 	}
 	:global(.blog-arrow) {
-		color: #64748b;
+		font-weight: bold;
+		color: #0284c7;
 		flex-shrink: 0;
-		font-size: 0.9rem;
 	}
 
 	.loading-text,
 	.no-posts {
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.9rem;
 		text-align: center;
 		padding: 1.5rem 0;
 	}
 
 	@media (max-width: 640px) {
 		.hero {
-			padding: 3.5rem 1rem 5rem;
+			padding: 3.75rem 1rem 5.5rem;
+		}
+		.hero-catch-title {
+			font-size: 1.85rem;
 		}
 		.card {
-			padding: 1.5rem 1rem;
+			padding: 1.6rem 1.15rem;
 		}
 		:global(.blog-item) {
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 0.4rem;
+			gap: 0.45rem;
 		}
 		:global(.blog-title) {
 			white-space: normal;
