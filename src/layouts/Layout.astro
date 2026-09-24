@@ -6,54 +6,31 @@ interface Props {
 const { title } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 
-// 現在のパスを取得
+// 現在表示しているページのパスを取得
 const currentPath = Astro.url.pathname;
 
-// 対応主要言語リスト
-const supportedLanguages = [
-	{ code: 'ja', label: '日本語', prefix: '' },
-	{ code: 'en', label: 'English', prefix: 'en' },
-	{ code: 'zh-tw', label: '繁體中文', prefix: 'zh-tw' },
-	{ code: 'zh-cn', label: '简体中文', prefix: 'zh-cn' },
-	{ code: 'ko', label: '한국어', prefix: 'ko' },
-	{ code: 'es', label: 'Español', prefix: 'es' },
-];
-
-// 現在のロケール判定（URLから判定）
-const pathSegments = currentPath.replace(baseUrl, '').split('/').filter(Boolean);
-const currentLocale = supportedLanguages.some(l => l.code === pathSegments[0]?.toLowerCase())
-	? pathSegments[0].toLowerCase()
-	: 'ja';
-
-// 現在のロケールプレフィックスを除いた基本パスを抽出
-const cleanSegments = currentLocale === 'ja' ? pathSegments : pathSegments.slice(1);
-const rawPagePath = cleanSegments.join('/');
-
-// 各言語への切り替えURLを生成する関数
-const getLocalizedPath = (langPrefix: string) => {
-	const prefixPart = langPrefix ? `${langPrefix}/` : '';
-	const pagePart = rawPagePath ? `${rawPagePath}/` : '';
-	return `${baseUrl}${prefixPart}${pagePart}`.replace(/\/+/g, '/');
-};
-
-// ナビゲーションのアクティブ判定関数
-const isActive = (pageSlug: string) => {
-	if (pageSlug === '') {
-		return rawPagePath === '';
+// アクティブ判定関数
+const isActive = (path: string) => {
+	const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
+	if (path === '') {
+		return currentPath === baseUrl || currentPath === `${baseUrl}/`;
 	}
-	return rawPagePath.startsWith(pageSlug);
+	return currentPath.includes(target);
 };
 
-// ナビリンクURL生成（現在の言語を維持）
-const navUrl = (pageSlug: string) => {
-	const prefixPart = currentLocale === 'ja' ? '' : `${currentLocale}/`;
-	const slugPart = pageSlug ? `${pageSlug}/` : '';
-	return `${baseUrl}${prefixPart}${slugPart}`.replace(/\/+/g, '/');
-};
+// 対応言語リスト
+const languages = [
+	{ code: 'ja', label: '日本語', native: '日本語' },
+	{ code: 'en', label: 'English', native: 'English' },
+	{ code: 'zh-TW', label: '繁體中文', native: '繁體中文' },
+	{ code: 'zh-CN', label: '简体中文', native: '简体中文' },
+	{ code: 'ko', label: '한국어', native: '한국어' },
+	{ code: 'es', label: 'Español', native: 'Español' },
+];
 ---
 
 <!doctype html>
-<html lang={currentLocale}>
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -65,7 +42,7 @@ const navUrl = (pageSlug: string) => {
 		<title>{title}</title>
 	</head>
 	<body>
-		<!-- ▼ クリスタル背景レイヤー ▼ -->
+		<!-- 背景クリスタルレイヤー -->
 		<div class="crystal-background" aria-hidden="true">
 			<div class="crystal-facet facet-1"></div>
 			<div class="crystal-facet facet-2"></div>
@@ -75,7 +52,7 @@ const navUrl = (pageSlug: string) => {
 
 		<header class="site-header">
 			<div class="container header-container">
-				<a href={navUrl('')} class="logo-link">
+				<a href={baseUrl} class="logo-link notranslate">
 					<img 
 						src={`${baseUrl}logo.png`} 
 						alt="Logo" 
@@ -85,8 +62,8 @@ const navUrl = (pageSlug: string) => {
 				</a>
 
 				<!-- 右側アクション（地球マーク言語切替 ＋ モバイル用ハンバーガー） -->
-				<div class="header-right">
-					<!-- 地球マーク 言語切替メニュー -->
+				<div class="header-right notranslate">
+					<!-- 地球マーク 言語切替ボタン -->
 					<div class="lang-switcher" id="langSwitcher">
 						<button 
 							type="button" 
@@ -97,29 +74,31 @@ const navUrl = (pageSlug: string) => {
 							aria-expanded="false"
 						>
 							<span class="globe-icon" aria-hidden="true">🌐</span>
-							<span class="current-lang-text">{currentLocale.toUpperCase()}</span>
+							<span class="current-lang-text" id="currentLangLabel">JA</span>
 							<span class="dropdown-arrow">▾</span>
 						</button>
 
-						<!-- ドロップダウンリンク -->
+						<!-- ドロップダウンメニュー -->
 						<div class="lang-dropdown" id="langDropdown" role="menu">
-							<div class="lang-dropdown-header">LANGUAGE</div>
+							<div class="lang-dropdown-header">LANGUAGE / 言語</div>
 							<div class="lang-list">
-								{supportedLanguages.map((lang) => (
-									<a 
-										href={getLocalizedPath(lang.prefix)}
-										class:list={["lang-option", { active: currentLocale === lang.code }]}
+								{languages.map((lang) => (
+									<button 
+										type="button" 
+										class={`lang-option ${lang.code === 'ja' ? 'active' : ''}`}
+										data-lang={lang.code}
+										data-label={lang.code.toUpperCase().split('-')[0]}
 										role="menuitem"
 									>
-										<span class="lang-name">{lang.label}</span>
+										<span class="lang-name">{lang.native}</span>
 										<span class="lang-code">{lang.code.toUpperCase()}</span>
-									</a>
+									</button>
 								))}
 							</div>
 						</div>
 					</div>
 
-					<!-- ハンバーガー切り替えボタン（モバイル専用） -->
+					<!-- ハンバーガー切り替えボタン（SP専用） -->
 					<button class="hamburger-btn" id="menuToggle" aria-label="メニューを開閉する" aria-expanded="false">
 						<span class="bar"></span>
 						<span class="bar"></span>
@@ -129,13 +108,13 @@ const navUrl = (pageSlug: string) => {
 
 				<!-- ナビゲーションメニュー -->
 				<nav class="nav" id="siteNav">
-					<a href={navUrl('')} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
-					<a href={navUrl('about')} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
-					<a href={navUrl('event')} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
-					<a href={navUrl('sponsor')} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
-					<a href={navUrl('poster')} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
-					<a href={navUrl('sns')} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
-					<a href={navUrl('contact')} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>CONTACT</a>
+					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
+					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
+					<a href={`${baseUrl}event/`} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
+					<a href={`${baseUrl}sponsor/`} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
+					<a href={`${baseUrl}poster/`} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
+					<a href={`${baseUrl}sns/`} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
+					<a href={`${baseUrl}contact/`} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>CONTACT</a>
 				</nav>
 			</div>
 		</header>
@@ -146,15 +125,51 @@ const navUrl = (pageSlug: string) => {
 
 		<footer class="site-footer">
 			<div class="container footer-container">
-				<p class="copyright">&copy; 2026 Nago Youth Future Summit & 海のサインプロジェクト All rights reserved.</p>
+				<p class="copyright notranslate">&copy; 2026 Nago Youth Future Summit & 海のサインプロジェクト All rights reserved.</p>
 			</div>
 		</footer>
 
+		<!-- 隠しGoogle翻訳エレメント -->
+		<div id="google_translate_element" style="display:none !important;"></div>
+		<script type="text/javascript">
+			function googleTranslateElementInit() {
+				// @ts-ignore
+				new google.translate.TranslateElement({
+					pageLanguage: 'ja',
+					includedLanguages: 'ja,en,zh-TW,zh-CN,ko,es',
+					autoDisplay: false
+				}, 'google_translate_element');
+			}
+		</script>
+		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 		<script>
-			// 言語切替ドロップダウンの制御
+			// 言語切替制御
 			const langBtn = document.getElementById('langBtn');
 			const langDropdown = document.getElementById('langDropdown');
 			const langSwitcher = document.getElementById('langSwitcher');
+			const currentLangLabel = document.getElementById('currentLangLabel');
+			const langOptions = document.querySelectorAll('.lang-option');
+
+			// Cookieから言語状態を復元
+			function getCookie(name: string) {
+				const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+				return v ? v[2] : null;
+			}
+
+			const savedLangCookie = getCookie('googtrans');
+			if (savedLangCookie && currentLangLabel) {
+				const langCode = savedLangCookie.split('/')[2];
+				if (langCode) {
+					currentLangLabel.textContent = langCode.toUpperCase().split('-')[0];
+					langOptions.forEach(opt => {
+						if (opt.getAttribute('data-lang') === langCode) {
+							langOptions.forEach(o => o.classList.remove('active'));
+							opt.classList.add('active');
+						}
+					});
+				}
+			}
 
 			if (langBtn && langDropdown) {
 				langBtn.addEventListener('click', (e) => {
@@ -163,12 +178,42 @@ const navUrl = (pageSlug: string) => {
 					langBtn.setAttribute('aria-expanded', String(isOpen));
 				});
 
-				// 外側タップで閉じる
 				document.addEventListener('click', (e) => {
 					if (langSwitcher && !langSwitcher.contains(e.target as Node)) {
 						langDropdown.classList.remove('is-open');
 						langBtn.setAttribute('aria-expanded', 'false');
 					}
+				});
+
+				langOptions.forEach((option) => {
+					option.addEventListener('click', () => {
+						const targetLang = option.getAttribute('data-lang');
+						const label = option.getAttribute('data-label');
+
+						langOptions.forEach(opt => opt.classList.remove('active'));
+						option.classList.add('active');
+						if (currentLangLabel && label) {
+							currentLangLabel.textContent = label;
+						}
+
+						// Google翻訳を即時トリガー
+						if (targetLang === 'ja') {
+							// 原文（日本語）に戻す
+							document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+							document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + location.hostname + "; path=/;";
+							location.reload();
+						} else {
+							// 翻訳実行
+							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+							if (select) {
+								select.value = targetLang || 'ja';
+								select.dispatchEvent(new Event('change'));
+							}
+						}
+
+						langDropdown.classList.remove('is-open');
+						langBtn.setAttribute('aria-expanded', 'false');
+					});
 				});
 			}
 
@@ -219,7 +264,9 @@ const navUrl = (pageSlug: string) => {
 		overflow-x: hidden;
 	}
 
+	/* Google翻訳デフォルトのバーやズレを完全非表示 */
 	body {
+		top: 0 !important;
 		font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 		color: var(--text);
 		background: var(--bg);
@@ -231,9 +278,14 @@ const navUrl = (pageSlug: string) => {
 		position: relative;
 	}
 
-	/* =========================================
-	   ▼ クリスタル背景レイヤーと浮遊多面体演出
-	   ========================================= */
+	.goog-te-banner-frame,
+	.skiptranslate,
+	#goog-gt-tt {
+		display: none !important;
+		visibility: hidden !important;
+	}
+
+	/* 背景クリスタルレイヤー */
 	.crystal-background {
 		position: fixed;
 		inset: 0;
@@ -305,9 +357,6 @@ const navUrl = (pageSlug: string) => {
 		}
 	}
 
-	/* =========================================
-	   ▼ ページコンテンツ（クリスタルガラス感）
-	   ========================================= */
 	.main-content {
 		flex: 1;
 		position: relative;
@@ -326,6 +375,7 @@ const navUrl = (pageSlug: string) => {
 		}
 	}
 
+	/* カードのクリスタルグラス */
 	.card,
 	.policy-card,
 	.sns-card,
@@ -384,7 +434,7 @@ const navUrl = (pageSlug: string) => {
 		padding: 0 1.5rem;
 	}
 
-	/* ヘッダー構造 */
+	/* ヘッダー */
 	.site-header {
 		background: rgba(255, 255, 255, 0.82);
 		backdrop-filter: blur(16px);
@@ -444,7 +494,7 @@ const navUrl = (pageSlug: string) => {
 		z-index: 60;
 	}
 
-	/* ▼ 地球マーク 言語切替ボタンスタイル ▼ */
+	/* 地球マーク 言語切替ボタン */
 	.lang-switcher {
 		position: relative;
 	}
@@ -494,13 +544,13 @@ const navUrl = (pageSlug: string) => {
 		position: absolute;
 		top: calc(100% + 8px);
 		right: 0;
-		background: rgba(255, 255, 255, 0.95);
+		background: rgba(255, 255, 255, 0.96);
 		backdrop-filter: blur(16px);
 		-webkit-backdrop-filter: blur(16px);
 		border: 1px solid #e2e8f0;
 		border-radius: 14px;
 		box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
-		min-width: 170px;
+		min-width: 175px;
 		padding: 0.5rem;
 		display: none;
 		flex-direction: column;
@@ -543,13 +593,17 @@ const navUrl = (pageSlug: string) => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.5rem 0.75rem;
+		padding: 0.55rem 0.75rem;
 		border-radius: 8px;
-		text-decoration: none;
-		font-size: 0.825rem;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+		font-size: 0.85rem;
 		font-weight: 600;
 		color: #334155;
 		transition: all 0.15s ease;
+		width: 100%;
+		text-align: left;
 	}
 
 	.lang-option:hover {
@@ -628,6 +682,7 @@ const navUrl = (pageSlug: string) => {
 		border: none;
 		cursor: pointer;
 		padding: 0;
+		z-index: 60;
 	}
 
 	.hamburger-btn .bar {
@@ -667,7 +722,6 @@ const navUrl = (pageSlug: string) => {
 		line-height: 1.8;
 	}
 
-	/* スマホ・タブレット（768px以下）用レイアウト */
 	@media (max-width: 768px) {
 		.hamburger-btn {
 			display: flex;
@@ -709,16 +763,6 @@ const navUrl = (pageSlug: string) => {
 			width: min(220px, 80%);
 			text-align: center;
 			padding: 0.75rem 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		*,
-		::before,
-		::after {
-			animation-duration: 0.01ms !important;
-			animation-iteration-count: 1 !important;
-			transition-duration: 0.01ms !important;
 		}
 	}
 </style>
