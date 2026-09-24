@@ -6,21 +6,54 @@ interface Props {
 const { title } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 
-// 現在表示しているページのパスを取得
+// 現在のパスを取得
 const currentPath = Astro.url.pathname;
 
-// アクティブ判定関数
-const isActive = (path: string) => {
-	const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
-	if (path === '') {
-		return currentPath === baseUrl || currentPath === `${baseUrl}/`;
+// 対応主要言語リスト
+const supportedLanguages = [
+	{ code: 'ja', label: '日本語', prefix: '' },
+	{ code: 'en', label: 'English', prefix: 'en' },
+	{ code: 'zh-tw', label: '繁體中文', prefix: 'zh-tw' },
+	{ code: 'zh-cn', label: '简体中文', prefix: 'zh-cn' },
+	{ code: 'ko', label: '한국어', prefix: 'ko' },
+	{ code: 'es', label: 'Español', prefix: 'es' },
+];
+
+// 現在のロケール判定（URLから判定）
+const pathSegments = currentPath.replace(baseUrl, '').split('/').filter(Boolean);
+const currentLocale = supportedLanguages.some(l => l.code === pathSegments[0]?.toLowerCase())
+	? pathSegments[0].toLowerCase()
+	: 'ja';
+
+// 現在のロケールプレフィックスを除いた基本パスを抽出
+const cleanSegments = currentLocale === 'ja' ? pathSegments : pathSegments.slice(1);
+const rawPagePath = cleanSegments.join('/');
+
+// 各言語への切り替えURLを生成する関数
+const getLocalizedPath = (langPrefix: string) => {
+	const prefixPart = langPrefix ? `${langPrefix}/` : '';
+	const pagePart = rawPagePath ? `${rawPagePath}/` : '';
+	return `${baseUrl}${prefixPart}${pagePart}`.replace(/\/+/g, '/');
+};
+
+// ナビゲーションのアクティブ判定関数
+const isActive = (pageSlug: string) => {
+	if (pageSlug === '') {
+		return rawPagePath === '';
 	}
-	return currentPath.includes(target);
+	return rawPagePath.startsWith(pageSlug);
+};
+
+// ナビリンクURL生成（現在の言語を維持）
+const navUrl = (pageSlug: string) => {
+	const prefixPart = currentLocale === 'ja' ? '' : `${currentLocale}/`;
+	const slugPart = pageSlug ? `${pageSlug}/` : '';
+	return `${baseUrl}${prefixPart}${slugPart}`.replace(/\/+/g, '/');
 };
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang={currentLocale}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,7 +75,7 @@ const isActive = (path: string) => {
 
 		<header class="site-header">
 			<div class="container header-container">
-				<a href={baseUrl} class="logo-link">
+				<a href={navUrl('')} class="logo-link">
 					<img 
 						src={`${baseUrl}logo.png`} 
 						alt="Logo" 
@@ -51,22 +84,58 @@ const isActive = (path: string) => {
 					<span class="logo-text">海のサインプロジェクト</span>
 				</a>
 
-				<!-- ハンバーガー切り替えボタン（モバイル専用） -->
-				<button class="hamburger-btn" id="menuToggle" aria-label="メニューを開閉する" aria-expanded="false">
-					<span class="bar"></span>
-					<span class="bar"></span>
-					<span class="bar"></span>
-				</button>
+				<!-- 右側アクション（地球マーク言語切替 ＋ モバイル用ハンバーガー） -->
+				<div class="header-right">
+					<!-- 地球マーク 言語切替メニュー -->
+					<div class="lang-switcher" id="langSwitcher">
+						<button 
+							type="button" 
+							class="lang-btn" 
+							id="langBtn" 
+							aria-label="言語切替 / Language Switcher"
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							<span class="globe-icon" aria-hidden="true">🌐</span>
+							<span class="current-lang-text">{currentLocale.toUpperCase()}</span>
+							<span class="dropdown-arrow">▾</span>
+						</button>
+
+						<!-- ドロップダウンリンク -->
+						<div class="lang-dropdown" id="langDropdown" role="menu">
+							<div class="lang-dropdown-header">LANGUAGE</div>
+							<div class="lang-list">
+								{supportedLanguages.map((lang) => (
+									<a 
+										href={getLocalizedPath(lang.prefix)}
+										class:list={["lang-option", { active: currentLocale === lang.code }]}
+										role="menuitem"
+									>
+										<span class="lang-name">{lang.label}</span>
+										<span class="lang-code">{lang.code.toUpperCase()}</span>
+									</a>
+								))}
+							</div>
+						</div>
+					</div>
+
+					<!-- ハンバーガー切り替えボタン（モバイル専用） -->
+					<button class="hamburger-btn" id="menuToggle" aria-label="メニューを開閉する" aria-expanded="false">
+						<span class="bar"></span>
+						<span class="bar"></span>
+						<span class="bar"></span>
+					</button>
+				</div>
 
 				<!-- ナビゲーションメニュー -->
 				<nav class="nav" id="siteNav">
-					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
-					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
-					<a href={`${baseUrl}event/`} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
-					<a href={`${baseUrl}sponsor/`} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
-					<a href={`${baseUrl}poster/`} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
-					<a href={`${baseUrl}sns/`} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
-					<a href={`${baseUrl}contact/`} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>CONTACT</a>
+					<a href={navUrl('')} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
+					<a href={navUrl('about')} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
+					<a href={navUrl('event')} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
+					<a href={navUrl('sponsor')} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
+					<a href={navUrl('poster')} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
+					<a href={navUrl('sns')} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
+					<a href={navUrl('contact')} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>CONTACT</a>
 				</nav>
 			</div>
 		</header>
@@ -82,6 +151,27 @@ const isActive = (path: string) => {
 		</footer>
 
 		<script>
+			// 言語切替ドロップダウンの制御
+			const langBtn = document.getElementById('langBtn');
+			const langDropdown = document.getElementById('langDropdown');
+			const langSwitcher = document.getElementById('langSwitcher');
+
+			if (langBtn && langDropdown) {
+				langBtn.addEventListener('click', (e) => {
+					e.stopPropagation();
+					const isOpen = langDropdown.classList.toggle('is-open');
+					langBtn.setAttribute('aria-expanded', String(isOpen));
+				});
+
+				// 外側タップで閉じる
+				document.addEventListener('click', (e) => {
+					if (langSwitcher && !langSwitcher.contains(e.target as Node)) {
+						langDropdown.classList.remove('is-open');
+						langBtn.setAttribute('aria-expanded', 'false');
+					}
+				});
+			}
+
 			// ハンバーガーメニュー開閉制御
 			const toggleBtn = document.getElementById('menuToggle');
 			const nav = document.getElementById('siteNav');
@@ -114,6 +204,7 @@ const isActive = (path: string) => {
 		--text-muted: #64748b;
 		--bg: #f8fafc;
 		--border: #e2e8f0;
+		--ocean-gradient: radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%);
 		--shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.05);
 	}
 
@@ -158,7 +249,6 @@ const isActive = (path: string) => {
 		animation: crystalFloat 18s ease-in-out infinite alternate;
 	}
 
-	/* クリスタル多面体 1（上部アクア・エメラルド） */
 	.facet-1 {
 		width: 420px;
 		height: 420px;
@@ -169,7 +259,6 @@ const isActive = (path: string) => {
 		animation-duration: 20s;
 	}
 
-	/* クリスタル多面体 2（右側プリズムブルー） */
 	.facet-2 {
 		width: 500px;
 		height: 500px;
@@ -181,7 +270,6 @@ const isActive = (path: string) => {
 		animation-delay: -5s;
 	}
 
-	/* クリスタル多面体 3（下部マリンクリスタル） */
 	.facet-3 {
 		width: 460px;
 		height: 460px;
@@ -193,7 +281,6 @@ const isActive = (path: string) => {
 		animation-delay: -10s;
 	}
 
-	/* クリスタル多面体 4（中央のシャープな輝き） */
 	.facet-4 {
 		width: 320px;
 		height: 320px;
@@ -239,7 +326,6 @@ const isActive = (path: string) => {
 		}
 	}
 
-	/* 各カードにクリスタルガラス（Glassmorphism + 繊細な縁取り）を付与 */
 	.card,
 	.policy-card,
 	.sns-card,
@@ -255,7 +341,6 @@ const isActive = (path: string) => {
 		animation: cardFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 	}
 
-	/* カードに走る微かなクリスタル光沢線 */
 	.card::before,
 	.coming-card::before {
 		content: '';
@@ -299,7 +384,7 @@ const isActive = (path: string) => {
 		padding: 0 1.5rem;
 	}
 
-	/* ヘッダー構造（クリスタルグラスヘッダー） */
+	/* ヘッダー構造 */
 	.site-header {
 		background: rgba(255, 255, 255, 0.82);
 		backdrop-filter: blur(16px);
@@ -351,13 +436,146 @@ const isActive = (path: string) => {
 		letter-spacing: 0.02em;
 	}
 
+	/* 右側アクションエリア */
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		z-index: 60;
+	}
+
+	/* ▼ 地球マーク 言語切替ボタンスタイル ▼ */
+	.lang-switcher {
+		position: relative;
+	}
+
+	.lang-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		background: rgba(255, 255, 255, 0.9);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border: 1px solid rgba(226, 232, 240, 0.9);
+		padding: 0.35rem 0.75rem;
+		border-radius: 9999px;
+		cursor: pointer;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #334155;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+		transition: all 0.2s ease;
+	}
+
+	.lang-btn:hover {
+		background: #e0f2fe;
+		border-color: #bae6fd;
+		color: var(--primary);
+		transform: translateY(-1px);
+	}
+
+	.globe-icon {
+		font-size: 1rem;
+		line-height: 1;
+	}
+
+	.current-lang-text {
+		font-size: 0.75rem;
+		letter-spacing: 0.05em;
+	}
+
+	.dropdown-arrow {
+		font-size: 0.7rem;
+		color: #64748b;
+	}
+
+	/* ドロップダウンメニュー */
+	.lang-dropdown {
+		position: absolute;
+		top: calc(100% + 8px);
+		right: 0;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border: 1px solid #e2e8f0;
+		border-radius: 14px;
+		box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
+		min-width: 170px;
+		padding: 0.5rem;
+		display: none;
+		flex-direction: column;
+		z-index: 100;
+		animation: dropFadeIn 0.2s ease-out forwards;
+	}
+
+	.lang-dropdown.is-open {
+		display: flex;
+	}
+
+	.lang-dropdown-header {
+		font-size: 0.65rem;
+		font-weight: 800;
+		color: #94a3b8;
+		padding: 0.25rem 0.6rem 0.4rem;
+		border-bottom: 1px solid #f1f5f9;
+		letter-spacing: 0.08em;
+	}
+
+	.lang-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		margin-top: 0.35rem;
+	}
+
+	@keyframes dropFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.lang-option {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.5rem 0.75rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-size: 0.825rem;
+		font-weight: 600;
+		color: #334155;
+		transition: all 0.15s ease;
+	}
+
+	.lang-option:hover {
+		background: #f0f9ff;
+		color: var(--primary);
+	}
+
+	.lang-option.active {
+		background: #e0f2fe;
+		color: var(--primary);
+		font-weight: 800;
+	}
+
+	.lang-code {
+		font-size: 0.68rem;
+		color: #94a3b8;
+		font-weight: 700;
+	}
+
+	/* ナビゲーションメニュー */
 	.nav {
 		display: flex;
 		gap: 0.35rem;
 		align-items: center;
 	}
 
-	/* 通常のナビ項目 */
 	.nav-item,
 	.nav-item:visited {
 		text-decoration: none;
@@ -374,14 +592,12 @@ const isActive = (path: string) => {
 		background-color: var(--accent-bg);
 	}
 
-	/* 通常メニューのアクティブ状態 */
 	.nav-item.active:not(.nav-item-cta) {
 		color: var(--primary);
 		background: #e0f2fe;
 		font-weight: 900;
 	}
 
-	/* CONTACTボタン */
 	.nav-item-cta,
 	.nav-item-cta:visited {
 		border: 1.5px solid var(--primary);
@@ -412,7 +628,6 @@ const isActive = (path: string) => {
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		z-index: 60;
 	}
 
 	.hamburger-btn .bar {
