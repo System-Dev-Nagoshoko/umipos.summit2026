@@ -151,16 +151,42 @@ const languages = [
 			const currentLangLabel = document.getElementById('currentLangLabel');
 			const langOptions = document.querySelectorAll('.lang-option');
 
-			// Cookieから言語状態を復元
+			// Cookie取得関数
 			function getCookie(name: string) {
 				const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
 				return v ? v[2] : null;
 			}
 
+			// Google翻訳Cookie（googtrans）をドメイン階層ごとに全削除する関数
+			function removeGoogleTranslateCookies() {
+				const hostname = window.location.hostname;
+				const domainParts = hostname.split('.');
+				const domains = ['', hostname, `.${hostname}`];
+
+				// サブドメインの階層を走査して対象ドメイン配列を作成
+				for (let i = 0; i < domainParts.length - 1; i++) {
+					const rootDomain = domainParts.slice(i).join('.');
+					domains.push(rootDomain);
+					domains.push(`.${rootDomain}`);
+				}
+
+				const paths = ['/', window.location.pathname];
+
+				domains.forEach((dom) => {
+					paths.forEach((p) => {
+						const domainAttr = dom ? `; domain=${dom}` : '';
+						document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p}${domainAttr};`;
+						document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p};`;
+					});
+				});
+			}
+
+			// 初期表示時にCookieから現在の言語を反映
 			const savedLangCookie = getCookie('googtrans');
 			if (savedLangCookie && currentLangLabel) {
-				const langCode = savedLangCookie.split('/')[2];
-				if (langCode) {
+				const langParts = savedLangCookie.split('/');
+				const langCode = langParts[langParts.length - 1];
+				if (langCode && langCode !== 'ja') {
 					currentLangLabel.textContent = langCode.toUpperCase().split('-')[0];
 					langOptions.forEach(opt => {
 						if (opt.getAttribute('data-lang') === langCode) {
@@ -172,12 +198,14 @@ const languages = [
 			}
 
 			if (langBtn && langDropdown) {
+				// 開閉トグル
 				langBtn.addEventListener('click', (e) => {
 					e.stopPropagation();
 					const isOpen = langDropdown.classList.toggle('is-open');
 					langBtn.setAttribute('aria-expanded', String(isOpen));
 				});
 
+				// 外側クリックで閉じる
 				document.addEventListener('click', (e) => {
 					if (langSwitcher && !langSwitcher.contains(e.target as Node)) {
 						langDropdown.classList.remove('is-open');
@@ -185,6 +213,7 @@ const languages = [
 					}
 				});
 
+				// 各言語ボタンクリック処理
 				langOptions.forEach((option) => {
 					option.addEventListener('click', () => {
 						const targetLang = option.getAttribute('data-lang');
@@ -196,17 +225,30 @@ const languages = [
 							currentLangLabel.textContent = label;
 						}
 
-						// Google翻訳を即時トリガー
 						if (targetLang === 'ja') {
-							// 原文（日本語）に戻す
-							document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-							document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + location.hostname + "; path=/;";
-							location.reload();
-						} else {
-							// 翻訳実行
+							// 1. Google翻訳のコンボボックスを日本語に切り替え
 							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
 							if (select) {
-								select.value = targetLang || 'ja';
+								select.value = 'ja';
+								select.dispatchEvent(new Event('change'));
+							}
+
+							// 2. Google翻訳の復元ボタン（オリジナル表示ボタン）が存在する場合は強制クリック
+							const restoreBtn = document.querySelector('.goog-te-banner-frame')?.contentWindow?.document?.getElementById(':1.restore') as HTMLElement | null;
+							if (restoreBtn) {
+								restoreBtn.click();
+							}
+
+							// 3. 全階層のCookieを完全消去して確実に初期状態へリロード
+							removeGoogleTranslateCookies();
+							setTimeout(() => {
+								window.location.reload();
+							}, 120);
+						} else {
+							// 外国語への切り替え
+							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+							if (select && targetLang) {
+								select.value = targetLang;
 								select.dispatchEvent(new Event('change'));
 							}
 						}
@@ -682,7 +724,6 @@ const languages = [
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		z-index: 60;
 	}
 
 	.hamburger-btn .bar {
