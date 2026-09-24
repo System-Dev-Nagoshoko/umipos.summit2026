@@ -35,51 +35,26 @@ const isActive = (path: string) => {
 		<header class="site-header">
 			<div class="container header-container">
 				<a href={baseUrl} class="logo-link">
-					<img 
-						src={`${baseUrl}logo.png`} 
-						alt="Logo" 
-						class="logo-img" 
-					/>
+					<img src={`${baseUrl}logo.png`} alt="Logo" class="logo-img" />
 					<span class="logo-text">海のサインプロジェクト</span>
 				</a>
 
-				<nav class="nav">
-					<a 
-						href={baseUrl} 
-						class:list={["nav-item", { active: isActive('') }]}
-					>
-						TOP
-					</a>
-					<a 
-						href={`${baseUrl}about/`} 
-						class:list={["nav-item", { active: isActive('about') }]}
-					>
-						ABOUT
-					</a>
-					<a 
-						href={`${baseUrl}event/`} 
-						class:list={["nav-item", { active: isActive('event') }]}
-					>
-						EVENT
-					</a>
-					<a 
-						href={`${baseUrl}sponsor/`} 
-						class:list={["nav-item", { active: isActive('sponsor') }]}
-					>
-						PARTNER
-					</a>
-					<a 
-						href={`${baseUrl}sns/`} 
-						class:list={["nav-item", { active: isActive('sns') }]}
-					>
-						SNS
-					</a>
-					<a 
-						href={`${baseUrl}contact/`} 
-						class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}
-					>
-						CONTACT
-					</a>
+				<!-- ハンバーガー切り替えボタン（SP専用） -->
+				<button class="hamburger-btn" id="menuToggle" aria-label="メニューを開閉する" aria-expanded="false">
+					<span class="bar"></span>
+					<span class="bar"></span>
+					<span class="bar"></span>
+				</button>
+
+				<!-- ナビゲーションメニュー -->
+				<nav class="nav" id="siteNav">
+					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
+					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
+					<a href={`${baseUrl}event/`} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
+					<a href={`${baseUrl}sponsor/`} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
+					<a href={`${baseUrl}poster/`} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
+					<a href={`${baseUrl}sns/`} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
+					<a href={`${baseUrl}contact/`} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>CONTACT</a>
 				</nav>
 			</div>
 		</header>
@@ -93,6 +68,29 @@ const isActive = (path: string) => {
 				<p class="copyright">&copy; 2026 Nago Youth Future Summit & 海のサインプロジェクト All rights reserved.</p>
 			</div>
 		</footer>
+
+		<script>
+			// ハンバーガーメニュー開閉制御
+			const toggleBtn = document.getElementById('menuToggle');
+			const nav = document.getElementById('siteNav');
+
+			if (toggleBtn && nav) {
+				toggleBtn.addEventListener('click', () => {
+					const isOpen = nav.classList.toggle('is-open');
+					toggleBtn.classList.toggle('is-active', isOpen);
+					toggleBtn.setAttribute('aria-expanded', String(isOpen));
+				});
+
+				// メニュー内のリンククリックで自動的にメニューを閉じる
+				nav.querySelectorAll('.nav-item').forEach((link) => {
+					link.addEventListener('click', () => {
+						nav.classList.remove('is-open');
+						toggleBtn.classList.remove('is-active');
+						toggleBtn.setAttribute('aria-expanded', 'false');
+					});
+				});
+			}
+		</script>
 	</body>
 </html>
 
@@ -143,7 +141,7 @@ const isActive = (path: string) => {
 
 	/* ヘッダー構造（ガラスモフィズム） */
 	.site-header {
-		background: rgba(255, 255, 255, 0.85);
+		background: rgba(255, 255, 255, 0.9);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		border-bottom: 1px solid rgba(226, 232, 240, 0.8);
@@ -167,6 +165,7 @@ const isActive = (path: string) => {
 		text-decoration: none;
 		flex-shrink: 0;
 		transition: opacity 0.2s ease;
+		z-index: 60;
 	}
 
 	.logo-link:hover {
@@ -188,7 +187,7 @@ const isActive = (path: string) => {
 
 	.nav {
 		display: flex;
-		gap: 0.5rem;
+		gap: 0.35rem;
 		align-items: center;
 	}
 
@@ -198,8 +197,8 @@ const isActive = (path: string) => {
 		text-decoration: none;
 		color: var(--text-muted);
 		font-weight: 700;
-		font-size: 0.875rem;
-		padding: 0.5rem 1rem;
+		font-size: 0.85rem;
+		padding: 0.5rem 0.85rem;
 		border-radius: 9999px;
 		transition: all 0.2s ease;
 	}
@@ -222,7 +221,7 @@ const isActive = (path: string) => {
 		border: 1.5px solid var(--primary);
 		color: var(--primary) !important;
 		background-color: transparent;
-		margin-left: 0.5rem;
+		margin-left: 0.35rem;
 	}
 
 	.nav-item-cta:hover {
@@ -230,11 +229,43 @@ const isActive = (path: string) => {
 		transform: translateY(-1px);
 	}
 
-	/* CONTACTページが開いている時のみ塗りつぶし表示 */
 	.nav-item-cta.active {
 		background-color: var(--primary) !important;
 		color: #ffffff !important;
 		box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
+	}
+
+	/* ハンバーガーアイコン（PC時は非表示） */
+	.hamburger-btn {
+		display: none;
+		flex-direction: column;
+		justify-content: space-around;
+		width: 32px;
+		height: 28px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		z-index: 60;
+	}
+
+	.hamburger-btn .bar {
+		width: 100%;
+		height: 3px;
+		background-color: var(--primary);
+		border-radius: 9999px;
+		transition: all 0.3s ease;
+	}
+
+	/* ハンバーガーがactiveになったときのバツ印アニメーション */
+	.hamburger-btn.is-active .bar:nth-child(1) {
+		transform: translateY(9px) rotate(45deg);
+	}
+	.hamburger-btn.is-active .bar:nth-child(2) {
+		opacity: 0;
+	}
+	.hamburger-btn.is-active .bar:nth-child(3) {
+		transform: translateY(-9px) rotate(-45deg);
 	}
 
 	/* フッター構造 */
@@ -252,30 +283,48 @@ const isActive = (path: string) => {
 		line-height: 1.8;
 	}
 
-	/* レスポンシブ調整 */
-	@media (max-width: 640px) {
-		.header-container {
-			height: auto;
-			padding-top: 0.875rem;
-			padding-bottom: 0.875rem;
-			flex-direction: column;
-			gap: 0.75rem;
+	/* スマホ・タブレット（768px以下）用レイアウト */
+	@media (max-width: 768px) {
+		.hamburger-btn {
+			display: flex;
 		}
 
 		.nav {
+			position: fixed;
+			top: 0;
+			right: -100%;
 			width: 100%;
+			height: 100vh;
+			background: rgba(255, 255, 255, 0.98);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
+			flex-direction: column;
 			justify-content: center;
-			gap: 0.25rem;
-			flex-wrap: wrap;
+			align-items: center;
+			gap: 1.25rem;
+			padding: 2rem;
+			transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+			z-index: 55;
+		}
+
+		.nav.is-open {
+			right: 0;
 		}
 
 		.nav-item {
-			padding: 0.4rem 0.6rem;
-			font-size: 0.775rem;
+			font-size: 1.15rem;
+			padding: 0.6rem 2rem;
+			width: auto;
+			text-align: center;
 		}
 
-		.nav-item-cta {
+		.nav-item-cta,
+		.nav-item-cta:visited {
 			margin-left: 0;
+			margin-top: 0.5rem;
+			width: min(220px, 80%);
+			text-align: center;
+			padding: 0.75rem 0;
 		}
 	}
 </style>
