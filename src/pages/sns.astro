@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="OFFICIAL SNS | 海のサインプロジェクト">
 	<main>
+		<!-- ページヘッダー: 全ページ共通のオーシャングラデーションを適用 -->
 		<section class="page-header">
 			<div class="container">
 				<h1>OFFICIAL SNS & MEDIA</h1>
@@ -65,27 +66,30 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* ページヘッダー（全ページ共通） */
+	/* ページヘッダー: 全ページ共通のオーシャングラデーションを適用 */
 	.page-header {
-		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
-		color: white;
-		padding: 4rem 0;
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+		color: #ffffff;
+		padding: 4.5rem 1.25rem 5.5rem;
 		text-align: center;
 	}
 	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
+		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
 	}
 	.page-header p {
-		color: #93c5fd;
+		color: #e0f2fe;
 		font-size: 1rem;
 		margin-top: 0.5rem;
+		font-weight: 500;
 	}
 
 	/* メインコンテンツ配置 */
 	.section {
-		padding: 3rem 0;
+		padding: 3.5rem 1.5rem;
+		background-color: var(--bg, #f8fafc);
 	}
 	.flex-container {
 		display: flex;
@@ -93,16 +97,17 @@ import Layout from '../layouts/Layout.astro';
 		gap: 2.5rem;
 	}
 
-	/* メインカード */
+	/* メインカード: 枠線・角丸・影をサイト共通ルールに統一 */
 	.card {
-		background: white;
+		background: #ffffff;
 		border-radius: 16px;
 		padding: 2.5rem 2rem;
-		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
 		max-width: 800px;
 		margin: 0 auto;
 		width: 100%;
-		border: 1px solid #f1f5f9;
+		border: 1px solid var(--border, #e2e8f0);
+		box-sizing: border-box;
 	}
 	.intro-text {
 		text-align: center;
@@ -133,7 +138,7 @@ import Layout from '../layouts/Layout.astro';
 	a.sns-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
-		border-color: #bae6fd;
+		border-color: #38bdf8;
 		background: #ffffff;
 	}
 
@@ -169,7 +174,7 @@ import Layout from '../layouts/Layout.astro';
 	.sns-id {
 		font-size: 0.85rem;
 		color: #0284c7;
-		font-weight: 500;
+		font-weight: 600;
 		margin-top: 0.2rem;
 	}
 
@@ -182,7 +187,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 	.badge.active {
 		background: #e0f2fe;
-		color: #0369a1;
+		color: #0284c7;
 	}
 
 	/* 矢印アイコン */
@@ -194,6 +199,15 @@ import Layout from '../layouts/Layout.astro';
 
 	/* スマホ表示対応 */
 	@media (max-width: 640px) {
+		.page-header {
+			padding: 3rem 1rem;
+		}
+		.page-header h1 {
+			font-size: 2rem;
+		}
+		.section {
+			padding: 2rem 1rem;
+		}
 		.card {
 			padding: 1.75rem 1.25rem;
 		}
