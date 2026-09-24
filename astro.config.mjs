@@ -6,5 +6,12 @@ export default defineConfig({
   base: '/',
   build: {
     format: 'directory'
+  },
+  i18n: {
+    defaultLocale: 'ja',
+    locales: ['ja', 'en', 'zh-tw', 'ko'],
+    routing: {
+      prefixDefaultLocale: false
+    }
   }
 });
