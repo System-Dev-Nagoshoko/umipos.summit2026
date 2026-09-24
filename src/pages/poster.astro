@@ -2,65 +2,23 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="特設ページ公開準備中 | 海のサインプロジェクト">
+<Layout title="現在制作中 | 海のサインプロジェクト">
   <main class="coming-wrapper">
     <div class="glow-bg"></div>
 
     <div class="coming-card">
-      <div class="badge-scan">
-        <span class="badge-icon">📲</span>
-        <span>ポスターからアクセスいただきありがとうございます！</span>
-      </div>
-
       <div class="status-pill">COMING SOON</div>
 
       <h1 class="main-title">
-        新しい安全看板の<br />
-        <span class="gradient-text">特設ページを準備中です</span>
+        <span class="gradient-text">現在制作中</span>
       </h1>
 
       <p class="description">
-        現在、「海のサインプロジェクト」では名護の海をより安全に楽しむための看板デザインや詳細解説コンテンツを鋭意制作・更新中です。<br />
-        公開までもうしばらくお待ちください！
+        公開までもうしばらくお待ちください。
       </p>
 
-      <div class="info-timeline">
-        <div class="timeline-step done">
-          <div class="step-dot">✓</div>
-          <div class="step-content">
-            <span class="step-label">STEP 01</span>
-            <p class="step-name">海岸危険箇所・看板調査</p>
-          </div>
-        </div>
-        <div class="timeline-step current">
-          <div class="step-dot">●</div>
-          <div class="step-content">
-            <span class="step-label">STEP 02</span>
-            <p class="step-name">デザイン試作・検証中</p>
-          </div>
-        </div>
-        <div class="timeline-step future">
-          <div class="step-dot">○</div>
-          <div class="step-content">
-            <span class="step-label">STEP 03</span>
-            <p class="step-name">本ページ＆成果物公開</p>
-          </div>
-        </div>
-      </div>
-
       <div class="action-box">
-        <p class="action-text">最新の活動記録や進捗は公式ブログにて先行公開中！</p>
-        <div class="button-group">
-          <a href="/" class="btn-top">トップページへ戻る</a>
-          <a
-            href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-blog"
-          >
-            活動ブログを見る ↗
-          </a>
-        </div>
+        <a href="/" class="btn-top">トップページへ戻る</a>
       </div>
     </div>
   </main>
@@ -68,23 +26,23 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .coming-wrapper {
-    min-height: calc(100vh - 180px);
+    min-height: calc(100vh - 200px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 3rem 1.5rem 5rem;
     position: relative;
     overflow: hidden;
-    background-color: #f8fafc;
+    background-color: #fafafa;
   }
 
-  /* 背景の青い光のグラデーション */
+  /* 背景の柔らかな光 */
   .glow-bg {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(2, 132, 199, 0.04) 50%, transparent 70%);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -96,201 +54,79 @@ import Layout from '../layouts/Layout.astro';
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 24px;
-    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.06);
-    padding: 3.5rem 2.5rem;
-    max-width: 680px;
+    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.05);
+    padding: 4rem 2.5rem;
+    max-width: 520px;
     width: 100%;
     text-align: center;
     position: relative;
     z-index: 2;
   }
 
-  .badge-scan {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: #e0f2fe;
-    color: #0369a1;
+  .status-pill {
+    display: inline-block;
+    letter-spacing: 0.25em;
     font-size: 0.8rem;
-    font-weight: 700;
-    padding: 0.35rem 0.9rem;
+    font-weight: 900;
+    color: #0284c7;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 0.4rem 1.25rem;
     border-radius: 9999px;
     margin-bottom: 1.5rem;
   }
 
-  .status-pill {
-    display: inline-block;
-    letter-spacing: 0.2em;
-    font-size: 0.75rem;
-    font-weight: 900;
-    color: #0284c7;
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-  }
-
   .main-title {
-    font-size: 2.1rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    color: #0f172a;
-    line-height: 1.35;
-    margin-bottom: 1.25rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .description {
     font-size: 0.95rem;
-    color: #475569;
-    line-height: 1.8;
-    margin-bottom: 2.25rem;
-  }
-
-  /* 進行状況タイムライン */
-  .info-timeline {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1.25rem;
-    margin-bottom: 2.25rem;
-  }
-
-  .timeline-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .step-dot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 800;
-  }
-
-  .timeline-step.done .step-dot {
-    background: #e0f2fe;
-    color: #0284c7;
-  }
-
-  .timeline-step.current .step-dot {
-    background: #0284c7;
-    color: white;
-    box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
-    animation: pulse 2s infinite;
-  }
-
-  .timeline-step.future .step-dot {
-    background: #e2e8f0;
-    color: #94a3b8;
-  }
-
-  .step-label {
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
     color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
   }
 
-  .step-name {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #1e293b;
-  }
-
-  /* 下部アクションエリア */
   .action-box {
     border-top: 1px solid #f1f5f9;
-    padding-top: 1.75rem;
-  }
-
-  .action-text {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 1.25rem;
-    font-weight: 500;
-  }
-
-  .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    padding-top: 2rem;
   }
 
   .btn-top {
-    background: #f1f5f9;
-    color: #334155;
-    font-size: 0.875rem;
-    font-weight: 700;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .btn-top:hover {
-    background: #e2e8f0;
-  }
-
-  .btn-blog {
+    display: inline-block;
     background: #0284c7;
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 700;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
+    padding: 0.85rem 2rem;
+    border-radius: 9999px;
     text-decoration: none;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
   }
 
-  .btn-blog:hover {
+  .btn-top:hover {
     background: #0369a1;
     transform: translateY(-1px);
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.08);
-    }
+    box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
   }
 
   @media (max-width: 640px) {
     .coming-card {
-      padding: 2.25rem 1.25rem;
+      padding: 3rem 1.5rem;
     }
     .main-title {
-      font-size: 1.6rem;
-    }
-    .info-timeline {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      text-align: left;
-    }
-    .timeline-step {
-      flex-direction: row;
-      gap: 0.75rem;
-    }
-    .button-group {
-      flex-direction: column;
-    }
-    .btn-top, .btn-blog {
-      width: 100%;
+      font-size: 2rem;
     }
   }
 </style>
