@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="CONTACT | 海のサインプロジェクト">
 	<main>
-		<!-- ページヘッダー -->
+		<!-- ページヘッダー: 全ページ共通のオーシャングラデーションを適用 -->
 		<section class="page-header">
 			<div class="container">
 				<h1>CONTACT</h1>
@@ -54,7 +54,7 @@ import Layout from '../layouts/Layout.astro';
 							</div>
 							<div class="faq-a">
 								<span class="a-badge">A</span>
-								<p>看板の設置候補地のご紹介、デザインへの助言、広報協力、あるいは活動資金の協賛など、様々な形での応援を受け付けております。まずはお気軽にご相談ください。</p>
+								<p>看板の設置候補地のご紹介、デザインへの助言、広報協力など、様々な形での応援を受け付けております。まずはお気軽にご相談ください。</p>
 							</div>
 						</div>
 
@@ -125,7 +125,7 @@ import Layout from '../layouts/Layout.astro';
 					<div class="contact-box">
 						<h3>✉️ メールでのお問い合わせ</h3>
 						<p>
-							プロジェクトへの応援メッセージ、取材依頼、協賛・設置場所のご相談など、下記アドレスまでお気軽にお送りください。
+							プロジェクトへの応援メッセージ、取材依頼、設置場所のご相談など、下記アドレスまでお気軽にお送りください。
 						</p>
 						
 						<a 
@@ -145,11 +145,11 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* --- ヘッダーセクション --- */
+	/* --- ヘッダーセクション: サイト共通変数で色ブレを完全解消 --- */
 	.page-header {
-		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
-		color: white;
-		padding: 4rem 1.5rem;
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+		color: #ffffff;
+		padding: 4.5rem 1.25rem 5.5rem;
 		text-align: center;
 	}
 	.page-header h1 {
@@ -157,17 +157,19 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 800;
 		letter-spacing: 0.05em;
 		margin: 0;
+		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
 	}
 	.page-header p {
-		color: #93c5fd;
+		color: #e0f2fe;
 		font-size: 1rem;
 		margin-top: 0.5rem;
+		font-weight: 500;
 	}
 
 	/* --- メインコンテナ配置 --- */
 	.section {
 		padding: 3.5rem 1.5rem;
-		background-color: #f8fafc;
+		background-color: var(--bg, #f8fafc);
 	}
 	.container {
 		max-width: 1000px;
@@ -186,13 +188,13 @@ import Layout from '../layouts/Layout.astro';
 		padding: 2.5rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
 		width: 100%;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--border, #e2e8f0);
 		box-sizing: border-box;
 	}
 	.card h2 {
-		font-size: 1.5rem;
+		font-size: 1.45rem;
 		color: #0f172a;
-		border-bottom: 2px solid #bae6fd;
+		border-bottom: 2px solid #e0f2fe;
 		padding-bottom: 0.75rem;
 		margin-top: 0;
 		margin-bottom: 1.5rem;
@@ -288,7 +290,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 	.a-badge {
 		background: #e0f2fe;
-		color: #0369a1;
+		color: #0284c7;
 		font-weight: 800;
 		font-size: 0.85rem;
 		width: 26px;
@@ -357,7 +359,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 	.contact-box h3 {
 		font-size: 1.2rem;
-		color: #0369a1;
+		color: #0284c7;
 		margin-top: 0;
 		margin-bottom: 0.75rem;
 		font-weight: 700;
@@ -394,7 +396,7 @@ import Layout from '../layouts/Layout.astro';
 		margin-top: 0.75rem;
 	}
 
-	/* --- モバイル対応（メディアクエリ） --- */
+	/* --- モバイル対応 --- */
 	@media (max-width: 640px) {
 		.page-header {
 			padding: 3rem 1rem;
