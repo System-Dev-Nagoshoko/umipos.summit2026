@@ -123,7 +123,7 @@ import Layout from '../layouts/Layout.astro';
 <style>
 	/* ヒーローエリア: 白文字の視認性が最も際立つディープオーシャングラデーション */
 	.hero {
-		background: radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%);
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
 		padding: 5rem 1.25rem 6.5rem;
 		text-align: center;
@@ -183,7 +183,6 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0;
 		letter-spacing: 0.02em;
 		color: #ffffff;
-		/* 視認性を補強する落ち着いたドロップシャドウ */
 		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.6);
 	}
 
@@ -238,7 +237,7 @@ import Layout from '../layouts/Layout.astro';
 		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--border, #e2e8f0);
 	}
 
 	.status-tag {
