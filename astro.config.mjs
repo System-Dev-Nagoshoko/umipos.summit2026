@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,5 +21,6 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false // 日本語は / のまま、多言語のみ /en/ や /ko/ が付く
     }
-  }
+  },
+  integrations: [sitemap()]
 });
