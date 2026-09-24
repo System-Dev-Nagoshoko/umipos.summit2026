@@ -14,7 +14,7 @@ const coOrganizers = [
 const partners = [
   { 
     name: 'NSF PROJECTs', 
-    role: '活動・プロジェクト連携協力', 
+    role: 'ドメイン提供・Webインフラ・技術連携協力', 
     logo: '/nsf.jpg', 
     url: 'https://nsf.stki.org/' 
   },
@@ -26,14 +26,14 @@ const supporters: { name: string; category: string }[] = [];
 
 <Layout title="連携・協力パートナー | 海のサインプロジェクト">
   <main class="page-wrapper">
-    <!-- ヒーローエリア -->
+    <!-- ヒーローエリア: 全ページ共通のオーシャングラデーションを適用 -->
     <section class="hero-section">
       <div class="hero-inner">
         <span class="sub-badge">PARTNERS & SUPPORTERS</span>
         <h1 class="page-title">連携・協力パートナー</h1>
         <p class="hero-desc">
           名護の海を「誰もが安心して楽しめる海」へ。<br />
-          当プロジェクトは金銭的な協賛金を集めることは行わず、資材や技術のご協力、周知活動などを通じて地域のパートナーの皆さまと共に進めています。
+          当プロジェクトは金銭的な協賛金を集めることは行わず、ドメインやWeb基盤の提供、資材・技術協力、周知活動などを通じて地域のパートナーの皆さまと共に進めています。
         </p>
       </div>
     </section>
@@ -46,7 +46,7 @@ const supporters: { name: string; category: string }[] = [];
           <h2>支援・ご協力に関する方針</h2>
           <p>
             高校生主体の探究・地域貢献アクションとして運営しているため、<strong>個人・企業を問わず金銭的な協賛金・支援金の募集は一切行っておりません。</strong>
-            看板の制作アドバイスや資材の提供、ポスターの掲示場所のご提供、活動の周知といった形でのサポートをお願いしております。
+            看板の制作アドバイスや資材の提供、ドメイン・IT基盤の提供、ポスターの掲示場所のご提供、活動周知といった形でのサポートをお願いしております。
           </p>
         </div>
       </section>
@@ -76,7 +76,7 @@ const supporters: { name: string; category: string }[] = [];
         <div class="card-header">
           <span class="section-label">COOPERATION</span>
           <h2>協力パートナー</h2>
-          <p class="section-sub">活動連携や知見のご提供、周知協力などで支えてくださっているパートナーです</p>
+          <p class="section-sub">ドメインやITインフラ提供、知見のご提供、活動連携などで支えてくださっているパートナーです</p>
         </div>
         <div class="partner-grid">
           {partners.map((partner) => (
@@ -120,7 +120,7 @@ const supporters: { name: string; category: string }[] = [];
           <a href="https://forms.gle/YOUR_GOOGLE_FORM_URL" target="_blank" rel="noopener noreferrer" class="btn-primary">
             ご協力・連携のご連絡フォーム ➔
           </a>
-          <a href="mailto:contact@nagoyc.stki.org" class="btn-secondary">
+          <a href="mailto:nyc.summit.umipos@outlook.jp" class="btn-secondary">
             メールでお問い合わせ
           </a>
         </div>
@@ -131,16 +131,16 @@ const supporters: { name: string; category: string }[] = [];
 
 <style>
   .page-wrapper {
-    background-color: #f8fafc;
+    background-color: var(--bg, #f8fafc);
     min-height: 100vh;
     padding-bottom: 5rem;
   }
 
-  /* ヒーローエリア */
+  /* ヒーローエリア: 全ページ共通のオーシャングラデーションを適用 */
   .hero-section {
-    background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 50%, #0f172a 100%);
-    color: white;
-    padding: 4rem 1.5rem 5.5rem;
+    background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+    color: #ffffff;
+    padding: 4.5rem 1.25rem 5.5rem;
     text-align: center;
   }
   .hero-inner {
@@ -149,7 +149,7 @@ const supporters: { name: string; category: string }[] = [];
   }
   .sub-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.16);
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 0.25rem 0.85rem;
     border-radius: 9999px;
@@ -163,11 +163,13 @@ const supporters: { name: string; category: string }[] = [];
     font-weight: 800;
     margin-bottom: 1rem;
     line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
   }
   .hero-desc {
-    color: #bae6fd;
+    color: #e0f2fe;
     font-size: 0.95rem;
     line-height: 1.7;
+    font-weight: 500;
   }
 
   /* コンテンツ配置 */
@@ -208,7 +210,7 @@ const supporters: { name: string; category: string }[] = [];
   .policy-text h2 {
     font-size: 1rem;
     font-weight: 700;
-    color: #0369a1;
+    color: #0284c7;
     margin-bottom: 0.35rem;
   }
   .policy-text p {
@@ -219,11 +221,11 @@ const supporters: { name: string; category: string }[] = [];
 
   /* 一般カード */
   .card {
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border: 1px solid var(--border, #e2e8f0);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
   }
   .card-header {
     text-align: center;
@@ -268,7 +270,7 @@ const supporters: { name: string; category: string }[] = [];
   }
   .partner-item:hover {
     background: white;
-    border-color: #7dd3fc;
+    border-color: #38bdf8;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
   }
@@ -335,7 +337,7 @@ const supporters: { name: string; category: string }[] = [];
 
   /* CTA */
   .cta-card {
-    background: linear-gradient(135deg, #0369a1 0%, #0f172a 100%);
+    background: linear-gradient(135deg, #0369a1 0%, #082f49 100%);
     color: white;
     border-radius: 16px;
     padding: 2.5rem 1.75rem;
@@ -348,7 +350,7 @@ const supporters: { name: string; category: string }[] = [];
   }
   .cta-card p {
     font-size: 0.85rem;
-    color: #bae6fd;
+    color: #e0f2fe;
     line-height: 1.7;
     max-width: 650px;
     margin: 0 auto 1.5rem;
@@ -360,17 +362,19 @@ const supporters: { name: string; category: string }[] = [];
     flex-wrap: wrap;
   }
   .btn-primary {
-    background: #38bdf8;
-    color: #0f172a;
-    font-weight: 800;
+    background: #0284c7;
+    color: #ffffff;
+    font-weight: 700;
     font-size: 0.85rem;
     padding: 0.75rem 1.5rem;
-    border-radius: 10px;
+    border-radius: 9999px;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
   }
   .btn-primary:hover {
-    background: #7dd3fc;
+    background: #0369a1;
+    transform: translateY(-1px);
   }
   .btn-secondary {
     background: rgba(255, 255, 255, 0.1);
@@ -379,7 +383,7 @@ const supporters: { name: string; category: string }[] = [];
     font-weight: 700;
     font-size: 0.85rem;
     padding: 0.75rem 1.5rem;
-    border-radius: 10px;
+    border-radius: 9999px;
     text-decoration: none;
     transition: background 0.2s;
   }
@@ -388,6 +392,9 @@ const supporters: { name: string; category: string }[] = [];
   }
 
   @media (max-width: 640px) {
+    .hero-section {
+      padding: 3rem 1rem;
+    }
     .page-title {
       font-size: 1.75rem;
     }
