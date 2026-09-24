@@ -5,6 +5,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <Layout title="ABOUT | 海のサインプロジェクト">
 	<main>
+		<!-- ページヘッダー: 全ページ共通のオーシャングラデーションを適用 -->
 		<section class="page-header">
 			<div class="container">
 				<h1>ABOUT</h1>
@@ -15,10 +16,10 @@ const baseUrl = import.meta.env.BASE_URL;
 		<section class="section">
 			<div class="container flex-container">
 				
-				<!-- ブランドカード  -->
+				<!-- ブランドカード -->
 				<div class="card main-card">
 					
-					<!--  ロゴ＆チーム名のフィーチャーエリア  -->
+					<!-- ロゴ＆チーム名のフィーチャーエリア -->
 					<div class="brand-banner">
 						<div class="brand-logo-container">
 							<img 
@@ -118,22 +119,24 @@ const baseUrl = import.meta.env.BASE_URL;
 </Layout>
 
 <style>
-	/* ページヘッダー */
+	/* ページヘッダー: サイト共通の変数を適用して色味を完全一致 */
 	.page-header {
-		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 100%);
-		color: white;
-		padding: 4rem 0;
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+		color: #ffffff;
+		padding: 4.5rem 1.25rem 5.5rem;
 		text-align: center;
 	}
 	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
+		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
 	}
 	.page-header p {
-		color: #93c5fd;
+		color: #e0f2fe;
 		font-size: 1rem;
 		margin-top: 0.5rem;
+		font-weight: 500;
 	}
 
 	/* メインレイアウト */
@@ -146,20 +149,20 @@ const baseUrl = import.meta.env.BASE_URL;
 		gap: 2.5rem;
 	}
 
-	/* カードスタイル */
+	/* カードスタイル: 背景・境界線をサイト共通ルールに統一 */
 	.card {
-		background: white;
+		background: #ffffff;
 		border-radius: 16px;
 		padding: 2.5rem;
 		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
 		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
-		border: 1px solid #f1f5f9;
+		border: 1px solid #e2e8f0;
 		overflow: hidden;
 	}
 
-	/*  ブランドバナー（ロゴフィーチャーセクション）  */
+	/* ブランドバナー */
 	.brand-banner {
 		display: flex;
 		align-items: center;
@@ -181,6 +184,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		padding: 12px;
 		box-shadow: 0 4px 15px rgba(2, 132, 199, 0.12);
 		flex-shrink: 0;
+		border: 1px solid #e2e8f0;
 	}
 	.brand-logo-img {
 		width: 100%;
@@ -209,9 +213,9 @@ const baseUrl = import.meta.env.BASE_URL;
 	}
 
 	.card h2 {
-		font-size: 1.5rem;
+		font-size: 1.45rem;
 		color: #0f172a;
-		border-bottom: 2px solid #bae6fd;
+		border-bottom: 2px solid #e0f2fe;
 		padding-bottom: 0.5rem;
 		margin-bottom: 1.5rem;
 		font-weight: 700;
@@ -226,8 +230,8 @@ const baseUrl = import.meta.env.BASE_URL;
 		margin-bottom: 1.5rem;
 	}
 	.block h3 {
-		font-size: 1.15rem;
-		color: #0369a1;
+		font-size: 1.1rem;
+		color: #0284c7;
 		margin-bottom: 0.5rem;
 		font-weight: 700;
 	}
@@ -284,7 +288,7 @@ const baseUrl = import.meta.env.BASE_URL;
 	}
 	.grid-item strong {
 		display: block;
-		color: #0369a1;
+		color: #0284c7;
 		font-size: 0.95rem;
 		margin-bottom: 0.35rem;
 	}
@@ -331,7 +335,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		object-fit: contain;
 	}
 
-	/*  スマホ表示対応  */
+	/* スマホ表示対応 */
 	@media (max-width: 640px) {
 		.card {
 			padding: 1.5rem 1.25rem;
