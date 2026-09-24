@@ -4,19 +4,25 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
+		<!-- ヒーローエリア -->
 		<section class="hero">
 			<div class="container hero-inner">
-				<div class="badge animate-badge">
+				<div class="badge">
 					<span class="badge-dot"></span>
 					うみぽす甲子園2026 ファイナリスト
 				</div>
-				<h1 class="hero-title">
-					<span class="title-line-1">「見る看板」から</span><br class="sp-only" />
-					<span class="title-line-2"><span class="highlight">「伝わる看板」へ</span></span>
-				</h1>
-				<p class="hero-subtitle">
-					<span>名護の海を守る「海のサインプロジェクト」</span><span class="launch-badge">始動！</span>
-				</p>
+				
+				<div class="hero-text-wrap">
+					<p class="hero-subline">
+						「見る看板」から
+					</p>
+					<h1 class="hero-mainline">
+						「<span class="contrast-blue">伝わる看板</span>」へ
+					</h1>
+					<p class="hero-caption">
+						名護の海を守る「海のサインプロジェクト」始動！
+					</p>
+				</div>
 			</div>
 		</section>
 
@@ -118,144 +124,111 @@ import Layout from '../layouts/Layout.astro';
 <style>
 	/* ヒーローエリア */
 	.hero {
-		background: radial-gradient(circle at 50% 0%, #0284c7 0%, #0369a1 50%, #0f172a 100%);
-		color: white;
-		padding: 5rem 0 6.5rem;
+		background: radial-gradient(circle at 50% 15%, #0f2438 0%, #09131d 75%, #04080e 100%);
+		padding: 5rem 1.25rem 6.5rem;
 		text-align: center;
 		position: relative;
-		overflow: hidden;
 	}
 	.hero-inner {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		max-width: 860px;
+		margin: 0 auto;
 	}
 
-	/* バッジのアニメーション */
+	/* バッジ */
 	.badge {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(255, 255, 255, 0.12);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
-		border: 1px solid rgba(255, 255, 255, 0.25);
-		padding: 0.4rem 1rem;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		padding: 0.35rem 1rem;
 		border-radius: 9999px;
 		font-size: 0.8rem;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		margin-bottom: 1.5rem;
-		opacity: 0;
-		animation: heroTextReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+		font-weight: 600;
+		color: #cbd5e1;
+		letter-spacing: 0.04em;
+		margin-bottom: 2rem;
 	}
 	.badge-dot {
-		width: 8px;
-		height: 8px;
+		width: 7px;
+		height: 7px;
 		background-color: #38bdf8;
 		border-radius: 50%;
-		box-shadow: 0 0 12px #38bdf8;
 	}
 
-	/* ヒーロータイトルと時間差アニメーション */
-	.hero-title {
-		font-size: 2.75rem;
-		font-weight: 800;
-		line-height: 1.35;
-		margin-bottom: 1rem;
-		letter-spacing: -0.01em;
-	}
-
-	.title-line-1 {
-		display: inline-block;
-		opacity: 0;
-		animation: heroTextReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
-	}
-
-	.title-line-2 {
-		display: inline-block;
-		opacity: 0;
-		animation: heroTextReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-	}
-
-	/* 「伝わる看板」へのクリスタル光彩シマー */
-	.highlight {
-		background: linear-gradient(
-			120deg,
-			#7dd3fc 0%,
-			#38bdf8 25%,
-			#ffffff 48%,
-			#67e8f9 55%,
-			#38bdf8 80%,
-			#7dd3fc 100%
-		);
-		background-size: 250% auto;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		animation: crystalTextFlow 6s linear infinite;
-		display: inline-block;
-		filter: drop-shadow(0 2px 10px rgba(56, 189, 248, 0.3));
-	}
-
-	/* サブタイトルと始動バッジ */
-	.hero-subtitle {
-		font-size: 1.15rem;
-		color: #93c5fd;
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		display: inline-flex;
+	/* キャッチコピー文字エリア */
+	.hero-text-wrap {
+		display: flex;
+		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-		opacity: 0;
-		animation: heroTextReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+		gap: 0.4rem;
 	}
 
-	.launch-badge {
-		background: linear-gradient(135deg, #0284c7, #38bdf8);
+	/* 1行目: オフホワイトで素直に読ませる */
+	.hero-subline {
+		font-size: clamp(1.2rem, 3vw, 1.55rem);
+		font-weight: 600;
+		color: #e2e8f0;
+		letter-spacing: 0.04em;
+		margin: 0;
+	}
+
+	/* 2行目 */
+	.hero-mainline {
+		font-size: clamp(2.3rem, 6vw, 3.6rem);
+		font-weight: 900;
 		color: #ffffff;
-		font-size: 0.8rem;
-		font-weight: 800;
-		padding: 0.2rem 0.65rem;
+		line-height: 1.25;
+		margin: 0.25rem 0 0.75rem;
+		letter-spacing: 0.02em;
+	}
+
+	/* ▼ 青文字 ＋ 背後に反対色（アンバー・オレンジ）のバックライト演出 ▼ */
+	.contrast-blue {
+		position: relative;
+		display: inline-block;
+		color: #38bdf8; /* 清涼感のあるオーシャンブルー */
+		font-weight: 900;
+		/* 青の反対色（オレンジ・アンバー）の柔らかな多重シャドウで文字輪郭を際立たせる */
+		text-shadow: 
+			0 0 10px rgba(249, 115, 22, 0.7),
+			0 0 24px rgba(245, 158, 11, 0.5),
+			0 0 45px rgba(234, 88, 12, 0.35);
+		padding: 0 0.15em;
+	}
+
+	/* 文字背後にふんわり敷く反対色のソフトグロー光体 */
+	.contrast-blue::before {
+		content: '';
+		position: absolute;
+		inset: -8% -15%;
+		background: radial-gradient(
+			ellipse at center,
+			rgba(245, 158, 11, 0.32) 0%,
+			rgba(234, 88, 12, 0.15) 50%,
+			transparent 75%
+		);
 		border-radius: 9999px;
-		box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
-		animation: badgePulse 2.5s ease-in-out infinite;
+		filter: blur(12px);
+		z-index: -1;
+		pointer-events: none;
 	}
 
-	/* アニメーション定義 */
-	@keyframes heroTextReveal {
-		0% {
-			opacity: 0;
-			transform: translateY(18px) scale(0.98);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-		}
-	}
-
-	@keyframes crystalTextFlow {
-		0% {
-			background-position: 250% center;
-		}
-		100% {
-			background-position: 0% center;
-		}
-	}
-
-	@keyframes badgePulse {
-		0%, 100% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.08);
-		}
+	/* 3行目 */
+	.hero-caption {
+		font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+		font-weight: 600;
+		color: #cbd5e1;
+		letter-spacing: 0.03em;
+		margin: 0;
 	}
 
 	/* メインレイアウト */
 	.section {
-		margin-top: -3rem;
+		margin-top: -2.5rem;
 		padding-bottom: 4rem;
 		position: relative;
 		z-index: 10;
@@ -263,18 +236,18 @@ import Layout from '../layouts/Layout.astro';
 	.flex-container {
 		display: flex;
 		flex-direction: column;
-		gap: 2.5rem;
+		gap: 2rem;
 	}
 
 	.card {
 		background: #ffffff;
-		border-radius: 16px;
-		padding: 2.5rem;
-		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
-		max-width: 1000px;
+		border-radius: 14px;
+		padding: 2.25rem;
+		box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+		max-width: 960px;
 		margin: 0 auto;
 		width: 100%;
-		border: 1px solid #f1f5f9;
+		border: 1px solid #e2e8f0;
 	}
 
 	.status-tag {
@@ -283,79 +256,77 @@ import Layout from '../layouts/Layout.astro';
 		color: #0369a1;
 		border: 1px solid #bae6fd;
 		font-weight: 700;
-		font-size: 0.8rem;
-		padding: 0.35rem 0.85rem;
+		font-size: 0.75rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 9999px;
-		margin-bottom: 1.25rem;
+		margin-bottom: 1rem;
 	}
 	.card h2 {
-		font-size: 1.5rem;
+		font-size: 1.35rem;
 		font-weight: 700;
-		margin-bottom: 1.25rem;
+		margin-bottom: 1rem;
 		color: #0f172a;
 		line-height: 1.45;
-		border-bottom: 2px solid #bae6fd;
+		border-bottom: 2px solid #e0f2fe;
 		padding-bottom: 0.5rem;
 	}
 	.desc {
-		color: #475569;
+		color: #334155;
 		line-height: 1.8;
-		font-size: 1rem;
-		margin-bottom: 2rem;
+		font-size: 0.975rem;
+		margin-bottom: 1.75rem;
 	}
 
-	/* ボックスデザイン */
 	.outline-box {
 		background: #f8fafc;
-		padding: 1.5rem;
-		border-radius: 12px;
+		padding: 1.25rem 1.5rem;
+		border-radius: 10px;
 		border: 1px solid #e2e8f0;
-		margin-bottom: 1.5rem;
+		margin-bottom: 1.25rem;
 	}
 	.outline-box h3 {
-		font-size: 1.1rem;
+		font-size: 1.05rem;
 		color: #0369a1;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.5rem;
 		font-weight: 700;
 	}
 	.box-desc {
 		color: #334155;
 		line-height: 1.75;
-		font-size: 0.95rem;
+		font-size: 0.925rem;
 	}
 
 	.message-box {
 		background: #f0f9ff;
 		border-left: 4px solid #0284c7;
 		padding: 1.25rem 1.5rem;
-		border-radius: 8px;
-		margin-bottom: 2rem;
+		border-radius: 6px;
+		margin-bottom: 1.5rem;
 	}
 	.message-box h3 {
-		font-size: 1.05rem;
+		font-size: 1rem;
 		color: #0369a1;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.35rem;
 		font-weight: 700;
 	}
 	.message-box p {
 		color: #1e293b;
 		line-height: 1.7;
-		font-size: 0.95rem;
+		font-size: 0.925rem;
 	}
 
 	.info-box {
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1.25rem 1.5rem;
-		font-size: 0.925rem;
+		border-radius: 10px;
+		padding: 1rem 1.25rem;
+		font-size: 0.9rem;
 		color: #0369a1;
-		font-weight: 700;
+		font-weight: 600;
 		text-align: center;
 		line-height: 1.6;
 	}
 
-	/* RSSブログ一覧スタイル */
 	.blog-header {
 		display: flex;
 		justify-content: space-between;
@@ -372,7 +343,7 @@ import Layout from '../layouts/Layout.astro';
 	.all-posts-link {
 		font-size: 0.85rem;
 		color: #0284c7;
-		font-weight: 700;
+		font-weight: 600;
 		text-decoration: none;
 	}
 	.all-posts-link:hover {
@@ -382,39 +353,36 @@ import Layout from '../layouts/Layout.astro';
 	.blog-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: 0.65rem;
 	}
 
-	/* 動的生成されるブログアイテム */
 	:global(.blog-item) {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		padding: 1rem 1.25rem;
+		padding: 0.85rem 1.15rem;
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
-		border-radius: 10px;
+		border-radius: 8px;
 		text-decoration: none;
-		transition: all 0.2s ease;
+		transition: border-color 0.2s, background-color 0.2s;
 	}
 	:global(.blog-item:hover) {
 		background: #ffffff;
-		border-color: #bae6fd;
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+		border-color: #38bdf8;
 	}
 	:global(.blog-date) {
-		font-size: 0.8rem;
-		font-weight: 700;
-		color: #0284c7;
+		font-size: 0.775rem;
+		font-weight: 600;
+		color: #0369a1;
 		background: #e0f2fe;
-		padding: 0.25rem 0.6rem;
-		border-radius: 6px;
+		padding: 0.2rem 0.55rem;
+		border-radius: 4px;
 		flex-shrink: 0;
 	}
 	:global(.blog-title) {
-		font-size: 0.95rem;
-		font-weight: 700;
+		font-size: 0.925rem;
+		font-weight: 600;
 		color: #1e293b;
 		flex: 1;
 		white-space: nowrap;
@@ -422,30 +390,30 @@ import Layout from '../layouts/Layout.astro';
 		text-overflow: ellipsis;
 	}
 	:global(.blog-arrow) {
-		font-weight: bold;
-		color: #0284c7;
+		color: #64748b;
 		flex-shrink: 0;
+		font-size: 0.9rem;
 	}
 
 	.loading-text,
 	.no-posts {
 		color: #64748b;
-		font-size: 0.9rem;
+		font-size: 0.875rem;
 		text-align: center;
 		padding: 1.5rem 0;
 	}
 
 	@media (max-width: 640px) {
-		.hero-title {
-			font-size: 2.1rem;
+		.hero {
+			padding: 3.5rem 1rem 5rem;
 		}
 		.card {
-			padding: 1.75rem 1.25rem;
+			padding: 1.5rem 1rem;
 		}
 		:global(.blog-item) {
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 0.5rem;
+			gap: 0.4rem;
 		}
 		:global(.blog-title) {
 			white-space: normal;
