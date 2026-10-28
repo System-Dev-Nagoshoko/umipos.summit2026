@@ -106,11 +106,10 @@ const languages = [
 					</button>
 				</div>
 
-				<!-- ナビゲーションメニュー -->
+				<!-- ナビゲーションメニュー（EVENTボタンを削除） -->
 				<nav class="nav" id="siteNav">
 					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
 					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
-					<a href={`${baseUrl}event/`} class:list={["nav-item", { active: isActive('event') }]}>EVENT</a>
 					<a href={`${baseUrl}sponsor/`} class:list={["nav-item", { active: isActive('sponsor') }]}>PARTNER</a>
 					<a href={`${baseUrl}poster/`} class:list={["nav-item", { active: isActive('poster') }]}>POSTER</a>
 					<a href={`${baseUrl}sns/`} class:list={["nav-item", { active: isActive('sns') }]}>SNS</a>
@@ -163,7 +162,6 @@ const languages = [
 				const domainParts = hostname.split('.');
 				const domains = ['', hostname, `.${hostname}`];
 
-				// サブドメインの階層を走査して対象ドメイン配列を作成
 				for (let i = 0; i < domainParts.length - 1; i++) {
 					const rootDomain = domainParts.slice(i).join('.');
 					domains.push(rootDomain);
@@ -226,26 +224,22 @@ const languages = [
 						}
 
 						if (targetLang === 'ja') {
-							// 1. Google翻訳のコンボボックスを日本語に切り替え
 							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
 							if (select) {
 								select.value = 'ja';
 								select.dispatchEvent(new Event('change'));
 							}
 
-							// 2. Google翻訳の復元ボタン（オリジナル表示ボタン）が存在する場合は強制クリック
 							const restoreBtn = document.querySelector('.goog-te-banner-frame')?.contentWindow?.document?.getElementById(':1.restore') as HTMLElement | null;
 							if (restoreBtn) {
 								restoreBtn.click();
 							}
 
-							// 3. 全階層のCookieを完全消去して確実に初期状態へリロード
 							removeGoogleTranslateCookies();
 							setTimeout(() => {
 								window.location.reload();
 							}, 120);
 						} else {
-							// 外国語への切り替え
 							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
 							if (select && targetLang) {
 								select.value = targetLang;
@@ -306,7 +300,6 @@ const languages = [
 		overflow-x: hidden;
 	}
 
-	/* Google翻訳デフォルトのバーやズレを完全非表示 */
 	body {
 		top: 0 !important;
 		font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -327,7 +320,6 @@ const languages = [
 		visibility: hidden !important;
 	}
 
-	/* 背景クリスタルレイヤー */
 	.crystal-background {
 		position: fixed;
 		inset: 0;
@@ -417,7 +409,6 @@ const languages = [
 		}
 	}
 
-	/* カードのクリスタルグラス */
 	.card,
 	.policy-card,
 	.sns-card,
@@ -476,7 +467,6 @@ const languages = [
 		padding: 0 1.5rem;
 	}
 
-	/* ヘッダー */
 	.site-header {
 		background: rgba(255, 255, 255, 0.82);
 		backdrop-filter: blur(16px);
@@ -528,7 +518,6 @@ const languages = [
 		letter-spacing: 0.02em;
 	}
 
-	/* 右側アクションエリア */
 	.header-right {
 		display: flex;
 		align-items: center;
@@ -536,7 +525,6 @@ const languages = [
 		z-index: 60;
 	}
 
-	/* 地球マーク 言語切替ボタン */
 	.lang-switcher {
 		position: relative;
 	}
@@ -581,7 +569,6 @@ const languages = [
 		color: #64748b;
 	}
 
-	/* ドロップダウンメニュー */
 	.lang-dropdown {
 		position: absolute;
 		top: calc(100% + 8px);
@@ -665,7 +652,6 @@ const languages = [
 		font-weight: 700;
 	}
 
-	/* ナビゲーションメニュー */
 	.nav {
 		display: flex;
 		gap: 0.35rem;
@@ -713,7 +699,6 @@ const languages = [
 		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
 	}
 
-	/* ハンバーガーアイコン */
 	.hamburger-btn {
 		display: none;
 		flex-direction: column;
@@ -744,7 +729,6 @@ const languages = [
 		transform: translateY(-9px) rotate(-45deg);
 	}
 
-	/* フッター構造 */
 	.site-footer {
 		text-align: center;
 		padding: 3rem 0;
