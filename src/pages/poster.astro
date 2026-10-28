@@ -1,9 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-const baseUrl = import.meta.env.BASE_URL;
-
-// 画像ディレクトリのベースパス（public/images/pictograms/ 配下に設置した場合）
-const imgBase = `${baseUrl}images/pictograms`;
 ---
 
 <Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
@@ -39,11 +35,11 @@ const imgBase = `${baseUrl}images/pictograms`;
               <h2 id="cat-safe-title">安全に遊ぶ</h2>
               <p class="ss-group__desc">海の流れ、波、岩場についての注意です。見た目では分かりにくいので、海に入る前に確認してください。</p>
               <div class="ss-grid">
-                <a class="ss-tile" id="t-rip-current" href="#rip-current"><img src={`${imgBase}/01_safe/離岸流注意（溺れる）.png`} alt="" /><span>離岸流</span></a>
-                <a class="ss-tile" id="t-high-waves" href="#high-waves"><img src={`${imgBase}/01_safe/高波・津波に注意.png`} alt="" /><span>高波・津波</span></a>
-                <a class="ss-tile" id="t-slippery-rocks" href="#slippery-rocks"><img src={`${imgBase}/01_safe/足元注意.png`} alt="" /><span>足元注意</span></a>
-                <a class="ss-tile" id="t-no-diving" href="#no-diving"><img src={`${imgBase}/01_safe/飛び込み禁止.png`} alt="" /><span>飛び込み禁止</span></a>
-                <a class="ss-tile" id="t-life-jacket" href="#life-jacket"><img src={`${imgBase}/01_safe/ライフジャケット着用.png`} alt="" /><span>ライフジャケット</span></a>
+                <a class="ss-tile" id="t-rip-current" href="#rip-current"><span class="ss-tile__noimg">画像準備中</span><span>離岸流</span></a>
+                <a class="ss-tile" id="t-high-waves" href="#high-waves"><span class="ss-tile__noimg">画像準備中</span><span>高波・津波</span></a>
+                <a class="ss-tile" id="t-slippery-rocks" href="#slippery-rocks"><span class="ss-tile__noimg">画像準備中</span><span>足元注意</span></a>
+                <a class="ss-tile" id="t-no-diving" href="#no-diving"><span class="ss-tile__noimg">画像準備中</span><span>飛び込み禁止</span></a>
+                <a class="ss-tile" id="t-life-jacket" href="#life-jacket"><span class="ss-tile__noimg">画像準備中</span><span>ライフジャケット</span></a>
               </div>
             </section>
 
@@ -52,10 +48,10 @@ const imgBase = `${baseUrl}images/pictograms`;
               <h2 id="cat-creatures-title">危険生物</h2>
               <p class="ss-group__desc">沖縄の海で注意が必要な、毒やトゲのある生きものです。水中では見えにくいものもいます。見つけても触らないでください。</p>
               <div class="ss-grid">
-                <a class="ss-tile" id="t-jellyfish" href="#jellyfish"><img src={`${imgBase}/02_creatures/クラゲ注意.png`} alt="" /><span>ハブクラゲ</span></a>
-                <a class="ss-tile" id="t-stonefish" href="#stonefish"><img src={`${imgBase}/02_creatures/オニダルマオコゼ注意.png`} alt="" /><span>オニダルマオコゼ</span></a>
-                <a class="ss-tile" id="t-sea-urchin" href="#sea-urchin"><img src={`${imgBase}/02_creatures/ウニ注意.png`} alt="" /><span>ウニ</span></a>
-                <a class="ss-tile" id="t-sea-snake" href="#sea-snake"><img src={`${imgBase}/02_creatures/ウミヘビ・ミノカサゴ.png`} alt="" /><span>ウミヘビ・ミノカサゴ</span></a>
+                <a class="ss-tile" id="t-jellyfish" href="#jellyfish"><span class="ss-tile__noimg">画像準備中</span><span>ハブクラゲ</span></a>
+                <a class="ss-tile" id="t-stonefish" href="#stonefish"><span class="ss-tile__noimg">画像準備中</span><span>オニダルマオコゼ</span></a>
+                <a class="ss-tile" id="t-sea-urchin" href="#sea-urchin"><span class="ss-tile__noimg">画像準備中</span><span>ウニ</span></a>
+                <a class="ss-tile" id="t-sea-snake" href="#sea-snake"><span class="ss-tile__noimg">画像準備中</span><span>ウミヘビ・ミノカサゴ</span></a>
               </div>
             </section>
 
@@ -64,7 +60,7 @@ const imgBase = `${baseUrl}images/pictograms`;
               <h2 id="cat-enjoy-title">楽しく利用する</h2>
               <p class="ss-group__desc">お酒を飲んだあと、子どもだけ、ひとりで、天気が悪い日。事故が起きやすい場面についての約束です。</p>
               <div class="ss-grid">
-                <a class="ss-tile" id="t-no-alcohol" href="#no-alcohol"><img src={`${imgBase}/03_enjoy/酒飲んだら泳ぐな.png`} alt="" /><span>飲酒遊泳禁止</span></a>
+                <a class="ss-tile" id="t-no-alcohol" href="#no-alcohol"><span class="ss-tile__noimg">画像準備中</span><span>飲酒遊泳禁止</span></a>
                 <a class="ss-tile" id="t-kids" href="#kids"><span class="ss-tile__noimg">画像準備中</span><span>子どもから目を離さない</span></a>
                 <a class="ss-tile" id="t-alone" href="#alone"><span class="ss-tile__noimg">画像準備中</span><span>ひとりで入らない</span></a>
                 <a class="ss-tile" id="t-weather" href="#weather"><span class="ss-tile__noimg">画像準備中</span><span>天気・波を確認</span></a>
@@ -76,7 +72,7 @@ const imgBase = `${baseUrl}images/pictograms`;
               <h2 id="cat-protect-title">海を守る</h2>
               <p class="ss-group__desc">ゴミとサンゴについてのマナーです。サンゴは踏むと折れて、元に戻るまで長い時間がかかります。</p>
               <div class="ss-grid">
-                <a class="ss-tile" id="t-trash" href="#trash"><img src={`${imgBase}/04_protect/ゴミは持ち帰ろう.png`} alt="" /><span>ゴミは持ち帰る</span></a>
+                <a class="ss-tile" id="t-trash" href="#trash"><span class="ss-tile__noimg">画像準備中</span><span>ゴミは持ち帰る</span></a>
                 <a class="ss-tile" id="t-coral" href="#coral"><span class="ss-tile__noimg">画像準備中</span><span>サンゴに乗らない・踏まない</span></a>
               </div>
             </section>
@@ -86,9 +82,9 @@ const imgBase = `${baseUrl}images/pictograms`;
               <h2 id="cat-rules-title">ビーチのルール</h2>
               <p class="ss-group__desc">このビーチで決められているルールです。旗の色と、監視員の指示に従ってください。</p>
               <div class="ss-grid">
-                <a class="ss-tile" id="t-no-swim-zone" href="#no-swim-zone"><img src={`${imgBase}/05_rules/遊泳禁止区域.png`} alt="" /><span>遊泳禁止区域</span></a>
-                <a class="ss-tile" id="t-flags" href="#flags"><img src={`${imgBase}/05_rules/赤旗黄旗.png`} alt="" /><span>赤旗・黄旗</span></a>
-                <a class="ss-tile" id="t-lifeguard" href="#lifeguard"><img src={`${imgBase}/05_rules/監視員の話を聞く.png`} alt="" /><span>監視員の指示</span></a>
+                <a class="ss-tile" id="t-no-swim-zone" href="#no-swim-zone"><span class="ss-tile__noimg">画像準備中</span><span>遊泳禁止区域</span></a>
+                <a class="ss-tile" id="t-flags" href="#flags"><span class="ss-tile__noimg">画像準備中</span><span>赤旗・黄旗</span></a>
+                <a class="ss-tile" id="t-lifeguard" href="#lifeguard"><span class="ss-tile__noimg">画像準備中</span><span>監視員の指示</span></a>
               </div>
 
               <h3 class="ss-subhead">このビーチで禁止されていること</h3>
@@ -172,7 +168,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-rip-current" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/01_safe/離岸流注意（溺れる）.png`} alt="沖に流される人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="rip-current-title">離岸流</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -188,7 +184,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-high-waves" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/01_safe/高波・津波に注意.png`} alt="高い波に飲まれる人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="high-waves-title">高波・津波</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -204,7 +200,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-slippery-rocks" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/01_safe/足元注意.png`} alt="岩場ですべる人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="slippery-rocks-title">足元注意</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -220,7 +216,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-diving" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/01_safe/飛び込み禁止.png`} alt="海に飛び込む人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="no-diving-title">飛び込み禁止</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -235,7 +231,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-life-jacket" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/01_safe/ライフジャケット着用.png`} alt="ライフジャケットを着た人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="life-jacket-title">ライフジャケット</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -251,7 +247,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-jellyfish" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/02_creatures/クラゲ注意.png`} alt="クラゲに刺される人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="jellyfish-title">ハブクラゲ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -270,7 +266,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-stonefish" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/02_creatures/オニダルマオコゼ注意.png`} alt="オニダルマオコゼの警告ピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="stonefish-title">オニダルマオコゼ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -289,7 +285,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-sea-urchin" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/02_creatures/ウニ注意.png`} alt="足元のウニのピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="sea-urchin-title">ウニ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -304,7 +300,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-sea-snake" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/02_creatures/ウミヘビ・ミノカサゴ.png`} alt="ミノカサゴとウミヘビのイラスト" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="sea-snake-title">ウミヘビ・ミノカサゴ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -320,7 +316,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-alcohol" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/03_enjoy/酒飲んだら泳ぐな.png`} alt="お酒を飲んで泳ぐことを禁止するピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="no-alcohol-title">飲酒遊泳禁止</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -381,7 +377,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-trash" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/04_protect/ゴミは持ち帰ろう.png`} alt="ゴミ袋を持ち帰る人のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="trash-title">ゴミは持ち帰る</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>来た時よりきれいにして帰ろう。</dd></dl>
@@ -408,7 +404,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-swim-zone" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/05_rules/遊泳禁止区域.png`} alt="遊泳禁止区域の標識" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="no-swim-zone-title">遊泳禁止区域</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>決められた区域（防護ネットの中）だけで泳ぐ。</dd></dl>
@@ -421,7 +417,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-flags" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/05_rules/赤旗黄旗.png`} alt="赤と黄色の旗のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="flags-title">赤旗・黄旗</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>赤旗</dt><dd>遊泳禁止</dd><dt>黄旗</dt><dd>遊泳注意</dd></dl>
@@ -434,7 +430,7 @@ const imgBase = `${baseUrl}images/pictograms`;
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-lifeguard" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <img src={`${imgBase}/05_rules/監視員の話を聞く.png`} alt="監視台から笛を吹く監視員のピクトグラム" />
+            <span class="ss-panel__noimg">画像準備中</span>
             <div class="ss-panel__title"><h2 id="lifeguard-title">監視員の指示</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>監視員の指示に従う。監視台には登らない。</dd></dl>
@@ -504,7 +500,6 @@ const imgBase = `${baseUrl}images/pictograms`;
       update();
     }
 
-    // Astro の View Transitions や初期読み込みの双方に対応
     document.addEventListener('astro:page-load', initReportGuide);
     if (document.readyState !== 'loading') {
       initReportGuide();
