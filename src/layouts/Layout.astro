@@ -106,7 +106,7 @@ const languages = [
 					</button>
 				</div>
 
-				<!-- ナビゲーションメニュー（EVENTボタンを削除） -->
+				<!-- ナビゲーションメニュー -->
 				<nav class="nav" id="siteNav">
 					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>TOP</a>
 					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>ABOUT</a>
@@ -124,7 +124,7 @@ const languages = [
 
 		<footer class="site-footer">
 			<div class="container footer-container">
-				<p class="copyright notranslate">&copy; 2026 Nago Youth Future Summit & 海のサインプロジェクト All rights reserved.</p>
+				<p class="copyright notranslate">&copy; 海のサインプロジェクト Created by NYC / Developer <a href="https://sites.google.com/view/meisi1/meisi" target="_blank" rel="noopener noreferrer">Jinn</a> All rights reserved.</p>
 			</div>
 		</footer>
 
@@ -180,16 +180,11 @@ const languages = [
 			}
 
 			// ─── Safari 対策：Google翻訳が動かない時は、Google の翻訳ページ（translate.goog）で開き直す ───
-			// iPhone の Safari では、プライバシー保護のため Google翻訳の部品が翻訳結果を取得できず、
-			// ボタンの表示だけ変わって文字が日本語のままになる（同じ iPhone の Chrome では起きない）。
-			// 言語を選んでも本文が訳されない時だけ、Google の翻訳ページに切り替えて翻訳を表示する。
 			const PROXY_SUFFIX = '.translate.goog';
 			const PROXY_PARAMS = ['_x_tr_sl', '_x_tr_tl', '_x_tr_hl', '_x_tr_pto'];
 			const isProxyPage = window.location.hostname.endsWith(PROXY_SUFFIX);
-			// 手元の開発環境（localhost）は Google の翻訳ページから見えないので切り替えない
 			const canUseProxy = !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 
-			// uminosign.nagoyc.stki.org ⇔ uminosign-nagoyc-stki-org.translate.goog
 			function toProxyHost(host: string) {
 				return host.replace(/-/g, '--').replace(/\./g, '-') + PROXY_SUFFIX;
 			}
@@ -200,7 +195,6 @@ const languages = [
 					.map((part) => part.replace(/-/g, '.'))
 					.join('-');
 			}
-			// Google の翻訳ページのURL（今のページを、指定の言語で）
 			function proxyUrl(lang: string) {
 				const url = new URL(window.location.href);
 				if (!isProxyPage) url.hostname = toProxyHost(url.hostname);
@@ -213,15 +207,13 @@ const languages = [
 				url.searchParams.set('_x_tr_pto', 'wapp');
 				return url.toString();
 			}
-			// Google の翻訳ページから、元のサイトの日本語ページに戻るURL
 			function originalUrl() {
 				const url = new URL(window.location.href);
 				url.hostname = fromProxyHost(url.hostname);
 				PROXY_PARAMS.forEach((key) => url.searchParams.delete(key));
-				url.searchParams.set('lang', 'ja'); // 戻った先で翻訳の記録（Cookie）を消すための目印
+				url.searchParams.set('lang', 'ja');
 				return url.toString();
 			}
-			// 本文のひらがな・カタカナの数（訳されると、ほぼ無くなる）
 			function kanaCount() {
 				const text = Array.from(document.querySelectorAll('main h2, main h3, main p'))
 					.slice(0, 20)
@@ -229,18 +221,17 @@ const languages = [
 					.join('');
 				return (text.match(/[぀-ヿ]/g) || []).length;
 			}
-			// 6秒たっても本文が訳されなければ、Google の翻訳ページへ切り替える
 			let fallbackTimer: number | undefined;
 			function watchTranslation(lang: string) {
 				if (!canUseProxy || isProxyPage) return;
 				window.clearInterval(fallbackTimer);
 				const start = kanaCount();
-				if (start < 20) return; // すでに訳されている（または比べられるほど本文がない）
+				if (start < 20) return;
 				let waited = 0;
 				fallbackTimer = window.setInterval(() => {
 					waited += 500;
 					if (kanaCount() < start * 0.3) {
-						window.clearInterval(fallbackTimer); // 訳された
+						window.clearInterval(fallbackTimer);
 					} else if (waited >= 6000) {
 						window.clearInterval(fallbackTimer);
 						window.location.href = proxyUrl(lang);
@@ -248,7 +239,6 @@ const languages = [
 				}, 500);
 			}
 
-			// Google の翻訳ページから「日本語」で戻ってきた時：翻訳の記録を消して、目印をURLから外す
 			const pageParams = new URLSearchParams(window.location.search);
 			if (!isProxyPage && pageParams.get('lang') === 'ja') {
 				removeGoogleTranslateCookies();
@@ -258,14 +248,12 @@ const languages = [
 			}
 			// ─── ここまで Safari 対策 ───
 
-			// 初期表示時に現在の言語を反映（Google の翻訳ページでは URL から、それ以外は Cookie から）
 			const savedLangCookie = getCookie('googtrans');
 			const proxyLang = isProxyPage ? pageParams.get('_x_tr_tl') : null;
 			if ((proxyLang || savedLangCookie) && currentLangLabel) {
 				const langParts = (proxyLang ?? savedLangCookie ?? '').split('/');
 				const langCode = langParts[langParts.length - 1];
 				if (langCode && langCode !== 'ja') {
-					// 別のページに移った時も、訳されなければ Google の翻訳ページへ（Safari 対策）
 					if (!proxyLang) watchTranslation(langCode);
 					currentLangLabel.textContent = langCode.toUpperCase().split('-')[0];
 					langOptions.forEach(opt => {
@@ -278,14 +266,12 @@ const languages = [
 			}
 
 			if (langBtn && langDropdown) {
-				// 開閉トグル
 				langBtn.addEventListener('click', (e) => {
 					e.stopPropagation();
 					const isOpen = langDropdown.classList.toggle('is-open');
 					langBtn.setAttribute('aria-expanded', String(isOpen));
 				});
 
-				// 外側クリックで閉じる
 				document.addEventListener('click', (e) => {
 					if (langSwitcher && !langSwitcher.contains(e.target as Node)) {
 						langDropdown.classList.remove('is-open');
@@ -293,7 +279,6 @@ const languages = [
 					}
 				});
 
-				// 各言語ボタンクリック処理
 				langOptions.forEach((option) => {
 					option.addEventListener('click', () => {
 						const targetLang = option.getAttribute('data-lang');
@@ -305,7 +290,6 @@ const languages = [
 							currentLangLabel.textContent = label;
 						}
 
-						// Google の翻訳ページ上では、ページごと開き直して言語を切り替える（Safari 対策）
 						if (isProxyPage && targetLang) {
 							window.location.href = targetLang === 'ja' ? originalUrl() : proxyUrl(targetLang);
 							return;
@@ -333,9 +317,8 @@ const languages = [
 							if (select && targetLang) {
 								select.value = targetLang;
 								select.dispatchEvent(new Event('change'));
-								watchTranslation(targetLang); // 訳されなければ Google の翻訳ページへ（Safari 対策）
+								watchTranslation(targetLang);
 							} else if (!select && targetLang && canUseProxy) {
-								// Google翻訳の部品そのものが読み込めていない時は、すぐ Google の翻訳ページへ
 								window.location.href = proxyUrl(targetLang);
 							}
 						}
@@ -838,6 +821,15 @@ const languages = [
 
 	.copyright {
 		line-height: 1.8;
+	}
+
+	.copyright a {
+		color: inherit;
+		text-decoration: underline;
+	}
+
+	.copyright a:hover {
+		color: var(--primary);
 	}
 
 	@media (max-width: 768px) {
