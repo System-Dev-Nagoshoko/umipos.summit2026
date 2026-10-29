@@ -17,146 +17,144 @@ import Layout from '../layouts/Layout.astro';
 
     <section class="section">
       <div class="container">
-        <div class="flex-container">
-          <!-- ピクトグラム一覧 -->
-          <div class="card">
-            <p class="ss-lead">看板で見た絵をタップすると、意味と、どうすればいいかが表示されます。QRコードから開いた場合は、その絵の説明が先に表示されています。</p>
-            <nav class="ss-toc" aria-label="もくじ">
-              <a href="#cat-safe">安全に遊ぶ</a>
-              <a href="#cat-creatures">危険生物</a>
-              <a href="#cat-enjoy">楽しく利用する</a>
-              <a href="#cat-protect">海を守る</a>
-              <a href="#cat-rules">ビーチのルール</a>
-              <a href="#emergency">もしもの時</a>
-            </nav>
+        <!-- 案内文章 -->
+        <p class="ss-lead">看板で見た絵をタップすると、意味と、どうすればいいかが表示されます。QRコードから開いた場合は、その絵の説明が先に表示されています。</p>
+        
+        <!-- もくじ -->
+        <nav class="ss-toc" aria-label="もくじ">
+          <a href="#cat-safe">安全に遊ぶ</a>
+          <a href="#cat-creatures">危険生物</a>
+          <a href="#cat-enjoy">楽しく利用する</a>
+          <a href="#cat-protect">海を守る</a>
+          <a href="#cat-rules">ビーチのルール</a>
+          <a href="#emergency">もしもの時</a>
+        </nav>
 
-            <!-- 1. 安全に遊ぶ -->
-            <section class="ss-group" id="cat-safe" aria-labelledby="cat-safe-title">
-              <h2 id="cat-safe-title">安全に遊ぶ</h2>
-              <p class="ss-group__desc">海の流れ、波、岩場についての注意です。見た目では分かりにくいので、海に入る前に確認してください。</p>
-              <div class="ss-grid">
-                <a class="ss-tile" id="t-rip-current" href="#rip-current"><span class="ss-tile__noimg">画像準備中</span><span>離岸流</span></a>
-                <a class="ss-tile" id="t-high-waves" href="#high-waves"><span class="ss-tile__noimg">画像準備中</span><span>高波・津波</span></a>
-                <a class="ss-tile" id="t-slippery-rocks" href="#slippery-rocks"><span class="ss-tile__noimg">画像準備中</span><span>足元注意</span></a>
-                <a class="ss-tile" id="t-no-diving" href="#no-diving"><span class="ss-tile__noimg">画像準備中</span><span>飛び込み禁止</span></a>
-                <a class="ss-tile" id="t-life-jacket" href="#life-jacket"><span class="ss-tile__noimg">画像準備中</span><span>ライフジャケット</span></a>
-              </div>
-            </section>
+        <!-- 1. 安全に遊ぶ -->
+        <section class="ss-group" id="cat-safe" aria-labelledby="cat-safe-title">
+          <h2 id="cat-safe-title">安全に遊ぶ</h2>
+          <p class="ss-group__desc">海の流れ、波、岩場についての注意です。見た目では分かりにくいので、海に入る前に確認してください。</p>
+          <div class="ss-grid">
+            <a class="ss-tile" id="t-rip-current" href="#rip-current"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">離岸流</span></a>
+            <a class="ss-tile" id="t-high-waves" href="#high-waves"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">高波・津波</span></a>
+            <a class="ss-tile" id="t-slippery-rocks" href="#slippery-rocks"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">足元注意</span></a>
+            <a class="ss-tile" id="t-no-diving" href="#no-diving"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">飛び込み禁止</span></a>
+            <a class="ss-tile" id="t-life-jacket" href="#life-jacket"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ライフジャケット</span></a>
+          </div>
+        </section>
 
-            <!-- 2. 危険生物 -->
-            <section class="ss-group" id="cat-creatures" aria-labelledby="cat-creatures-title">
-              <h2 id="cat-creatures-title">危険生物</h2>
-              <p class="ss-group__desc">沖縄の海で注意が必要な、毒やトゲのある生きものです。水中では見えにくいものもいます。見つけても触らないでください。</p>
-              <div class="ss-grid">
-                <a class="ss-tile" id="t-jellyfish" href="#jellyfish"><span class="ss-tile__noimg">画像準備中</span><span>ハブクラゲ</span></a>
-                <a class="ss-tile" id="t-stonefish" href="#stonefish"><span class="ss-tile__noimg">画像準備中</span><span>オニダルマオコゼ</span></a>
-                <a class="ss-tile" id="t-sea-urchin" href="#sea-urchin"><span class="ss-tile__noimg">画像準備中</span><span>ウニ</span></a>
-                <a class="ss-tile" id="t-sea-snake" href="#sea-snake"><span class="ss-tile__noimg">画像準備中</span><span>ウミヘビ・ミノカサゴ</span></a>
-              </div>
-            </section>
+        <!-- 2. 危険生物 -->
+        <section class="ss-group" id="cat-creatures" aria-labelledby="cat-creatures-title">
+          <h2 id="cat-creatures-title">危険生物</h2>
+          <p class="ss-group__desc">沖縄の海で注意が必要な、毒やトゲのある生きものです。水中では見えにくいものもいます。見つけても触らないでください。</p>
+          <div class="ss-grid">
+            <a class="ss-tile" id="t-jellyfish" href="#jellyfish"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ハブクラゲ</span></a>
+            <a class="ss-tile" id="t-stonefish" href="#stonefish"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">オニダルマオコゼ</span></a>
+            <a class="ss-tile" id="t-sea-urchin" href="#sea-urchin"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ウニ</span></a>
+            <a class="ss-tile" id="t-sea-snake" href="#sea-snake"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ウミヘビ・ミノカサゴ</span></a>
+          </div>
+        </section>
 
-            <!-- 3. 楽しく利用する -->
-            <section class="ss-group" id="cat-enjoy" aria-labelledby="cat-enjoy-title">
-              <h2 id="cat-enjoy-title">楽しく利用する</h2>
-              <p class="ss-group__desc">お酒を飲んだあと、子どもだけ、ひとりで、天気が悪い日。事故が起きやすい場面についての約束です。</p>
-              <div class="ss-grid">
-                <a class="ss-tile" id="t-no-alcohol" href="#no-alcohol"><span class="ss-tile__noimg">画像準備中</span><span>飲酒遊泳禁止</span></a>
-                <a class="ss-tile" id="t-kids" href="#kids"><span class="ss-tile__noimg">画像準備中</span><span>子どもから目を離さない</span></a>
-                <a class="ss-tile" id="t-alone" href="#alone"><span class="ss-tile__noimg">画像準備中</span><span>ひとりで入らない</span></a>
-                <a class="ss-tile" id="t-weather" href="#weather"><span class="ss-tile__noimg">画像準備中</span><span>天気・波を確認</span></a>
-              </div>
-            </section>
+        <!-- 3. 楽しく利用する -->
+        <section class="ss-group" id="cat-enjoy" aria-labelledby="cat-enjoy-title">
+          <h2 id="cat-enjoy-title">楽しく利用する</h2>
+          <p class="ss-group__desc">お酒を飲んだあと、子どもだけ、ひとりで、天気が悪い日。事故が起きやすい場面についての約束です。</p>
+          <div class="ss-grid">
+            <a class="ss-tile" id="t-no-alcohol" href="#no-alcohol"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">飲酒遊泳禁止</span></a>
+            <a class="ss-tile" id="t-kids" href="#kids"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">子どもから目を離さない</span></a>
+            <a class="ss-tile" id="t-alone" href="#alone"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ひとりで入らない</span></a>
+            <a class="ss-tile" id="t-weather" href="#weather"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">天気・波を確認</span></a>
+          </div>
+        </section>
 
-            <!-- 4. 海を守る -->
-            <section class="ss-group" id="cat-protect" aria-labelledby="cat-protect-title">
-              <h2 id="cat-protect-title">海を守る</h2>
-              <p class="ss-group__desc">ゴミとサンゴについてのマナーです。サンゴは踏むと折れて、元に戻るまで長い時間がかかります。</p>
-              <div class="ss-grid">
-                <a class="ss-tile" id="t-trash" href="#trash"><span class="ss-tile__noimg">画像準備中</span><span>ゴミは持ち帰る</span></a>
-                <a class="ss-tile" id="t-coral" href="#coral"><span class="ss-tile__noimg">画像準備中</span><span>サンゴに乗らない・踏まない</span></a>
-              </div>
-            </section>
+        <!-- 4. 海を守る -->
+        <section class="ss-group" id="cat-protect" aria-labelledby="cat-protect-title">
+          <h2 id="cat-protect-title">海を守る</h2>
+          <p class="ss-group__desc">ゴミとサンゴについてのマナーです。サンゴは踏むと折れて、元に戻るまで長い時間がかかります。</p>
+          <div class="ss-grid">
+            <a class="ss-tile" id="t-trash" href="#trash"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">ゴミは持ち帰る</span></a>
+            <a class="ss-tile" id="t-coral" href="#coral"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">サンゴに乗らない・踏まない</span></a>
+          </div>
+        </section>
 
-            <!-- 5. ビーチのルール -->
-            <section class="ss-group" id="cat-rules" aria-labelledby="cat-rules-title">
-              <h2 id="cat-rules-title">ビーチのルール</h2>
-              <p class="ss-group__desc">このビーチで決められているルールです。旗の色と、監視員の指示に従ってください。</p>
-              <div class="ss-grid">
-                <a class="ss-tile" id="t-no-swim-zone" href="#no-swim-zone"><span class="ss-tile__noimg">画像準備中</span><span>遊泳禁止区域</span></a>
-                <a class="ss-tile" id="t-flags" href="#flags"><span class="ss-tile__noimg">画像準備中</span><span>赤旗・黄旗</span></a>
-                <a class="ss-tile" id="t-lifeguard" href="#lifeguard"><span class="ss-tile__noimg">画像準備中</span><span>監視員の指示</span></a>
-              </div>
+        <!-- 5. ビーチのルール -->
+        <section class="ss-group" id="cat-rules" aria-labelledby="cat-rules-title">
+          <h2 id="cat-rules-title">ビーチのルール</h2>
+          <p class="ss-group__desc">このビーチで決められているルールです。旗の色と、監視員の指示に従ってください。</p>
+          <div class="ss-grid">
+            <a class="ss-tile" id="t-no-swim-zone" href="#no-swim-zone"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">遊泳禁止区域</span></a>
+            <a class="ss-tile" id="t-flags" href="#flags"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">赤旗・黄旗</span></a>
+            <a class="ss-tile" id="t-lifeguard" href="#lifeguard"><div class="ss-tile__noimg"><span>📷</span>準備中</div><span class="ss-tile__txt">監視員の指示</span></a>
+          </div>
 
-              <h3 class="ss-subhead">このビーチで禁止されていること</h3>
-              <ul class="ss-plainlist ss-plainlist--cols">
-                <li>シュノーケルの使用</li>
-                <li>防護ネットに触れる</li>
-                <li>火気（タバコ・BBQ）</li>
-                <li>遊泳区域でのペットの散歩</li>
-                <li>監視台に登る</li>
-                <li>小学生・中学生だけで泳ぐ</li>
+          <h3 class="ss-subhead">このビーチで禁止されていること</h3>
+          <ul class="ss-plainlist ss-plainlist--cols">
+            <li>シュノーケルの使用</li>
+            <li>防護ネットに触れる</li>
+            <li>火気（タバコ・BBQ）</li>
+            <li>遊泳区域でのペットの散歩</li>
+            <li>監視台に登る</li>
+            <li>小学生・中学生だけで泳ぐ</li>
+          </ul>
+        </section>
+
+        <!-- もしもの時 -->
+        <section class="ss-group" id="emergency">
+          <h2>もしもの時</h2>
+          <p class="ss-lead">当てはまる状況にチェックすると、電話する番号が分かります。迷ったら、上の119・118からすぐに電話してください。</p>
+
+          <form class="ss-report" id="report" aria-describedby="report-msg">
+            <fieldset>
+              <legend class="ss-subhead">いま、どんな状況ですか（いくつでも）</legend>
+              <ul class="ss-report__list">
+                <li><label><input type="checkbox" data-call="118 119" /><span>人がおぼれている・沖に流されている</span><span class="ss-report__tags"><b class="is-118">118</b><b class="is-119">119</b></span></label></li>
+                <li><label><input type="checkbox" data-call="118" /><span>海で人の姿が見えなくなった</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
+                <li><label><input type="checkbox" data-call="118" /><span>船・水上バイクの事故を見た</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
+                <li><label><input type="checkbox" data-call="118" /><span>海に油が流れている・あやしい船がいる</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
+                <li><label><input type="checkbox" data-call="119" /><span>意識がない・呼吸がおかしい</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
+                <li><label><input type="checkbox" data-call="119" /><span>危険生物に刺され、息苦しい・ぐったりしている</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
+                <li><label><input type="checkbox" data-call="119" /><span>大きなケガ・出血がある</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
+                <li><label><input type="checkbox" data-call="119" /><span>熱中症のような様子（めまい・吐き気・けいれん）</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
+                <li><label><input type="checkbox" data-call="lifeguard" /><span>刺された・切ったが、元気で息苦しさはない</span><span class="ss-report__tags"><b class="is-lifeguard">監視員</b></span></label></li>
+              </ul>
+            </fieldset>
+
+            <div class="ss-report__result">
+              <p class="ss-report__msg" id="report-msg" aria-live="polite">当てはまるものにチェックしてください。</p>
+              <ul class="ss-tel">
+                <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
+                <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong>海の事件・事故（海上保安庁）</a></li>
+                <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員【要確認：電話番号・場所】</span></li>
+              </ul>
+              <button type="reset" class="ss-report__reset">チェックをすべて外す</button>
+            </div>
+          </form>
+          <p class="ss-note">【要確認：どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認してから公開】</p>
+
+          <div class="ss-two">
+            <section aria-labelledby="tell-title">
+              <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
+              <ul class="ss-plainlist">
+                <li>場所：<strong>【要確認：〇〇ビーチ 看板No.1】</strong>（この看板の番号）</li>
+                <li>何があったか（おぼれた・刺された・ケガ など）</li>
+                <li>何人か、どんな様子か（意識・呼吸があるか）</li>
+                <li>あなたの名前と電話番号</li>
               </ul>
             </section>
+
+            <section aria-labelledby="case-title">
+              <h3 class="ss-subhead" id="case-title">その場でできること</h3>
+              <dl class="ss-case">
+                <div><dt><a href="#rip-current">沖に流された</a></dt><dd>あわてず、岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
+                <div><dt><a href="#jellyfish">クラゲに刺された</a></dt><dd>こすらない。酢をかけ、触手を取り、冷やして監視員へ。</dd></div>
+                <div><dt><a href="#stonefish">オコゼを踏んだ</a></dt><dd>動かない。40〜45℃のお湯につけて病院へ。</dd></div>
+                <div><dt><a href="#alone">人がおぼれている</a></dt><dd>自分は飛び込まず、浮くものを投げる。すぐに118・119。</dd></div>
+              </dl>
+            </section>
           </div>
-
-          <!-- もしもの時 -->
-          <div class="card" id="emergency">
-            <h2>もしもの時</h2>
-            <p class="ss-lead">当てはまる状況にチェックすると、電話する番号が分かります。迷ったら、上の119・118からすぐに電話してください。</p>
-
-            <form class="ss-report" id="report" aria-describedby="report-msg">
-              <fieldset>
-                <legend class="ss-subhead">いま、どんな状況ですか（いくつでも）</legend>
-                <ul class="ss-report__list">
-                  <li><label><input type="checkbox" data-call="118 119" /><span>人がおぼれている・沖に流されている</span><span class="ss-report__tags"><b class="is-118">118</b><b class="is-119">119</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="118" /><span>海で人の姿が見えなくなった</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="118" /><span>船・水上バイクの事故を見た</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="118" /><span>海に油が流れている・あやしい船がいる</span><span class="ss-report__tags"><b class="is-118">118</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="119" /><span>意識がない・呼吸がおかしい</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="119" /><span>危険生物に刺され、息苦しい・ぐったりしている</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="119" /><span>大きなケガ・出血がある</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="119" /><span>熱中症のような様子（めまい・吐き気・けいれん）</span><span class="ss-report__tags"><b class="is-119">119</b></span></label></li>
-                  <li><label><input type="checkbox" data-call="lifeguard" /><span>刺された・切ったが、元気で息苦しさはない</span><span class="ss-report__tags"><b class="is-lifeguard">監視員</b></span></label></li>
-                </ul>
-              </fieldset>
-
-              <div class="ss-report__result">
-                <p class="ss-report__msg" id="report-msg" aria-live="polite">当てはまるものにチェックしてください。</p>
-                <ul class="ss-tel">
-                  <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
-                  <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong>海の事件・事故（海上保安庁）</a></li>
-                  <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員【要確認：電話番号・場所】</span></li>
-                </ul>
-                <button type="reset" class="ss-report__reset">チェックをすべて外す</button>
-              </div>
-            </form>
-            <p class="ss-note">【要確認：どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認してから公開】</p>
-
-            <div class="ss-two">
-              <section aria-labelledby="tell-title">
-                <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
-                <ul class="ss-plainlist">
-                  <li>場所：<strong>【要確認：〇〇ビーチ 看板No.1】</strong>（この看板の番号）</li>
-                  <li>何があったか（おぼれた・刺された・ケガ など）</li>
-                  <li>何人か、どんな様子か（意識・呼吸があるか）</li>
-                  <li>あなたの名前と電話番号</li>
-                </ul>
-              </section>
-
-              <section aria-labelledby="case-title">
-                <h3 class="ss-subhead" id="case-title">その場でできること</h3>
-                <dl class="ss-case">
-                  <div><dt><a href="#rip-current">沖に流された</a></dt><dd>あわてず、岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
-                  <div><dt><a href="#jellyfish">クラゲに刺された</a></dt><dd>こすらない。酢をかけ、触手を取り、冷やして監視員へ。</dd></div>
-                  <div><dt><a href="#stonefish">オコゼを踏んだ</a></dt><dd>動かない。40〜45℃のお湯につけて病院へ。</dd></div>
-                  <div><dt><a href="#alone">人がおぼれている</a></dt><dd>自分は飛び込まず、浮くものを投げる。すぐに118・119。</dd></div>
-                </dl>
-              </section>
-            </div>
-            <p class="ss-note">【要確認：応急処置・救助方法は名護市・消防・医療機関に確認してから公開】</p>
-            <p class="ss-manager">管理者：名護市【要確認：問い合わせ先】</p>
-          </div>
-        </div>
+          <p class="ss-note">【要確認：応急処置・救助方法は名護市・消防・医療機関に確認してから公開】</p>
+          <p class="ss-manager">管理者：名護市【要確認：問い合わせ先】</p>
+        </section>
       </div>
     </section>
 
@@ -168,7 +166,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-rip-current" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="rip-current-title">離岸流</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -184,7 +182,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-high-waves" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="high-waves-title">高波・津波</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -200,7 +198,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-slippery-rocks" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="slippery-rocks-title">足元注意</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -216,7 +214,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-diving" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="no-diving-title">飛び込み禁止</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -231,7 +229,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-life-jacket" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="life-jacket-title">ライフジャケット</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -247,7 +245,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-jellyfish" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="jellyfish-title">ハブクラゲ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -266,7 +264,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-stonefish" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="stonefish-title">オニダルマオコゼ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -285,7 +283,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-sea-urchin" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="sea-urchin-title">ウニ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -300,7 +298,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-sea-snake" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="sea-snake-title">ウミヘビ・ミノカサゴ</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -316,7 +314,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-alcohol" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="no-alcohol-title">飲酒遊泳禁止</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -331,7 +329,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-kids" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="kids-title">子どもから目を離さない</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -346,7 +344,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-alone" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="alone-title">ひとりで入らない</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -361,7 +359,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-weather" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="weather-title">天気・波を確認</h2></div>
           </div>
           <dl class="ss-panel__body">
@@ -377,7 +375,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-trash" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="trash-title">ゴミは持ち帰る</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>来た時よりきれいにして帰ろう。</dd></dl>
@@ -390,7 +388,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-coral" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="coral-title">サンゴに乗らない・踏まない</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>意味</dt><dd>サンゴは生きています。乗ったり踏んだりすると折れてしまい、元に戻るまで長い時間がかかります。</dd></dl>
@@ -404,7 +402,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-no-swim-zone" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="no-swim-zone-title">遊泳禁止区域</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>決められた区域（防護ネットの中）だけで泳ぐ。</dd></dl>
@@ -417,7 +415,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-flags" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="flags-title">赤旗・黄旗</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>赤旗</dt><dd>遊泳禁止</dd><dt>黄旗</dt><dd>遊泳注意</dd></dl>
@@ -430,7 +428,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ss-panel__box">
           <a class="ss-panel__close" href="#t-lifeguard" aria-label="とじる">×</a>
           <div class="ss-panel__head">
-            <span class="ss-panel__noimg">画像準備中</span>
+            <div class="ss-panel__noimg"><span>📷</span>準備中</div>
             <div class="ss-panel__title"><h2 id="lifeguard-title">監視員の指示</h2></div>
           </div>
           <dl class="ss-panel__body"><dt>どうする</dt><dd>監視員の指示に従う。監視台には登らない。</dd></dl>
@@ -441,7 +439,6 @@ import Layout from '../layouts/Layout.astro';
   </main>
 
   <script>
-    // 通報ガイド：チェックした状況に必要な番号のボタンだけを押せるようにする
     function initReportGuide() {
       const form = document.getElementById('report') as HTMLFormElement | null;
       if (!form) return;
@@ -510,225 +507,30 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style is:global>
-  /* 案C スタイル定義（本番サイトとバッティングしないよう ss- プレフィックスを使用） */
   :root {
-    --ss-call-119: #dc2626; /* 119（救急・消防） */
-    --ss-call-118: #1d4ed8; /* 118（海上保安庁） */
-    --ss-call-guard: #047857; /* ビーチ監視員 */
-    --ss-line: #e2e8f0;
-    --ss-text-sub: #475569;
+    --ss-call-119: #dc2626;
+    --ss-call-118: #1d4ed8;
+    --ss-call-guard: #047857;
+    --ss-line: #cbd5e1;
+    --ss-text-main: #0f172a;
+    --ss-text-sub: #334155;
   }
 
-  /* ===== 緊急バー（ページ上部。いつでも押せる） ===== */
+  /* 既存のCard枠線を打ち消す */
+  .main-content .card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  /* ===== 緊急バー ===== */
   .ss-emergency-bar {
     position: sticky; top: 72px; z-index: 40;
     display: flex; gap: .75rem; justify-content: center;
-    padding: .75rem 1.5rem; background: #fff; border-bottom: 1px solid var(--ss-line);
+    padding: .85rem 1.5rem; background: rgba(255, 255, 255, 0.92); 
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   }
   .ss-emergency-bar a {
-    flex: 0 1 240px; display: flex; align-items: baseline; justify-content: center; gap: .5rem;
-    padding: .6rem 1rem; border-radius: 10px; color: #fff; font-weight: 700; text-decoration: none;
-  }
-  .ss-emergency-bar a[href="tel:119"] { background: var(--ss-call-119); }
-  .ss-emergency-bar a[href="tel:118"] { background: var(--ss-call-118); }
-  .ss-emergency-bar strong { font-size: 1.3rem; line-height: 1; letter-spacing: .02em; }
-  .ss-emergency-bar + .section { margin-top: 0; padding-top: 2rem; }
-
-  /* ===== 共通の文字 ===== */
-  .ss-lead { color: #334155; font-size: 1rem; line-height: 1.9; max-width: 44em; }
-  .ss-subhead { font-size: 1rem; font-weight: 700; color: #0f172a; margin: 2rem 0 .75rem; }
-  .ss-note { font-size: .8rem; color: #b91c1c; margin-top: .75rem; }
-
-  /* 点だけのシンプルなリスト */
-  .ss-plainlist { padding-left: 1.2em; color: var(--ss-text-sub); font-size: .95rem; line-height: 1.8; }
-  .ss-plainlist li::marker { color: #94a3b8; }
-  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
-
-  /* ===== もくじ ===== */
-  .ss-toc {
-    display: flex; flex-wrap: wrap; gap: .25rem 1.5rem;
-    margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--ss-line);
-  }
-  .ss-toc a { color: var(--primary, #0284c7); font-weight: 700; font-size: .9rem; text-decoration: none; }
-  .ss-toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-  /* ===== ジャンル ===== */
-  .ss-group { margin-top: 3.5rem; scroll-margin-top: 100px; }
-  .ss-group__desc { color: var(--ss-text-sub); font-size: .95rem; line-height: 1.8; margin: -.25rem 0 1.5rem; max-width: 44em; }
-  #emergency { scroll-margin-top: 100px; }
-
-  /* ===== 絵の一覧 ===== */
-  .ss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; }
-  .ss-tile {
-    display: flex; flex-direction: column; gap: .6rem;
-    text-decoration: none; color: #0f172a; font-weight: 700; font-size: .95rem; line-height: 1.45;
-    scroll-margin-top: 150px;
-  }
-  .ss-tile img {
-    width: 100%; aspect-ratio: 1; object-fit: contain;
-    background: #fff; border: 1px solid var(--ss-line); border-radius: 10px; padding: .75rem;
-    transition: border-color .15s ease;
-  }
-  .ss-tile:hover img, .ss-tile:focus-visible img { border-color: var(--primary, #0284c7); }
-  .ss-tile:hover > span:last-child { color: var(--primary, #0284c7); }
-  .ss-tile:focus-visible { outline: none; }
-  .ss-tile:focus-visible img { outline: 3px solid #93c5fd; outline-offset: 2px; }
-
-  /* 画像準備中エリアの最適化スタイル */
-  .ss-tile__noimg, .ss-panel__noimg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    aspect-ratio: 1;
-    background: #f8fafc;
-    border: 1.5px dashed #cbd5e1;
-    border-radius: 16px;
-    padding: 1.25rem 0.75rem;
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-align: center;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-  }
-
-  .ss-tile:hover .ss-tile__noimg {
-    border-color: var(--primary, #0284c7);
-    background: #f0f9ff;
-    color: var(--primary, #0284c7);
-  }
-
-  .ss-panel__noimg {
-    width: 140px;
-    height: 140px;
-    flex-shrink: 0;
-  }
-
-  /* ===== 説明パネル ===== */
-  .ss-panel { display: none; }
-  .ss-panel:target {
-    display: flex; align-items: center; justify-content: center;
-    position: fixed; inset: 0; z-index: 100;
-    padding: 88px 1rem 1rem;
-  }
-  .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .55); }
-  .ss-panel__box {
-    position: relative; width: min(560px, 100%); max-height: 100%; overflow-y: auto;
-    background: #fff; border-radius: 14px; padding: 2rem;
-    box-shadow: 0 24px 48px -16px rgba(15, 23, 42, .35);
-  }
-
-  .ss-panel__close {
-    position: absolute; top: .9rem; right: .9rem;
-    width: 2.25rem; height: 2.25rem; border-radius: 8px; display: grid; place-items: center;
-    color: #64748b; font-size: 1.4rem; line-height: 1; text-decoration: none;
-  }
-  .ss-panel__close:hover { background: #f1f5f9; color: #0f172a; }
-
-  .ss-panel__head { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; padding-right: 2rem; }
-  .ss-panel__head img { width: 140px; height: 140px; flex-shrink: 0; object-fit: contain; border: 1px solid var(--ss-line); border-radius: 10px; padding: .6rem; }
-  .ss-panel__head h2 { font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.35; }
-
-  .ss-panel__body { display: grid; grid-template-columns: 6.5em 1fr; border-top: 1px solid var(--ss-line); }
-  .ss-panel__body dt, .ss-panel__body dd { padding: .75rem 0; border-bottom: 1px solid var(--ss-line); }
-  .ss-panel__body dt { font-size: .85rem; color: var(--ss-text-sub); font-weight: 700; padding-top: .9rem; }
-  .ss-panel__body dd { color: #0f172a; font-size: .95rem; line-height: 1.75; }
-
-  .ss-panel__back {
-    display: block; margin-top: 1.5rem; padding: .7rem; border-radius: 10px; text-align: center;
-    border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; text-decoration: none;
-  }
-  .ss-panel__back:hover { background: #f8fafc; }
-
-  /* ===== もしもの時：通報ガイド ===== */
-  .ss-report { margin-top: .5rem; }
-  .ss-report fieldset { border: 0; }
-  .ss-report__list { list-style: none; border: 1px solid var(--ss-line); border-radius: 12px; overflow: hidden; }
-  .ss-report__list li + li { border-top: 1px solid var(--ss-line); }
-  .ss-report__list label {
-    display: flex; align-items: center; gap: .85rem;
-    padding: .85rem 1.1rem; cursor: pointer;
-    font-size: .95rem; line-height: 1.5; color: #0f172a;
-    transition: background-color .15s ease;
-  }
-  .ss-report__list label:hover { background: #f8fafc; }
-  .ss-report__list label:has(input:checked) { background: #fef2f2; font-weight: 700; }
-  .ss-report__list input { width: 1.2rem; height: 1.2rem; flex-shrink: 0; accent-color: var(--ss-call-119); }
-  .ss-report__list label > span:first-of-type { flex: 1; }
-  .ss-report__tags { display: flex; gap: .3rem; flex-shrink: 0; }
-  .ss-report__tags b { font-size: .75rem; font-weight: 700; padding: .1rem .45rem; border-radius: 4px; color: #fff; line-height: 1.5; }
-  .ss-report__tags .is-119 { background: var(--ss-call-119); }
-  .ss-report__tags .is-118 { background: var(--ss-call-118); }
-  .ss-report__tags .is-lifeguard { background: var(--ss-call-guard); }
-
-  /* 結果 */
-  .ss-report__result { margin-top: 1.25rem; padding: 1.5rem; border-radius: 12px; background: #f8fafc; }
-  .ss-report.is-active .ss-report__result { background: #fff7f7; }
-  .ss-report__msg { font-weight: 700; font-size: 1.05rem; color: #0f172a; text-align: center; margin-bottom: 1rem; }
-  .ss-report__reset {
-    display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer;
-    font: inherit; font-size: .85rem; color: #64748b; text-decoration: underline; text-underline-offset: 3px;
-  }
-
-  /* 電話ボタン */
-  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-  .ss-tel__wide { grid-column: 1 / -1; }
-  .ss-tel__btn {
-    display: flex; align-items: baseline; justify-content: center; gap: .6rem; height: 100%;
-    padding: 1rem; border-radius: 12px; color: #fff; font-weight: 700; text-decoration: none; text-align: center;
-    transition: background-color .15s ease;
-  }
-  .ss-tel__btn strong { font-size: 1.8rem; line-height: 1; letter-spacing: .02em; }
-  #call-119 { background: var(--ss-call-119); }
-  #call-118 { background: var(--ss-call-118); }
-  .ss-tel__btn--lifeguard { background: var(--ss-call-guard); padding: .75rem 1rem; font-size: .9rem; align-items: center; }
-  .ss-tel__btn--lifeguard strong { font-size: 1.1rem; }
-  .ss-tel__btn.is-disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; pointer-events: none; }
-
-  /* 電話で伝えること／その場でできること（2列） */
-  .ss-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; margin-top: .5rem; }
-  .ss-case div { padding: .75rem 0; border-bottom: 1px solid var(--ss-line); }
-  .ss-case div:first-child { border-top: 1px solid var(--ss-line); }
-  .ss-case dt a { color: var(--primary, #0284c7); font-weight: 700; text-decoration: none; }
-  .ss-case dt a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .ss-case dd { color: var(--ss-text-sub); font-size: .9rem; line-height: 1.7; margin-top: .15rem; }
-
-  .ss-manager { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--ss-line); font-size: .85rem; color: #64748b; }
-
-  /* ===== スマホ（レスポンシブ） ===== */
-  @media (max-width: 640px) {
-    .ss-emergency-bar { padding: .6rem 1rem; gap: .5rem; }
-    .ss-emergency-bar a { padding: .55rem .5rem; font-size: .85rem; }
-    .ss-emergency-bar strong { font-size: 1.15rem; }
-
-    .ss-lead, .ss-group__desc { font-size: .9rem; }
-    .ss-toc { gap: .25rem 1rem; }
-    .ss-toc a { font-size: .85rem; }
-    .ss-group { margin-top: 2.75rem; }
-
-    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .9rem; }
-    .ss-tile { font-size: .85rem; }
-
-    .ss-plainlist--cols { grid-template-columns: 1fr; }
-
-    .ss-panel:target { align-items: flex-end; padding: 72px 0 0; }
-    .ss-panel__box { width: 100%; border-radius: 14px 14px 0 0; padding: 1.4rem 1.15rem 1.5rem; }
-    .ss-panel__head { gap: 1rem; }
-    .ss-panel__head img, .ss-panel__noimg { width: 88px; height: 88px; }
-    .ss-panel__head h2 { font-size: 1.2rem; }
-    .ss-panel__body { grid-template-columns: 1fr; }
-    .ss-panel__body dt { border-bottom: none; padding: .7rem 0 0; }
-    .ss-panel__body dd { padding: .15rem 0 .7rem; }
-
-    .ss-report__list label { padding: .75rem .85rem; font-size: .875rem; gap: .65rem; }
-    .ss-report__result { padding: 1.1rem .85rem; }
-    .ss-report__msg { font-size: .95rem; }
-    .ss-tel { gap: .5rem; }
-    .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .8rem .5rem; font-size: .8rem; line-height: 1.4; }
-    .ss-tel__btn--lifeguard { flex-direction: row; gap: .5rem; }
-
-    .ss-two { grid-template-columns: 1fr; }
-  }
-</style>
+    flex: 0 1 240px; display: flex; align-items: baseline; justify
