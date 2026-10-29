@@ -9,6 +9,7 @@
  * - rows  … 説明の表。[項目名, 内容]
  * - note  … 赤字の注意書き（画面に出る）
  * - todo  … 公開前に確認すること（画面には出ないメモ。確認が済んだら消す）
+ * - hidden … true にすると一覧にも説明にも出さない（データは残る。戻す時はこの行を消す）
  */
 
 export type Pictogram = {
@@ -19,6 +20,7 @@ export type Pictogram = {
   rows: [string, string][];
   note?: string | null;
   todo?: string;
+  hidden?: boolean;
 };
 
 export type Genre = {
@@ -132,6 +134,18 @@ export const genres: Genre[] = [
         todo: "トゲが刺さった時の対処を医療機関に確認する",
       },
       {
+        id: "crown-of-thorns",
+        name: "オニヒトデ",
+        image: "crown-of-thorns.png",
+        alt: "トゲにおおわれたオニヒトデのピクトグラム",
+        rows: [
+          ["見た目", "腕がたくさんあり、全体が長く鋭いトゲにおおわれている。"],
+          ["いる場所", "サンゴ礁。サンゴを食べる。"],
+          ["どうする", "見つけても触らない。トゲに毒があり、刺さると強く痛む。"],
+        ],
+        todo: "刺された時の応急処置を名護市・医療機関に確認してから載せる（今は載せていない）",
+      },
+      {
         id: "sea-snake",
         name: "ウミヘビ・ミノカサゴ",
         image: "sea-snake-lionfish.png",
@@ -159,8 +173,8 @@ export const genres: Genre[] = [
       {
         id: "kids",
         name: "子どもから目を離さない",
-        image: null,
-        alt: "",
+        image: "kids.png",
+        alt: "海で遊ぶ子どもから大人が目を離すことを禁止するピクトグラム",
         rows: [
           ["どうする", "子どもが海にいる間は、大人がずっと見ている。小学生・中学生だけで泳ぐのは禁止です。"],
         ],
@@ -168,14 +182,16 @@ export const genres: Genre[] = [
       {
         id: "alone",
         name: "ひとりで入らない",
-        image: null,
-        alt: "",
+        image: "alone.png",
+        alt: "2人で並んで泳ぐ人のピクトグラム",
         rows: [
           ["どうする", "海には2人以上で入る。おぼれている人を見つけたら、自分は飛び込まず浮くものを投げ、すぐに118・119。"],
         ],
       },
       {
         id: "weather",
+        // 画像がまだないので一時的に非表示（画像ができたら image にファイル名を入れて、この行を消す）
+        hidden: true,
         name: "天気・波を確認",
         image: null,
         alt: "",
@@ -202,8 +218,8 @@ export const genres: Genre[] = [
       {
         id: "coral",
         name: "サンゴに乗らない・踏まない",
-        image: null,
-        alt: "",
+        image: "coral.png",
+        alt: "サンゴを踏むことを禁止するピクトグラム",
         rows: [
           ["意味", "サンゴは生きています。乗ったり踏んだりすると折れてしまい、元に戻るまで長い時間がかかります。"],
         ],
