@@ -124,7 +124,7 @@ const languages = [
 
 		<footer class="site-footer">
 			<div class="container footer-container">
-				<p class="copyright notranslate">&copy; 海のサインプロジェクト Created by NYC / Developer <a href="https://sites.google.com/view/meisi1/meisi" target="_blank" rel="noopener noreferrer">Jinn</a> All rights reserved.</p>
+				<p class="copyright notranslate">&copy; 海のサインプロジェクト Created by <a href="https://nagoyc.stki.org/" target="_blank" rel="noopener noreferrer">NYC</a> / Developer <a href="https://sites.google.com/view/meisi1/meisi" target="_blank" rel="noopener noreferrer">Jinn</a> All rights reserved.</p>
 			</div>
 		</footer>
 
@@ -143,20 +143,42 @@ const languages = [
 		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 		<script>
-			// 言語切替制御
+			// ─── RSS 取得処理（CORSエラー回避プロキシ経由） ───
+			async function fetchRssFeed() {
+				const targetFeed = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
+				// CORSブロックを回避するため allorigins プロキシを使用
+				const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetFeed)}`;
+
+				try {
+					const res = await fetch(proxyUrl);
+					if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+					const data = await res.json();
+					
+					if (data && data.contents) {
+						const parser = new DOMParser();
+						const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+						const items = xmlDoc.querySelectorAll("item");
+						// RSSアイテムの取得成功時のカスタムイベントを発行
+						window.dispatchEvent(new CustomEvent('rssLoaded', { detail: { items } }));
+					}
+				} catch (e) {
+					console.error("RSS読み込みエラー:", e);
+				}
+			}
+			fetchRssFeed();
+
+			// ─── 言語切替制御 ───
 			const langBtn = document.getElementById('langBtn');
 			const langDropdown = document.getElementById('langDropdown');
 			const langSwitcher = document.getElementById('langSwitcher');
 			const currentLangLabel = document.getElementById('currentLangLabel');
 			const langOptions = document.querySelectorAll('.lang-option');
 
-			// Cookie取得関数
 			function getCookie(name: string) {
 				const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
 				return v ? v[2] : null;
 			}
 
-			// Google翻訳Cookie（googtrans）をドメイン階層ごとに全削除する関数
 			function removeGoogleTranslateCookies() {
 				const hostname = window.location.hostname;
 				const domainParts = hostname.split('.');
@@ -179,7 +201,7 @@ const languages = [
 				});
 			}
 
-			// ─── Safari 対策：Google翻訳が動かない時は、Google の翻訳ページ（translate.goog）で開き直す ───
+			// ─── Safari 対策（translate.goog） ───
 			const PROXY_SUFFIX = '.translate.goog';
 			const PROXY_PARAMS = ['_x_tr_sl', '_x_tr_tl', '_x_tr_hl', '_x_tr_pto'];
 			const isProxyPage = window.location.hostname.endsWith(PROXY_SUFFIX);
@@ -246,7 +268,6 @@ const languages = [
 				const query = pageParams.toString();
 				window.history.replaceState(null, '', window.location.pathname + (query ? `?${query}` : '') + window.location.hash);
 			}
-			// ─── ここまで Safari 対策 ───
 
 			const savedLangCookie = getCookie('googtrans');
 			const proxyLang = isProxyPage ? pageParams.get('_x_tr_tl') : null;
@@ -329,7 +350,7 @@ const languages = [
 				});
 			}
 
-			// ハンバーガーメニュー開閉制御
+			// ─── ハンバーガーメニュー開閉制御 ───
 			const toggleBtn = document.getElementById('menuToggle');
 			const nav = document.getElementById('siteNav');
 
