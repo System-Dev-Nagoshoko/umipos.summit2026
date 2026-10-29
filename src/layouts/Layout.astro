@@ -179,12 +179,94 @@ const languages = [
 				});
 			}
 
-			// 初期表示時にCookieから現在の言語を反映
+			// ─── Safari 対策：Google翻訳が動かない時は、Google の翻訳ページ（translate.goog）で開き直す ───
+			// iPhone の Safari では、プライバシー保護のため Google翻訳の部品が翻訳結果を取得できず、
+			// ボタンの表示だけ変わって文字が日本語のままになる（同じ iPhone の Chrome では起きない）。
+			// 言語を選んでも本文が訳されない時だけ、Google の翻訳ページに切り替えて翻訳を表示する。
+			const PROXY_SUFFIX = '.translate.goog';
+			const PROXY_PARAMS = ['_x_tr_sl', '_x_tr_tl', '_x_tr_hl', '_x_tr_pto'];
+			const isProxyPage = window.location.hostname.endsWith(PROXY_SUFFIX);
+			// 手元の開発環境（localhost）は Google の翻訳ページから見えないので切り替えない
+			const canUseProxy = !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+
+			// uminosign.nagoyc.stki.org ⇔ uminosign-nagoyc-stki-org.translate.goog
+			function toProxyHost(host: string) {
+				return host.replace(/-/g, '--').replace(/\./g, '-') + PROXY_SUFFIX;
+			}
+			function fromProxyHost(host: string) {
+				return host
+					.slice(0, -PROXY_SUFFIX.length)
+					.split('--')
+					.map((part) => part.replace(/-/g, '.'))
+					.join('-');
+			}
+			// Google の翻訳ページのURL（今のページを、指定の言語で）
+			function proxyUrl(lang: string) {
+				const url = new URL(window.location.href);
+				if (!isProxyPage) url.hostname = toProxyHost(url.hostname);
+				url.protocol = 'https:';
+				url.port = '';
+				PROXY_PARAMS.forEach((key) => url.searchParams.delete(key));
+				url.searchParams.set('_x_tr_sl', 'ja');
+				url.searchParams.set('_x_tr_tl', lang);
+				url.searchParams.set('_x_tr_hl', lang);
+				url.searchParams.set('_x_tr_pto', 'wapp');
+				return url.toString();
+			}
+			// Google の翻訳ページから、元のサイトの日本語ページに戻るURL
+			function originalUrl() {
+				const url = new URL(window.location.href);
+				url.hostname = fromProxyHost(url.hostname);
+				PROXY_PARAMS.forEach((key) => url.searchParams.delete(key));
+				url.searchParams.set('lang', 'ja'); // 戻った先で翻訳の記録（Cookie）を消すための目印
+				return url.toString();
+			}
+			// 本文のひらがな・カタカナの数（訳されると、ほぼ無くなる）
+			function kanaCount() {
+				const text = Array.from(document.querySelectorAll('main h2, main h3, main p'))
+					.slice(0, 20)
+					.map((el) => el.textContent ?? '')
+					.join('');
+				return (text.match(/[぀-ヿ]/g) || []).length;
+			}
+			// 6秒たっても本文が訳されなければ、Google の翻訳ページへ切り替える
+			let fallbackTimer: number | undefined;
+			function watchTranslation(lang: string) {
+				if (!canUseProxy || isProxyPage) return;
+				window.clearInterval(fallbackTimer);
+				const start = kanaCount();
+				if (start < 20) return; // すでに訳されている（または比べられるほど本文がない）
+				let waited = 0;
+				fallbackTimer = window.setInterval(() => {
+					waited += 500;
+					if (kanaCount() < start * 0.3) {
+						window.clearInterval(fallbackTimer); // 訳された
+					} else if (waited >= 6000) {
+						window.clearInterval(fallbackTimer);
+						window.location.href = proxyUrl(lang);
+					}
+				}, 500);
+			}
+
+			// Google の翻訳ページから「日本語」で戻ってきた時：翻訳の記録を消して、目印をURLから外す
+			const pageParams = new URLSearchParams(window.location.search);
+			if (!isProxyPage && pageParams.get('lang') === 'ja') {
+				removeGoogleTranslateCookies();
+				pageParams.delete('lang');
+				const query = pageParams.toString();
+				window.history.replaceState(null, '', window.location.pathname + (query ? `?${query}` : '') + window.location.hash);
+			}
+			// ─── ここまで Safari 対策 ───
+
+			// 初期表示時に現在の言語を反映（Google の翻訳ページでは URL から、それ以外は Cookie から）
 			const savedLangCookie = getCookie('googtrans');
-			if (savedLangCookie && currentLangLabel) {
-				const langParts = savedLangCookie.split('/');
+			const proxyLang = isProxyPage ? pageParams.get('_x_tr_tl') : null;
+			if ((proxyLang || savedLangCookie) && currentLangLabel) {
+				const langParts = (proxyLang ?? savedLangCookie ?? '').split('/');
 				const langCode = langParts[langParts.length - 1];
 				if (langCode && langCode !== 'ja') {
+					// 別のページに移った時も、訳されなければ Google の翻訳ページへ（Safari 対策）
+					if (!proxyLang) watchTranslation(langCode);
 					currentLangLabel.textContent = langCode.toUpperCase().split('-')[0];
 					langOptions.forEach(opt => {
 						if (opt.getAttribute('data-lang') === langCode) {
@@ -223,7 +305,14 @@ const languages = [
 							currentLangLabel.textContent = label;
 						}
 
+						// Google の翻訳ページ上では、ページごと開き直して言語を切り替える（Safari 対策）
+						if (isProxyPage && targetLang) {
+							window.location.href = targetLang === 'ja' ? originalUrl() : proxyUrl(targetLang);
+							return;
+						}
+
 						if (targetLang === 'ja') {
+							window.clearInterval(fallbackTimer);
 							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
 							if (select) {
 								select.value = 'ja';
@@ -244,6 +333,10 @@ const languages = [
 							if (select && targetLang) {
 								select.value = targetLang;
 								select.dispatchEvent(new Event('change'));
+								watchTranslation(targetLang); // 訳されなければ Google の翻訳ページへ（Safari 対策）
+							} else if (!select && targetLang && canUseProxy) {
+								// Google翻訳の部品そのものが読み込めていない時は、すぐ Google の翻訳ページへ
+								window.location.href = proxyUrl(targetLang);
 							}
 						}
 
