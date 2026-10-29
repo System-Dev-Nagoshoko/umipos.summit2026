@@ -80,17 +80,37 @@ import Layout from '../layouts/Layout.astro';
 <script>
 	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
 
+	// 複数のCORSプロキシURLリスト（1つ目が失敗したら順に次を試行）
+	const PROXIES = [
+		(url: string) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+		(url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+		(url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`
+	];
+
+	async function fetchWithFallback(url: string) {
+		for (const proxyFn of PROXIES) {
+			try {
+				const proxyUrl = proxyFn(url);
+				const res = await fetch(proxyUrl);
+				if (res.ok) {
+					const text = await res.text();
+					if (text && (text.includes('<rss') || text.includes('<feed') || text.includes('<item'))) {
+						return text;
+					}
+				}
+			} catch (e) {
+				console.warn('プロキシの読み込みに失敗したため、次のプロキシを試します...', e);
+			}
+		}
+		throw new Error('すべてのプロキシでの取得に失敗しました');
+	}
+
 	async function fetchLatestPosts() {
 		const container = document.getElementById('blog-list-container');
 		if (!container) return;
 
-		// 高速・安定した corsproxy.io を経由してCORS制限を回回避
-		const PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}`;
-
 		try {
-			const res = await fetch(PROXY_URL);
-			if (!res.ok) throw new Error('ネットワーク応答エラー');
-			const xmlText = await res.text();
+			const xmlText = await fetchWithFallback(RSS_URL);
 
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(xmlText, "text/xml");
