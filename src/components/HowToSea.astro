@@ -46,7 +46,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             <h2 id={`${g.id}-title`}>{g.title}</h2>
             <p class="ss-group__desc">{g.desc}</p>
             <div class="ss-grid">
-              {g.items.map((item) => (
+              {g.items.filter((item) => !item.hidden).map((item) => (
                 <a class="ss-tile" id={`t-${item.id}`} href={`#${item.id}`}>
                   {item.image
                     ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
@@ -165,7 +165,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
 <!-- ===== 説明（タップ or QR で開く）。.card の外に置く ===== -->
 <div class="ss-panels">
-  {genres.flatMap((g) => g.items).map((item) => (
+  {genres.flatMap((g) => g.items).filter((item) => !item.hidden).map((item) => (
     <section class="ss-panel" id={item.id} aria-labelledby={`${item.id}-title`}>
       <a class="ss-panel__backdrop" href={`#t-${item.id}`} aria-label="とじる"></a>
       <div class="ss-panel__box">
