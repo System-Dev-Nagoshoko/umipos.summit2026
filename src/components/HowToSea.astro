@@ -1,0 +1,401 @@
+---
+/**
+ * HOW TO SEA（海のピクトグラム辞典）の本文
+ * ─────────────────────────────────────────
+ * 使い方：ページで <Layout> の中に <HowToSea /> と書くだけ（src/pages/poster.astro）。
+ *   Layout がすでに <main class="main-content"> で囲むので、ページ側で <main> は書かない。
+ *   文章・絵の追加は src/data/how-to-sea.ts を書き換える（このファイルは触らなくてよい）。
+ *
+ * ・一覧の絵（.ss-tile）は、ページ下の説明（.ss-panel）へのリンク
+ * ・看板ごとのQRコードは /poster/#jellyfish のように説明の id を付けたURLにすると、
+ *   その説明が開いた状態で表示される（CSS の :target。JavaScriptなし）
+ * ・説明（.ss-panel）は .card の外に置くこと（.card の backdrop-filter で表示位置がずれるため）
+ * ・Astro 7 の compressHTML（'jsx'）でも表示が崩れないよう、要素の間の空白に頼らない書き方にしている
+ */
+import { genres, reportItems, IMAGE_BASE } from "../data/how-to-sea";
+
+const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as const;
+---
+
+<section class="page-header">
+  <h1>PICTOGRAM GUIDE</h1>
+  <p>看板の絵の意味と、どうすればいいかをまとめています</p>
+</section>
+
+<!-- 緊急バー（いつでも押せる） -->
+<aside class="ss-emergency-bar" aria-label="緊急連絡先">
+  <a href="tel:119"><strong>119</strong>救急・消防</a>
+  <a href="tel:118"><strong>118</strong>海の事故</a>
+</aside>
+
+<section class="section">
+  <div class="container">
+    <div class="flex-container">
+
+      <!-- ===== ピクトグラム一覧 ===== -->
+      <div class="card">
+        <p class="ss-lead">看板で見た絵をタップすると、意味と、どうすればいいかが表示されます。QRコードから開いた場合は、その絵の説明が先に表示されています。</p>
+        <nav class="ss-toc" aria-label="もくじ">
+          {genres.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
+          <a href="#emergency">もしもの時</a>
+        </nav>
+
+        {genres.map((g) => (
+          <section class="ss-group" id={g.id} aria-labelledby={`${g.id}-title`}>
+            <h2 id={`${g.id}-title`}>{g.title}</h2>
+            <p class="ss-group__desc">{g.desc}</p>
+            <div class="ss-grid">
+              {g.items.map((item) => (
+                <a class="ss-tile" id={`t-${item.id}`} href={`#${item.id}`}>
+                  {item.image
+                    ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
+                    : <span class="ss-tile__noimg">画像準備中</span>}
+                  <span>{item.name}</span>
+                </a>
+              ))}
+            </div>
+
+            {g.id === "cat-rules" && (
+              <Fragment>
+                {/* 今の看板の「禁止」9項目のうち、絵にしていないもの */}
+                <h3 class="ss-subhead">このビーチで禁止されていること</h3>
+                <ul class="ss-plainlist ss-plainlist--cols">
+                  <li>シュノーケルの使用</li>
+                  <li>防護ネットに触れる</li>
+                  <li>火気（タバコ・BBQ）</li>
+                  <li>遊泳区域でのペットの散歩</li>
+                  <li>監視台に登る</li>
+                  <li>小学生・中学生だけで泳ぐ</li>
+                </ul>
+              </Fragment>
+            )}
+          </section>
+        ))}
+      </div>
+
+      <!-- ===== もしもの時 ===== -->
+      <div class="card" id="emergency">
+        <h2>もしもの時</h2>
+        <p class="ss-lead">当てはまる状況にチェックすると、電話する番号が分かります。迷ったら、上の119・118からすぐに電話してください。</p>
+
+        <!--
+          通報ガイド
+          ・項目と連絡先は src/data/how-to-sea.ts の reportItems
+          ・ボタンは普段は押せない。チェックした状況に必要な番号のボタンだけが押せるようになる
+          ・JavaScriptが動かない時は、ボタンは最初から押せる状態のまま（電話できなくなることはない）
+        -->
+        <form class="ss-report" id="report" aria-describedby="report-msg">
+          <fieldset>
+            <legend class="ss-subhead">いま、どんな状況ですか（いくつでも）</legend>
+            <ul class="ss-report__list">
+              {reportItems.map((r) => (
+                <li>
+                  <label>
+                    <input type="checkbox" data-call={r.call.join(" ")} />
+                    <span>{r.text}</span>
+                    <span class="ss-report__tags">
+                      {r.call.map((c) => <b class={`is-${c}`}>{callLabel[c]}</b>)}
+                    </span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </fieldset>
+
+          <div class="ss-report__result">
+            <p class="ss-report__msg" id="report-msg" aria-live="polite">当てはまるものにチェックしてください。</p>
+            <ul class="ss-tel">
+              <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
+              <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong>海の事件・事故（海上保安庁）</a></li>
+              <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員【要確認：電話番号・場所】</span></li>
+            </ul>
+            <button type="reset" class="ss-report__reset">チェックをすべて外す</button>
+          </div>
+        </form>
+        <p class="ss-note">【要確認：どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認してから公開】</p>
+
+        <div class="ss-two">
+          <section aria-labelledby="tell-title">
+            <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
+            <ul class="ss-plainlist">
+              <li>場所：<strong>【要確認：〇〇ビーチ 看板No.1】</strong>（この看板の番号）</li>
+              <li>何があったか（おぼれた・刺された・ケガ など）</li>
+              <li>何人か、どんな様子か（意識・呼吸があるか）</li>
+              <li>あなたの名前と電話番号</li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="case-title">
+            <h3 class="ss-subhead" id="case-title">その場でできること</h3>
+            <dl class="ss-case">
+              <div><dt><a href="#rip-current">沖に流された</a></dt><dd>あわてず、岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
+              <div><dt><a href="#jellyfish">クラゲに刺された</a></dt><dd>こすらない。酢をかけ、触手を取り、冷やして監視員へ。</dd></div>
+              <div><dt><a href="#stonefish">オコゼを踏んだ</a></dt><dd>動かない。40〜45℃のお湯につけて病院へ。</dd></div>
+              <div><dt><a href="#alone">人がおぼれている</a></dt><dd>自分は飛び込まず、浮くものを投げる。すぐに118・119。</dd></div>
+            </dl>
+          </section>
+        </div>
+        <p class="ss-note">【要確認：応急処置・救助方法は名護市・消防・医療機関に確認してから公開】</p>
+        <p class="ss-manager">管理者：名護市【要確認：問い合わせ先】</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== 説明（タップ or QR で開く）。.card の外に置く ===== -->
+<div class="ss-panels">
+  {genres.flatMap((g) => g.items).map((item) => (
+    <section class="ss-panel" id={item.id} aria-labelledby={`${item.id}-title`}>
+      <a class="ss-panel__backdrop" href={`#t-${item.id}`} aria-label="とじる"></a>
+      <div class="ss-panel__box">
+        <a class="ss-panel__close" href={`#t-${item.id}`} aria-label="とじる">×</a>
+        <div class="ss-panel__head">
+          {item.image
+            ? <img src={`${IMAGE_BASE}${item.image}`} alt={item.alt} loading="lazy" decoding="async" />
+            : <span class="ss-panel__noimg">画像準備中</span>}
+          <div class="ss-panel__title"><h2 id={`${item.id}-title`}>{item.name}</h2></div>
+        </div>
+        <dl class="ss-panel__body">
+          {item.rows.map(([label, text]) => (
+            <Fragment><dt>{label}</dt><dd>{text}</dd></Fragment>
+          ))}
+        </dl>
+        {item.note && <p class="ss-note">{item.note}</p>}
+        <a class="ss-panel__back" href={`#t-${item.id}`}>一覧にもどる</a>
+      </div>
+    </section>
+  ))}
+</div>
+
+<script>
+  // 通報ガイド：チェックした状況に必要な番号のボタンだけを押せるようにする
+  // （ClientRouter を使っていても動くよう、astro:page-load でも初期化する）
+  function initReport() {
+    const form = document.getElementById("report");
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = "1";
+    const msg = document.getElementById("report-msg");
+    const btns: Record<string, HTMLElement | null> = {
+      "119": document.getElementById("call-119"),
+      "118": document.getElementById("call-118"),
+      lifeguard: document.getElementById("call-lifeguard"),
+    };
+
+    // 押せない時は href を外す。押せる時に戻せるよう、元の href を覚えておく
+    Object.values(btns).forEach((btn) => {
+      if (btn?.hasAttribute("href")) btn.dataset.href = btn.getAttribute("href") ?? "";
+    });
+
+    const setEnabled = (btn: HTMLElement | null, on: boolean) => {
+      if (!btn) return;
+      btn.classList.toggle("is-needed", on);
+      btn.classList.toggle("is-disabled", !on);
+      btn.setAttribute("aria-disabled", on ? "false" : "true");
+      const href = btn.dataset.href;
+      if (!href) return; // 監視所は電話番号が未定なのでリンクなし
+      if (on) btn.setAttribute("href", href);
+      else btn.removeAttribute("href");
+    };
+
+    const update = () => {
+      const need: Record<string, boolean> = {};
+      form.querySelectorAll<HTMLInputElement>("input[data-call]:checked").forEach((box) => {
+        (box.dataset.call ?? "").split(" ").forEach((key) => (need[key] = true));
+      });
+      const any = Object.keys(need).length > 0;
+      Object.entries(btns).forEach(([key, btn]) => setEnabled(btn, !!need[key]));
+      form.classList.toggle("is-active", any);
+
+      let text: string;
+      if (need["119"] && need["118"]) text = "119 と 118 の両方に電話してください。";
+      else if (need["119"]) text = "119（救急・消防）に電話してください。";
+      else if (need["118"]) text = "118（海の事件・事故）に電話してください。";
+      else if (need.lifeguard) text = "近くのビーチ監視員に知らせてください。具合が悪くなったら、すぐに119へ。";
+      else text = "当てはまるものにチェックすると、電話ボタンが押せるようになります。今すぐ電話する時は、ページ上の119・118ボタンから。";
+      if ((need["119"] || need["118"]) && need.lifeguard) text += "監視員にも知らせてください。";
+      if (msg) msg.textContent = text;
+    };
+
+    form.addEventListener("change", update);
+    form.addEventListener("reset", () => setTimeout(update, 0));
+    form.addEventListener("submit", (e) => e.preventDefault());
+    update();
+  }
+
+  initReport();
+  document.addEventListener("astro:page-load", initReport);
+</script>
+
+<style>
+  /*
+    このページだけのスタイル（Astroのスコープ付き。他のページには影響しない）
+    前半：本番サイトで「ページごと」に書かれている共通部品（.page-header / .section / .card など）
+          → このページでも同じ見た目になるよう、ここに同じ指定を書いている
+    後半：このページの部品（ss-）
+
+    デザインの方針（「AIっぽさ」を避けるため）
+    - 枠の入れ子・片側だけの色線・ぼかし・絵文字・英字の小ラベルは使わない
+    - 区切りは、見出しの大きさ・余白・細い線で表す
+    - 動きは、ユーザーが操作した時の色の変化だけ（点滅・浮き上がりはしない）
+  */
+
+  /* ===== 本番サイトのページ部品（ABOUT / トップページと同じ指定） ===== */
+  .page-header { background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%)); color: #fff; padding: 4.5rem 1.25rem 5.5rem; text-align: center; }
+  .page-header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: .05em; text-shadow: 0 2px 8px rgba(8, 47, 73, .5); }
+  .page-header p { color: #e0f2fe; font-size: 1rem; margin-top: .5rem; font-weight: 500; }
+  .section { padding-bottom: 4rem; position: relative; z-index: 10; }
+  .flex-container { display: flex; flex-direction: column; gap: 2.5rem; }
+  .card { background: #fff; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 25px -5px #0f172a0d; max-width: 1000px; margin: 0 auto; width: 100%; border: 1px solid var(--border, #e2e8f0); overflow: hidden; }
+  .card h2 { font-size: 1.45rem; font-weight: 700; margin-bottom: 1.25rem; color: #0f172a; line-height: 1.45; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
+
+  /* ===== 色 ===== */
+  .ss-emergency-bar, .card, .ss-panels {
+    --ss-call-119: #dc2626;   /* 119（救急・消防） */
+    --ss-call-118: #1d4ed8;   /* 118（海上保安庁） */
+    --ss-call-guard: #047857; /* ビーチ監視員 */
+    --ss-line: #e2e8f0;
+    --ss-text-sub: #475569;
+    --ss-primary: var(--primary, #0284c7);
+  }
+
+  /* ===== 緊急バー ===== */
+  .ss-emergency-bar {
+    position: sticky; top: 72px; z-index: 40;
+    display: flex; gap: .75rem; justify-content: center;
+    padding: .75rem 1.5rem; background: #fff; border-bottom: 1px solid var(--ss-line);
+  }
+  .ss-emergency-bar a {
+    flex: 0 1 240px; display: flex; align-items: baseline; justify-content: center; gap: .5rem;
+    padding: .6rem 1rem; border-radius: 10px; color: #fff; font-weight: 700; text-decoration: none;
+  }
+  .ss-emergency-bar a[href="tel:119"] { background: var(--ss-call-119); }
+  .ss-emergency-bar a[href="tel:118"] { background: var(--ss-call-118); }
+  .ss-emergency-bar strong { font-size: 1.3rem; line-height: 1; letter-spacing: .02em; }
+  .ss-emergency-bar + .section { padding-top: 2rem; }
+
+  /* ===== 共通の文字 ===== */
+  .ss-lead { color: #334155; font-size: 1rem; line-height: 1.9; max-width: 44em; }
+  .ss-subhead { font-size: 1rem; font-weight: 700; color: #0f172a; margin: 2rem 0 .75rem; }
+  .ss-note { font-size: .8rem; color: #b91c1c; margin-top: .75rem; }
+  .ss-plainlist { padding-left: 1.2em; color: var(--ss-text-sub); font-size: .95rem; line-height: 1.8; }
+  .ss-plainlist li::marker { color: #94a3b8; }
+  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
+
+  /* ===== もくじ ===== */
+  .ss-toc { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--ss-line); }
+  .ss-toc a { color: var(--ss-primary); font-weight: 700; font-size: .9rem; text-decoration: none; }
+  .ss-toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ===== ジャンル ===== */
+  .ss-group { margin-top: 3.5rem; scroll-margin-top: 100px; }
+  .ss-group__desc { color: var(--ss-text-sub); font-size: .95rem; line-height: 1.8; margin: -.25rem 0 1.5rem; max-width: 44em; }
+  #emergency { scroll-margin-top: 100px; }
+
+  /* ===== 絵の一覧 ===== */
+  .ss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; }
+  .ss-tile { display: flex; flex-direction: column; gap: .6rem; text-decoration: none; color: #0f172a; font-weight: 700; font-size: .95rem; line-height: 1.45; scroll-margin-top: 150px; }
+  .ss-tile img, .ss-tile__noimg { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border: 1px solid var(--ss-line); border-radius: 10px; padding: .75rem; transition: border-color .15s ease; }
+  .ss-tile:hover img, .ss-tile:focus-visible img, .ss-tile:hover .ss-tile__noimg { border-color: var(--ss-primary); }
+  .ss-tile:hover > span:last-child { color: var(--ss-primary); }
+  .ss-tile:focus-visible { outline: none; }
+  .ss-tile:focus-visible img { outline: 3px solid #93c5fd; outline-offset: 2px; }
+  .ss-tile__noimg, .ss-panel__noimg { display: grid; place-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; color: #94a3b8; font-size: .8rem; font-weight: 700; }
+  .ss-panel__noimg { width: 140px; aspect-ratio: 1; flex-shrink: 0; }
+
+  /* ===== 説明（URLの #id と一致したものだけ表示） ===== */
+  /*
+    本番の .main-content には、位置を動かすフェードイン（animation で transform）が付いている。
+    このアニメーションが付いている間は、position: fixed の説明が「画面」ではなく「本文」を基準に置かれ、
+    ページのずっと下に出てしまう（transform を !important で打ち消しても直らない）。
+    そこでこのページだけ、本文の現れ方を「位置を動かさない、透明から現れるだけ」の動きに差し替える。
+  */
+  :global(.main-content:has(.ss-panels)) { animation-name: ssPageFade; }
+  @keyframes ssPageFade { from { opacity: 0; } to { opacity: 1; } }
+  .ss-panel { display: none; }
+  .ss-panel:target { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 88px 1rem 1rem; }
+  .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .55); }
+  .ss-panel__box { position: relative; width: min(560px, 100%); max-height: 100%; overflow-y: auto; background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 24px 48px -16px rgba(15, 23, 42, .35); }
+  .ss-panel__close { position: absolute; top: .9rem; right: .9rem; width: 2.25rem; height: 2.25rem; border-radius: 8px; display: grid; place-items: center; color: #64748b; font-size: 1.4rem; line-height: 1; text-decoration: none; }
+  .ss-panel__close:hover { background: #f1f5f9; color: #0f172a; }
+  .ss-panel__head { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; padding-right: 2rem; }
+  .ss-panel__head img { width: 140px; height: 140px; flex-shrink: 0; object-fit: contain; border: 1px solid var(--ss-line); border-radius: 10px; padding: .6rem; }
+  .ss-panel__head h2 { font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.35; }
+  .ss-panel__body { display: grid; grid-template-columns: 6.5em 1fr; border-top: 1px solid var(--ss-line); }
+  .ss-panel__body dt, .ss-panel__body dd { padding: .75rem 0; border-bottom: 1px solid var(--ss-line); }
+  .ss-panel__body dt { font-size: .85rem; color: var(--ss-text-sub); font-weight: 700; padding-top: .9rem; }
+  .ss-panel__body dd { color: #0f172a; font-size: .95rem; line-height: 1.75; }
+  .ss-panel__back { display: block; margin-top: 1.5rem; padding: .7rem; border-radius: 10px; text-align: center; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; text-decoration: none; }
+  .ss-panel__back:hover { background: #f8fafc; }
+
+  /* ===== 通報ガイド ===== */
+  .ss-report { margin-top: .5rem; }
+  .ss-report fieldset { border: 0; }
+  .ss-report__list { list-style: none; border: 1px solid var(--ss-line); border-radius: 12px; overflow: hidden; }
+  .ss-report__list li + li { border-top: 1px solid var(--ss-line); }
+  .ss-report__list label { display: flex; align-items: center; gap: .85rem; padding: .85rem 1.1rem; cursor: pointer; font-size: .95rem; line-height: 1.5; color: #0f172a; transition: background-color .15s ease; }
+  .ss-report__list label:hover { background: #f8fafc; }
+  .ss-report__list label:has(input:checked) { background: #fef2f2; font-weight: 700; }
+  .ss-report__list input { width: 1.2rem; height: 1.2rem; flex-shrink: 0; accent-color: var(--ss-call-119); }
+  .ss-report__list label > span:first-of-type { flex: 1; }
+  .ss-report__tags { display: flex; gap: .3rem; flex-shrink: 0; }
+  .ss-report__tags b { font-size: .75rem; font-weight: 700; padding: .1rem .45rem; border-radius: 4px; color: #fff; line-height: 1.5; }
+  .ss-report__tags .is-119 { background: var(--ss-call-119); }
+  .ss-report__tags .is-118 { background: var(--ss-call-118); }
+  .ss-report__tags .is-lifeguard { background: var(--ss-call-guard); }
+  .ss-report__result { margin-top: 1.25rem; padding: 1.5rem; border-radius: 12px; background: #f8fafc; }
+  .ss-report.is-active .ss-report__result { background: #fff7f7; }
+  .ss-report__msg { font-weight: 700; font-size: 1.05rem; color: #0f172a; text-align: center; margin-bottom: 1rem; }
+  .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font: inherit; font-size: .85rem; color: #64748b; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* 電話ボタン */
+  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .ss-tel__wide { grid-column: 1 / -1; }
+  .ss-tel__btn { display: flex; align-items: baseline; justify-content: center; gap: .6rem; height: 100%; padding: 1rem; border-radius: 12px; color: #fff; font-weight: 700; text-decoration: none; text-align: center; transition: background-color .15s ease; }
+  .ss-tel__btn strong { font-size: 1.8rem; line-height: 1; letter-spacing: .02em; }
+  #call-119 { background: var(--ss-call-119); }
+  #call-118 { background: var(--ss-call-118); }
+  .ss-tel__btn--lifeguard { background: var(--ss-call-guard); padding: .75rem 1rem; font-size: .9rem; align-items: center; }
+  .ss-tel__btn--lifeguard strong { font-size: 1.1rem; }
+  .ss-tel__btn.is-disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; pointer-events: none; }
+
+  /* 電話で伝えること／その場でできること */
+  .ss-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; margin-top: .5rem; }
+  .ss-case div { padding: .75rem 0; border-bottom: 1px solid var(--ss-line); }
+  .ss-case div:first-child { border-top: 1px solid var(--ss-line); }
+  .ss-case dt a { color: var(--ss-primary); font-weight: 700; text-decoration: none; }
+  .ss-case dt a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .ss-case dd { color: var(--ss-text-sub); font-size: .9rem; line-height: 1.7; margin-top: .15rem; }
+  .ss-manager { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--ss-line); font-size: .85rem; color: #64748b; }
+
+  /* ===== スマホ ===== */
+  @media (max-width: 640px) {
+    .card { padding: 1.6rem 1.15rem; }
+    .ss-emergency-bar { padding: .6rem 1rem; gap: .5rem; }
+    .ss-emergency-bar a { padding: .55rem .5rem; font-size: .85rem; }
+    .ss-emergency-bar strong { font-size: 1.15rem; }
+    .ss-lead, .ss-group__desc { font-size: .9rem; }
+    .ss-toc { gap: .25rem 1rem; }
+    .ss-toc a { font-size: .85rem; }
+    .ss-group { margin-top: 2.75rem; }
+    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .9rem; }
+    .ss-tile { font-size: .85rem; }
+    .ss-tile img, .ss-tile__noimg { padding: .5rem; }
+    .ss-plainlist--cols { grid-template-columns: 1fr; }
+    .ss-panel:target { align-items: flex-end; padding: 72px 0 0; }
+    .ss-panel__box { width: 100%; border-radius: 14px 14px 0 0; padding: 1.4rem 1.15rem 1.5rem; }
+    .ss-panel__head { gap: 1rem; }
+    .ss-panel__head img, .ss-panel__noimg { width: 88px; height: 88px; }
+    .ss-panel__head h2 { font-size: 1.2rem; }
+    .ss-panel__body { grid-template-columns: 1fr; }
+    .ss-panel__body dt { border-bottom: none; padding: .7rem 0 0; }
+    .ss-panel__body dd { padding: .15rem 0 .7rem; }
+    .ss-report__list label { padding: .75rem .85rem; font-size: .875rem; gap: .65rem; }
+    .ss-report__result { padding: 1.1rem .85rem; }
+    .ss-report__msg { font-size: .95rem; }
+    .ss-tel { gap: .5rem; }
+    .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .8rem .5rem; font-size: .8rem; line-height: 1.4; }
+    .ss-tel__btn--lifeguard { flex-direction: row; gap: .5rem; }
+    .ss-two { grid-template-columns: 1fr; }
+  }
+</style>
