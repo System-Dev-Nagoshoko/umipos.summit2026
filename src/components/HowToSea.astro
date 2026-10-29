@@ -120,7 +120,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             </div>
             <ul class="ss-tel">
               <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
-              <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong>海の事件・事故（海上保安庁）</a></li>
+              <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong><span>海の事件・事故<span class="ss-tel__sub">（海上保安庁）</span></span></a></li>
               {/* 【要確認・展示のため一時的に非表示】監視所の電話番号・場所。番号が分かったら <a href="tel:…"> にする */}
               <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員</span></li>
             </ul>
@@ -266,11 +266,17 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   /* ===== 本番サイトのページ部品（ABOUT / トップページと同じ指定） ===== */
   .page-header { background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%)); color: #fff; padding: 4.5rem 1.25rem 5.5rem; text-align: center; }
   .page-header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: .05em; text-shadow: 0 2px 8px rgba(8, 47, 73, .5); }
-  .page-header p { color: #e0f2fe; font-size: 1rem; margin-top: .5rem; font-weight: 500; }
+  .page-header p { color: #e0f2fe; font-size: 1rem; margin-top: .5rem; font-weight: 500; text-wrap: balance; /* 折り返した時、最後の1文字だけが次の行に残らないように */ }
   .section { padding-bottom: 4rem; position: relative; z-index: 10; }
   .flex-container { display: flex; flex-direction: column; gap: 2.5rem; }
   .card { background: #fff; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 25px -5px #0f172a0d; max-width: 1000px; margin: 0 auto; width: 100%; border: 1px solid var(--border, #e2e8f0); overflow: hidden; }
   .card h2 { font-size: 1.45rem; font-weight: 700; margin-bottom: 1.25rem; color: #0f172a; line-height: 1.45; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
+  /*
+    サイト共通の .card::before（マウスを乗せると光が横切る演出）は、斜めに傾けた帯をカードの外に隠している。
+    このページのカードは縦にとても長いので、その帯がカードの中まではみ出し、文字が斜めの帯状に薄く見えていた。
+    このページのカードでは演出を止める（他のページには影響しない）。
+  */
+  .card::before { display: none; }
 
   /* ===== 色 ===== */
   .ss-emergency-bar, .card, .ss-panels {
@@ -352,7 +358,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-panel__back:hover { background: #f8fafc; }
 
   /* ===== 通報ガイド ===== */
-  .ss-report { margin-top: .5rem; }
+  .ss-report { margin-top: 1.5rem; } /* 説明文と「いま、どんな状況ですか」の間をあける */
   .ss-report fieldset { border: 0; }
   .ss-report__list { list-style: none; border: 1px solid var(--ss-line); border-radius: 12px; overflow: hidden; }
   .ss-report__list li + li { border-top: 1px solid var(--ss-line); }
@@ -394,8 +400,22 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
   /* ===== スマホ ===== */
   @media (max-width: 640px) {
-    .card { padding: 1.6rem 1.15rem; }
-    .ss-emergency-bar { padding: .6rem 1rem; gap: .5rem; }
+    /* 左右の余白を詰めて、絵を大きく見せる（画面の端→カード 8px、カードの中 14px。中身まで片側 22px。このページだけ）
+       これ以上詰めると、カードの枠が画面の端に張り付いて窮屈に見えるので、ここまでにしている */
+    .container { padding: 0 .5rem; }
+    .card { padding: 1.5rem .875rem; }
+    /* 見出し帯を低くして、開いてすぐ本文が見えるように（「PICTOGRAM GUIDE」も1行に収める） */
+    .page-header { padding: 2.5rem 1rem 2.75rem; }
+    .page-header h1 { font-size: 1.85rem; }
+    .page-header p { font-size: .9rem; }
+    /* 最後のカードとフッターの間の空白を縮める */
+    .section { padding-bottom: 1.5rem; }
+    .ss-emergency-bar { padding: .6rem .5rem; gap: .5rem; } /* 左右はカードの端（8px）にそろえる */
+    /* もくじのリンクを指で押しやすく（押せる範囲を上下に広げる） */
+    .ss-toc a { display: inline-block; padding: .3rem 0; }
+    .ss-report { margin-top: 1.25rem; }
+    /* 通報ガイドの結果：スマホでは灰色の箱をなくし、細い線1本で区切る（カードの中の箱の入れ子で窮屈に見えるため） */
+    .ss-report__result, .ss-report.is-active .ss-report__result { background: none; padding: 1.25rem 0 0; border-radius: 0; border-top: 1px solid var(--ss-line); }
     .ss-emergency-bar a { padding: .55rem .5rem; font-size: .85rem; }
     .ss-emergency-bar strong { font-size: 1.15rem; }
     .ss-lead, .ss-group__desc { font-size: .9rem; }
@@ -415,11 +435,11 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     .ss-panel__body dt { border-bottom: none; padding: .7rem 0 0; }
     .ss-panel__body dd { padding: .15rem 0 .7rem; }
     .ss-report__list label { padding: .75rem .85rem; font-size: .875rem; gap: .65rem; }
-    .ss-report__result { padding: 1.1rem .85rem; }
     .ss-report__msg { font-size: .95rem; }
     .ss-tel { gap: .5rem; }
     .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .8rem .5rem; font-size: .8rem; line-height: 1.4; }
     .ss-tel__btn--lifeguard { flex-direction: row; gap: .5rem; }
+    .ss-tel__sub { display: block; } /* 「（海上保安庁）」を言葉の途中で折り返さず、まとめて次の行に */
     .ss-two { grid-template-columns: 1fr; }
   }
 </style>
