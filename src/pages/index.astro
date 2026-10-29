@@ -1,10 +1,48 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+interface BlogPost {
+	title: string;
+	link: string;
+	formattedDate: string;
+}
+
+let posts: BlogPost[] = [];
+
+try {
+	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
+	const res = await fetch(RSS_URL);
+	if (res.ok) {
+		const xmlText = await res.text();
+		
+		// XMLの<item>タグを抽出
+		const itemMatches = xmlText.match(/<item>[\s\S]*?<\/item>/g) || [];
+		
+		posts = itemMatches.slice(0, 3).map((itemXml) => {
+			const titleMatch = itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) || itemXml.match(/<title>([\s\S]*?)<\/title>/);
+			const linkMatch = itemXml.match(/<link>([\s\S]*?)<\/link>/);
+			const pubDateMatch = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+
+			const title = titleMatch ? titleMatch[1].trim() : '無題';
+			const link = linkMatch ? linkMatch[1].trim() : '#';
+			const pubDateStr = pubDateMatch ? pubDateMatch[1].trim() : '';
+
+			const dateObj = new Date(pubDateStr);
+			const formattedDate = !isNaN(dateObj.getTime())
+				? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
+				: '';
+
+			return { title, link, formattedDate };
+		});
+	}
+} catch (error) {
+	console.error('RSS取得エラー:', error);
+}
 ---
 
 <Layout title="海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
-		<!-- ヒーローエリア: 文字の視認性を極限まで高めたオーシャングラデーション -->
+		<!-- ヒーローエリア -->
 		<section class="hero">
 			<div class="container hero-inner">
 				<div class="badge">
@@ -13,7 +51,6 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				
 				<div class="hero-text-wrap">
-					<!-- 同サイズ・1セットの対比キャッチコピー -->
 					<h1 class="hero-catch-title">
 						<span class="line-from">「見る看板」から</span>
 						<span class="line-to">「<span class="highlight-aqua">伝わる看板</span>」へ</span>
@@ -53,7 +90,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
-				<!-- 📝 記事投稿時に即更新される「明日の地図」公式ブログカード -->
+				<!-- 📝 最新活動ブログ（ビルド時に自動埋め込み） -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📝 最新活動ブログ（明日の地図）</h2>
@@ -67,8 +104,18 @@ import Layout from '../layouts/Layout.astro';
 						</a>
 					</div>
 
-					<div id="blog-list-container" class="blog-list">
-						<p class="loading-text">最新記事を読み込み中...</p>
+					<div class="blog-list">
+						{posts.length > 0 ? (
+							posts.map((item) => (
+								<a href={item.link} target="_blank" rel="noopener noreferrer" class="blog-item">
+									<div class="blog-date">{item.formattedDate}</div>
+									<div class="blog-title">{item.title}</div>
+									<div class="blog-arrow">↗</div>
+								</a>
+							))
+						) : (
+							<p class="no-posts">最新記事はありません。</p>
+						)}
 					</div>
 				</div>
 
@@ -77,64 +124,7 @@ import Layout from '../layouts/Layout.astro';
 	</main>
 </Layout>
 
-<script>
-	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
-
-	async function fetchLatestPosts() {
-		const container = document.getElementById('blog-list-container');
-		if (!container) return;
-
-		// CORSエラー回避のため allorigins プロキシを使用
-		const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(RSS_URL)}`;
-
-		try {
-			const res = await fetch(PROXY_URL);
-			if (!res.ok) throw new Error('ネットワーク応答エラー');
-			const data = await res.json();
-
-			if (data && data.contents) {
-				const parser = new DOMParser();
-				const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-				const items = Array.from(xmlDoc.querySelectorAll("item"));
-
-				if (items.length > 0) {
-					const postsHtml = items.slice(0, 3).map((item) => {
-						const title = item.querySelector("title")?.textContent || '無題';
-						const link = item.querySelector("link")?.textContent || '#';
-						const pubDate = item.querySelector("pubDate")?.textContent || '';
-
-						const dateObj = new Date(pubDate);
-						const formattedDate = !isNaN(dateObj.getTime())
-							? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
-							: '';
-
-						return `
-							<a href="${link}" target="_blank" rel="noopener noreferrer" class="blog-item">
-								<div class="blog-date">${formattedDate}</div>
-								<div class="blog-title">${title}</div>
-								<div class="blog-arrow">↗</div>
-							</a>
-						`;
-					}).join('');
-
-					container.innerHTML = postsHtml;
-				} else {
-					container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
-				}
-			} else {
-				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
-			}
-		} catch (error) {
-			console.error('RSS読み込みエラー:', error);
-			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
-		}
-	}
-
-	fetchLatestPosts();
-</script>
-
 <style>
-	/* ヒーローエリア: 白文字の視認性が最も際立つディープオーシャングラデーション */
 	.hero {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
@@ -150,7 +140,6 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0 auto;
 	}
 
-	/* バッジ */
 	.badge {
 		display: inline-flex;
 		align-items: center;
@@ -176,7 +165,6 @@ import Layout from '../layouts/Layout.astro';
 		box-shadow: 0 0 8px #38bdf8;
 	}
 
-	/* キャッチコピー文字エリア */
 	.hero-text-wrap {
 		display: flex;
 		flex-direction: column;
@@ -184,7 +172,6 @@ import Layout from '../layouts/Layout.astro';
 		gap: 0.85rem;
 	}
 
-	/* 1セットの見出し（上下ともに完全に同じフォントサイズ） */
 	.hero-catch-title {
 		display: flex;
 		flex-direction: column;
@@ -199,17 +186,14 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.6);
 	}
 
-	/* 1行目: まとまりを感じるソフトホワイト */
 	.line-from {
 		color: #f0f9ff;
 	}
 
-	/* 2行目: クリアな純白 */
 	.line-to {
 		color: #ffffff;
 	}
 
-	/* 「伝わる看板」のアクセント: 文字の可読性を損なわない爽やかな下線グラデーション */
 	.highlight-aqua {
 		position: relative;
 		display: inline-block;
@@ -219,7 +203,6 @@ import Layout from '../layouts/Layout.astro';
 		border-radius: 2px;
 	}
 
-	/* サブタイトル */
 	.hero-caption {
 		font-size: clamp(1rem, 2.4vw, 1.2rem);
 		font-weight: 700;
@@ -229,7 +212,6 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 1px 4px rgba(8, 47, 73, 0.5);
 	}
 
-	/* メインレイアウト */
 	.section {
 		margin-top: -3rem;
 		padding-bottom: 4rem;
@@ -359,7 +341,7 @@ import Layout from '../layouts/Layout.astro';
 		gap: 0.75rem;
 	}
 
-	:global(.blog-item) {
+	.blog-item {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
@@ -370,13 +352,13 @@ import Layout from '../layouts/Layout.astro';
 		text-decoration: none;
 		transition: all 0.2s ease;
 	}
-	:global(.blog-item:hover) {
+	.blog-item:hover {
 		background: #ffffff;
 		border-color: #38bdf8;
 		transform: translateY(-2px);
 		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
 	}
-	:global(.blog-date) {
+	.blog-date {
 		font-size: 0.8rem;
 		font-weight: 700;
 		color: #0284c7;
@@ -385,7 +367,7 @@ import Layout from '../layouts/Layout.astro';
 		border-radius: 6px;
 		flex-shrink: 0;
 	}
-	:global(.blog-title) {
+	.blog-title {
 		font-size: 0.95rem;
 		font-weight: 700;
 		color: #1e293b;
@@ -394,13 +376,12 @@ import Layout from '../layouts/Layout.astro';
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	:global(.blog-arrow) {
+	.blog-arrow {
 		font-weight: bold;
 		color: #0284c7;
 		flex-shrink: 0;
 	}
 
-	.loading-text,
 	.no-posts {
 		color: #64748b;
 		font-size: 0.9rem;
@@ -418,15 +399,15 @@ import Layout from '../layouts/Layout.astro';
 		.card {
 			padding: 1.6rem 1.15rem;
 		}
-		:global(.blog-item) {
+		.blog-item {
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 0.45rem;
 		}
-		:global(.blog-title) {
+		.blog-title {
 			white-space: normal;
 		}
-		:global(.blog-arrow) {
+		.blog-arrow {
 			display: none;
 		}
 	}
