@@ -400,17 +400,17 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
   /* ===== スマホ ===== */
   @media (max-width: 640px) {
-    /* 左右の余白を詰めて、絵を大きく見せる（画面の端→カード 8px、カードの中 14px。中身まで片側 22px。このページだけ）
-       これ以上詰めると、カードの枠が画面の端に張り付いて窮屈に見えるので、ここまでにしている */
-    .container { padding: 0 .5rem; }
-    .card { padding: 1.5rem .875rem; }
+    /* 左右の余白（このページだけ）：画面の端→カード 16px、カードの中 12px。中身まで片側 28px
+       外側はスマホの一般的な余白（16px）に合わせ、内側は絵を大きく見せるために少し詰めている */
+    .container { padding: 0 1rem; }
+    .card { padding: 1.5rem .75rem; }
     /* 見出し帯を低くして、開いてすぐ本文が見えるように（「PICTOGRAM GUIDE」も1行に収める） */
     .page-header { padding: 2.5rem 1rem 2.75rem; }
     .page-header h1 { font-size: 1.85rem; }
     .page-header p { font-size: .9rem; }
     /* 最後のカードとフッターの間の空白を縮める */
     .section { padding-bottom: 1.5rem; }
-    .ss-emergency-bar { padding: .6rem .5rem; gap: .5rem; } /* 左右はカードの端（8px）にそろえる */
+    .ss-emergency-bar { padding: .6rem 1rem; gap: .5rem; } /* 左右はカードの端（16px）にそろえる */
     /* もくじのリンクを指で押しやすく（押せる範囲を上下に広げる） */
     .ss-toc a { display: inline-block; padding: .3rem 0; }
     .ss-report { margin-top: 1.25rem; }
@@ -422,22 +422,22 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     .ss-toc { gap: .25rem 1rem; }
     .ss-toc a { font-size: .85rem; }
     .ss-group { margin-top: 2.75rem; }
-    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .9rem; }
+    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem .75rem; }
     .ss-tile { font-size: .85rem; }
-    .ss-tile img, .ss-tile__noimg { padding: .5rem; }
+    .ss-tile img, .ss-tile__noimg { padding: .35rem; } /* 枠の中の余白を詰めて、絵そのものを大きく */
     .ss-plainlist--cols { grid-template-columns: 1fr; }
     .ss-panel:target { align-items: flex-end; padding: 72px 0 0; }
-    .ss-panel__box { width: 100%; border-radius: 14px 14px 0 0; padding: 1.4rem 1.15rem 1.5rem; }
+    .ss-panel__box { width: 100%; border-radius: 14px 14px 0 0; padding: 1.25rem 1rem 1.4rem; }
     .ss-panel__head { gap: 1rem; }
     .ss-panel__head img, .ss-panel__noimg { width: 88px; height: 88px; }
     .ss-panel__head h2 { font-size: 1.2rem; }
     .ss-panel__body { grid-template-columns: 1fr; }
     .ss-panel__body dt { border-bottom: none; padding: .7rem 0 0; }
     .ss-panel__body dd { padding: .15rem 0 .7rem; }
-    .ss-report__list label { padding: .75rem .85rem; font-size: .875rem; gap: .65rem; }
+    .ss-report__list label { padding: .65rem .7rem; font-size: .875rem; gap: .55rem; }
     .ss-report__msg { font-size: .95rem; }
     .ss-tel { gap: .5rem; }
-    .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .8rem .5rem; font-size: .8rem; line-height: 1.4; }
+    .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .7rem .4rem; font-size: .8rem; line-height: 1.4; }
     .ss-tel__btn--lifeguard { flex-direction: row; gap: .5rem; }
     .ss-tel__sub { display: block; } /* 「（海上保安庁）」を言葉の途中で折り返さず、まとめて次の行に */
     .ss-two { grid-template-columns: 1fr; }
