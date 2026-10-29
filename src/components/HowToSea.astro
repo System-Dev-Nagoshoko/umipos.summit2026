@@ -23,8 +23,9 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 </section>
 
 <!-- 緊急バー（いつでも押せる） -->
+<!-- 翻訳されても短く収まるよう、ここは短い言葉にしている（正式な名前は下の通報ガイドのボタン） -->
 <aside class="ss-emergency-bar" aria-label="緊急連絡先">
-  <a href="tel:119"><strong>119</strong>救急・消防</a>
+  <a href="tel:119"><strong>119</strong>救急</a>
   <a href="tel:118"><strong>118</strong>海の事故</a>
 </aside>
 
@@ -103,22 +104,38 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
           </fieldset>
 
           <div class="ss-report__result">
-            <p class="ss-report__msg" id="report-msg" aria-live="polite">当てはまるものにチェックしてください。</p>
+            <!--
+              案内文はすべて最初からページに書いておき、表示・非表示を切り替えるだけにする。
+              文をスクリプトで書き換えると、言語切り替え（Google翻訳）があとから訳し直すまで数秒間
+              日本語のまま表示されてしまうため。最初から書いておけば、ページの翻訳と一緒に訳される。
+            -->
+            <!-- 1文ずつ別の段落にする（横並びの要素だと、翻訳が1つの文として並べ替えて崩れるため） -->
+            <div class="ss-report__msg" id="report-msg" aria-live="polite">
+              <p data-msg="none">当てはまるものにチェックすると、電話する番号が分かります。今すぐ電話する時は、ページ上の119・118ボタンから。</p>
+              <p data-msg="both" hidden>119 と 118 の両方に電話してください。</p>
+              <p data-msg="119" hidden>119（救急・消防）に電話してください。</p>
+              <p data-msg="118" hidden>118（海の事件・事故）に電話してください。</p>
+              <p data-msg="lifeguard" hidden>近くのビーチ監視員に知らせてください。具合が悪くなったら、すぐに119へ。</p>
+              <p data-msg="also-lifeguard" hidden>ビーチ監視員にも知らせてください。</p>
+            </div>
             <ul class="ss-tel">
               <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
               <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong>海の事件・事故（海上保安庁）</a></li>
-              <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員【要確認：電話番号・場所】</span></li>
+              {/* 【要確認・展示のため一時的に非表示】監視所の電話番号・場所。番号が分かったら <a href="tel:…"> にする */}
+              <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員</span></li>
             </ul>
             <button type="reset" class="ss-report__reset">チェックをすべて外す</button>
           </div>
         </form>
-        <p class="ss-note">【要確認：どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認してから公開】</p>
+        {/* 【要確認・展示のため一時的に非表示】どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認する
+            （元の表示：<p class="ss-note">【要確認：どの状況で119・118・監視員のどれに連絡するかは、消防・海上保安庁・名護市に確認してから公開】</p>） */}
 
         <div class="ss-two">
           <section aria-labelledby="tell-title">
             <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
             <ul class="ss-plainlist">
-              <li>場所：<strong>【要確認：〇〇ビーチ 看板No.1】</strong>（この看板の番号）</li>
+              {/* 【要確認・展示のため一時的に非表示】ビーチの正式名と看板番号が決まったら「場所：〇〇ビーチ 看板No.1（この看板の番号）」に戻す */}
+              <li>場所（ビーチの名前や、近くの目印）</li>
               <li>何があったか（おぼれた・刺された・ケガ など）</li>
               <li>何人か、どんな様子か（意識・呼吸があるか）</li>
               <li>あなたの名前と電話番号</li>
@@ -135,8 +152,11 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             </dl>
           </section>
         </div>
-        <p class="ss-note">【要確認：応急処置・救助方法は名護市・消防・医療機関に確認してから公開】</p>
-        <p class="ss-manager">管理者：名護市【要確認：問い合わせ先】</p>
+        {/* 【要確認・展示のため一時的に非表示】
+            ・応急処置・救助方法は名護市・消防・医療機関に確認する
+              （元の表示：<p class="ss-note">【要確認：応急処置・救助方法は名護市・消防・医療機関に確認してから公開】</p>）
+            ・管理者（名護市か土木事務所か）と問い合わせ先を確認する
+              （元の表示：<p class="ss-manager">管理者：名護市【要確認：問い合わせ先】</p>） */}
       </div>
 
     </div>
@@ -207,14 +227,17 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       Object.entries(btns).forEach(([key, btn]) => setEnabled(btn, !!need[key]));
       form.classList.toggle("is-active", any);
 
-      let text: string;
-      if (need["119"] && need["118"]) text = "119 と 118 の両方に電話してください。";
-      else if (need["119"]) text = "119（救急・消防）に電話してください。";
-      else if (need["118"]) text = "118（海の事件・事故）に電話してください。";
-      else if (need.lifeguard) text = "近くのビーチ監視員に知らせてください。具合が悪くなったら、すぐに119へ。";
-      else text = "当てはまるものにチェックすると、電話ボタンが押せるようになります。今すぐ電話する時は、ページ上の119・118ボタンから。";
-      if ((need["119"] || need["118"]) && need.lifeguard) text += "監視員にも知らせてください。";
-      if (msg) msg.textContent = text;
+      // 表示する案内文を選ぶ（文は書き換えず、hidden の付け外しだけ。翻訳済みの文がすぐ出る）
+      let main = "none";
+      if (need["119"] && need["118"]) main = "both";
+      else if (need["119"]) main = "119";
+      else if (need["118"]) main = "118";
+      else if (need.lifeguard) main = "lifeguard";
+      const alsoLifeguard = (need["119"] || need["118"]) && need.lifeguard;
+      msg?.querySelectorAll<HTMLElement>("[data-msg]").forEach((el) => {
+        const key = el.dataset.msg;
+        el.hidden = !(key === main || (key === "also-lifeguard" && alsoLifeguard));
+      });
     };
 
     form.addEventListener("change", update);
@@ -266,7 +289,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     padding: .75rem 1.5rem; background: #fff; border-bottom: 1px solid var(--ss-line);
   }
   .ss-emergency-bar a {
-    flex: 0 1 240px; display: flex; align-items: baseline; justify-content: center; gap: .5rem;
+    flex: 0 1 300px; display: flex; align-items: baseline; justify-content: center; gap: .5rem; /* 翻訳後の長い言葉も1行に収まる幅 */
     padding: .6rem 1rem; border-radius: 10px; color: #fff; font-weight: 700; text-decoration: none;
   }
   .ss-emergency-bar a[href="tel:119"] { background: var(--ss-call-119); }
@@ -346,6 +369,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-report__result { margin-top: 1.25rem; padding: 1.5rem; border-radius: 12px; background: #f8fafc; }
   .ss-report.is-active .ss-report__result { background: #fff7f7; }
   .ss-report__msg { font-weight: 700; font-size: 1.05rem; color: #0f172a; text-align: center; margin-bottom: 1rem; }
+  .ss-report__msg [data-msg="also-lifeguard"] { margin-top: .25rem; }
   .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font: inherit; font-size: .85rem; color: #64748b; text-decoration: underline; text-underline-offset: 3px; }
 
   /* 電話ボタン */
