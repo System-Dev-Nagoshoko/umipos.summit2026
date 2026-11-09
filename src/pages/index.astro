@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
-		<!-- ヒーローエリア: 文字の視認性を極限まで高めたオーシャングラデーション -->
 		<section class="hero">
 			<div class="container hero-inner">
 				<div class="badge">
@@ -13,7 +12,6 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				
 				<div class="hero-text-wrap">
-					<!-- 同サイズ・1セットの対比キャッチコピー -->
 					<h1 class="hero-catch-title">
 						<span class="line-from">「見る看板」から</span>
 						<span class="line-to">「<span class="highlight-aqua">伝わる看板</span>」へ</span>
@@ -53,7 +51,6 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
-				<!-- 📝 記事投稿時に即更新される「明日の地図」公式ブログカード -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📝 最新活動ブログ（明日の地図）</h2>
@@ -83,7 +80,6 @@ import Layout from '../layouts/Layout.astro';
 		if (!container) return;
 
 		try {
-			// 同一ドメインの自前APIからデータを取得（CORSエラーが発生しません）
 			const res = await fetch('/api/rss');
 			if (!res.ok) throw new Error('ネットワーク応答エラー');
 			const xmlText = await res.text();
@@ -126,7 +122,6 @@ import Layout from '../layouts/Layout.astro';
 </script>
 
 <style>
-	/* ヒーローエリア: 白文字の視認性が最も際立つディープオーシャングラデーション */
 	.hero {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
@@ -142,7 +137,6 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0 auto;
 	}
 
-	/* バッジ */
 	.badge {
 		display: inline-flex;
 		align-items: center;
@@ -168,7 +162,6 @@ import Layout from '../layouts/Layout.astro';
 		box-shadow: 0 0 8px #38bdf8;
 	}
 
-	/* キャッチコピー文字エリア */
 	.hero-text-wrap {
 		display: flex;
 		flex-direction: column;
@@ -176,7 +169,6 @@ import Layout from '../layouts/Layout.astro';
 		gap: 0.85rem;
 	}
 
-	/* 1セットの見出し（上下ともに完全に同じフォントサイズ） */
 	.hero-catch-title {
 		display: flex;
 		flex-direction: column;
@@ -191,17 +183,14 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.6);
 	}
 
-	/* 1行目: まとまりを感じるソフトホワイト */
 	.line-from {
 		color: #f0f9ff;
 	}
 
-	/* 2行目: クリアな純白 */
 	.line-to {
 		color: #ffffff;
 	}
 
-	/* 「伝わる看板」のアクセント: 文字の可読性を損なわない爽やかな下線グラデーション */
 	.highlight-aqua {
 		position: relative;
 		display: inline-block;
@@ -211,7 +200,6 @@ import Layout from '../layouts/Layout.astro';
 		border-radius: 2px;
 	}
 
-	/* サブタイトル */
 	.hero-caption {
 		font-size: clamp(1rem, 2.4vw, 1.2rem);
 		font-weight: 700;
@@ -221,7 +209,6 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 1px 4px rgba(8, 47, 73, 0.5);
 	}
 
-	/* メインレイアウト */
 	.section {
 		margin-top: -3rem;
 		padding-bottom: 4rem;
@@ -257,18 +244,18 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1rem;
 	}
 	.card h2 {
-		font-size: 1.45rem;
-		font-weight: 700;
+		font-size: 1.5rem;
+		font-weight: 800;
 		margin-bottom: 1rem;
 		color: #0f172a;
-		line-height: 1.45;
+		line-height: 1.4;
 		border-bottom: 2px solid #e0f2fe;
 		padding-bottom: 0.5rem;
 	}
 	.desc {
 		color: #475569;
 		line-height: 1.8;
-		font-size: 0.975rem;
+		font-size: 1rem;
 		margin-bottom: 1.75rem;
 	}
 
@@ -280,7 +267,7 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1.25rem;
 	}
 	.outline-box h3 {
-		font-size: 1.05rem;
+		font-size: 1.1rem;
 		color: #0284c7;
 		margin-bottom: 0.5rem;
 		font-weight: 700;
@@ -299,7 +286,7 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1.5rem;
 	}
 	.message-box h3 {
-		font-size: 1.05rem;
+		font-size: 1.1rem;
 		color: #0284c7;
 		margin-bottom: 0.35rem;
 		font-weight: 700;
@@ -402,13 +389,17 @@ import Layout from '../layouts/Layout.astro';
 
 	@media (max-width: 640px) {
 		.hero {
-			padding: 3.75rem 1rem 5.5rem;
+			padding: 3.5rem 1rem 5.25rem;
 		}
 		.hero-catch-title {
-			font-size: 1.85rem;
+			font-size: 2.1rem;
+			line-height: 1.3;
 		}
 		.card {
-			padding: 1.6rem 1.15rem;
+			padding: 1.5rem 1.1rem;
+		}
+		.card h2 {
+			font-size: 1.3rem;
 		}
 		:global(.blog-item) {
 			flex-direction: column;
