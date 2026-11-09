@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="CONTACT | 海のサインプロジェクト">
 	<main>
-		<!-- ページヘッダー: 全ページ共通のオーシャングラデーションを適用 -->
 		<section class="page-header">
 			<div class="container">
 				<h1>CONTACT</h1>
@@ -12,39 +11,33 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</section>
 
-		<!-- コンテンツセクション -->
 		<section class="section">
 			<div class="container flex-container">
 				
-				<!-- 🤝 協力・パートナー団体・企業募集セクション -->
 				<div class="card">
-					<h2>🤝 応援・パートナー募集</h2>
+					<h2>応援・パートナー募集</h2>
 					<p class="section-desc">
 						「名護の海をもっと安全に、笑顔で楽しめる場所にしたい」という想いに賛同し、活動を後押ししてくださる企業・団体・地域の皆様を募集しています。まだ始まったばかりの挑戦ですが、ぜひ力をお貸しください。
 					</p>
 					
 					<div class="support-grid">
 						<div class="support-item">
-							<span class="support-icon">📍</span>
 							<h3>看板の設置場所のご提供</h3>
 							<p>店舗敷地内、ビーチへの導線、施設周辺など、危険周知サインを掲示・実証させていただける場所を探しています。</p>
 						</div>
 						<div class="support-item">
-							<span class="support-icon">💡</span>
 							<h3>専門知見・アドバイス</h3>
 							<p>マリンレジャー・安全対策の専門家、看板製作・印刷関係者、デザイン関係の皆様からのフィードバックをお待ちしています。</p>
 						</div>
 						<div class="support-item">
-							<span class="support-icon">📢</span>
 							<h3>広報・周知のご協力</h3>
 							<p>SNSでの拡散、店舗へのフライヤー設置など、プロジェクトの存在を地域や観光客に届けるサポートを歓迎します。</p>
 						</div>
 					</div>
 				</div>
 
-				<!-- ❓ よくある質問（FAQ） -->
 				<div class="card">
-					<h2>❓ よくある質問（FAQ）</h2>
+					<h2>よくある質問（FAQ）</h2>
 					
 					<div class="faq-list">
 						<div class="faq-item">
@@ -93,7 +86,6 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
-				<!-- 🏢 主催・連携組織とお問い合わせ窓口 -->
 				<div class="card">
 					<h2>主催・連携組織とお問い合わせ</h2>
 					
@@ -123,7 +115,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 
 					<div class="contact-box">
-						<h3>✉️ メールでのお問い合わせ</h3>
+						<h3>メールでのお問い合わせ</h3>
 						<p>
 							プロジェクトへの応援メッセージ、取材依頼、設置場所のご相談など、下記アドレスまでお気軽にお送りください。
 						</p>
@@ -145,15 +137,14 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* --- ヘッダーセクション: サイト共通変数で色ブレを完全解消 --- */
 	.page-header {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
-		padding: 4.5rem 1.25rem 5.5rem;
+		padding: 3.5rem 1.25rem 4.5rem;
 		text-align: center;
 	}
 	.page-header h1 {
-		font-size: 2.5rem;
+		font-size: 2.2rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
 		margin: 0;
@@ -161,32 +152,33 @@ import Layout from '../layouts/Layout.astro';
 	}
 	.page-header p {
 		color: #e0f2fe;
-		font-size: 1rem;
-		margin-top: 0.5rem;
+		font-size: 0.95rem;
+		margin-top: 0.35rem;
 		font-weight: 500;
 	}
 
-	/* --- メインコンテナ配置 --- */
 	.section {
-		padding: 3.5rem 1.5rem;
-		background-color: var(--bg, #f8fafc);
+		padding-bottom: 4rem;
 	}
 	.container {
 		max-width: 1000px;
 		margin: 0 auto;
+		padding: 0 1.25rem;
 	}
 	.flex-container {
 		display: flex;
 		flex-direction: column;
-		gap: 2.5rem;
+		gap: 2.25rem;
+		margin-top: -3rem;
+		position: relative;
+		z-index: 10;
 	}
 
-	/* --- 共通カードスタイル --- */
 	.card {
 		background: #ffffff;
 		border-radius: 16px;
 		padding: 2.5rem;
-		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
 		width: 100%;
 		border: 1px solid var(--border, #e2e8f0);
 		box-sizing: border-box;
@@ -195,7 +187,7 @@ import Layout from '../layouts/Layout.astro';
 		font-size: 1.45rem;
 		color: #0f172a;
 		border-bottom: 2px solid #e0f2fe;
-		padding-bottom: 0.75rem;
+		padding-bottom: 0.5rem;
 		margin-top: 0;
 		margin-bottom: 1.5rem;
 		font-weight: 700;
@@ -208,43 +200,37 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1.75rem;
 	}
 
-	/* --- 🤝 パートナー募集グリッド --- */
 	.support-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-		gap: 1.25rem;
+		gap: 1rem;
 	}
 	.support-item {
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
 		border-radius: 12px;
-		padding: 1.5rem 1.25rem;
+		padding: 1.25rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-	}
-	.support-icon {
-		font-size: 1.75rem;
-		line-height: 1;
+		gap: 0.35rem;
 	}
 	.support-item h3 {
-		font-size: 1.05rem;
+		font-size: 1rem;
 		font-weight: 700;
-		color: #0f172a;
-		margin: 0.25rem 0 0;
+		color: #0284c7;
+		margin: 0;
 	}
 	.support-item p {
 		font-size: 0.875rem;
-		color: #64748b;
+		color: #475569;
 		line-height: 1.6;
 		margin: 0;
 	}
 
-	/* --- ❓ FAQ リスト --- */
 	.faq-list {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: 1rem;
 	}
 	.faq-item {
 		background: #f8fafc;
@@ -272,10 +258,10 @@ import Layout from '../layouts/Layout.astro';
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		margin-top: 0.15rem;
+		margin-top: 0.1rem;
 	}
 	.faq-q h3 {
-		font-size: 1.05rem;
+		font-size: 1rem;
 		color: #0f172a;
 		font-weight: 700;
 		line-height: 1.5;
@@ -300,22 +286,21 @@ import Layout from '../layouts/Layout.astro';
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		margin-top: 0.15rem;
+		margin-top: 0.1rem;
 	}
 	.faq-a p {
 		color: #475569;
-		font-size: 0.95rem;
+		font-size: 0.925rem;
 		line-height: 1.7;
 		margin: 0;
 	}
 
-	/* --- 組織概要（Profile） --- */
 	.profile-box {
 		margin-bottom: 2rem;
 	}
 	.profile-dl {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 		gap: 1.25rem;
 		background: #f8fafc;
 		padding: 1.25rem 1.5rem;
@@ -349,36 +334,35 @@ import Layout from '../layouts/Layout.astro';
 		text-decoration: underline;
 	}
 
-	/* --- メールお問い合わせボックス --- */
 	.contact-box {
 		background: #f0f9ff;
 		border: 1px solid #bae6fd;
-		padding: 2.25rem 1.5rem;
+		padding: 2rem 1.5rem;
 		border-radius: 12px;
 		text-align: center;
 	}
 	.contact-box h3 {
-		font-size: 1.2rem;
+		font-size: 1.15rem;
 		color: #0284c7;
 		margin-top: 0;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.5rem;
 		font-weight: 700;
 	}
 	.contact-box p {
 		color: #475569;
-		font-size: 0.95rem;
-		margin: 0 auto 1.5rem;
+		font-size: 0.925rem;
+		margin: 0 auto 1.25rem;
 		max-width: 600px;
 		line-height: 1.7;
 	}
 	.email-link {
 		display: inline-block;
-		font-size: 1.05rem;
+		font-size: 1rem;
 		font-weight: 700;
 		color: #ffffff;
 		background: #0284c7;
 		text-decoration: none;
-		padding: 0.85rem 2rem;
+		padding: 0.75rem 1.75rem;
 		border-radius: 9999px;
 		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
 		transition: all 0.2s ease;
@@ -393,25 +377,24 @@ import Layout from '../layouts/Layout.astro';
 		display: block;
 		font-size: 0.8rem;
 		color: #64748b;
-		margin-top: 0.75rem;
+		margin-top: 0.65rem;
 	}
 
-	/* --- モバイル対応 --- */
 	@media (max-width: 640px) {
 		.page-header {
-			padding: 3rem 1rem;
+			padding: 2.75rem 1rem 4.5rem;
 		}
 		.page-header h1 {
-			font-size: 2rem;
+			font-size: 1.85rem;
 		}
-		.section {
-			padding: 2rem 1rem;
+		.container {
+			padding: 0 1rem;
 		}
 		.card {
-			padding: 1.5rem 1.25rem;
+			padding: 1.5rem 1.15rem;
 		}
 		.card h2 {
-			font-size: 1.3rem;
+			font-size: 1.25rem;
 		}
 		.support-grid {
 			grid-template-columns: 1fr;
@@ -420,14 +403,14 @@ import Layout from '../layouts/Layout.astro';
 			padding: 1rem;
 		}
 		.faq-q h3 {
-			font-size: 0.95rem;
+			font-size: 0.925rem;
 		}
 		.contact-box {
 			padding: 1.5rem 1rem;
 		}
 		.email-link {
-			font-size: 0.9rem;
-			padding: 0.75rem 1.25rem;
+			font-size: 0.875rem;
+			padding: 0.7rem 1.15rem;
 		}
 	}
 </style>
