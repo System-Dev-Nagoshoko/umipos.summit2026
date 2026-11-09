@@ -1,739 +1,196 @@
 ---
-interface Props {
-	title: string;
-}
-
-const { title } = Astro.props;
-const baseUrl = import.meta.env.BASE_URL;
-const currentPath = Astro.url.pathname;
-
-const isActive = (path: string) => {
-	const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
-	if (path === '') {
-		return currentPath === baseUrl || currentPath === `${baseUrl}/`;
-	}
-	return currentPath.includes(target);
-};
-
-const languages = [
-	{ code: 'ja', label: '日本語', native: '日本語' },
-	{ code: 'en', label: 'English', native: 'English' },
-	{ code: 'zh-TW', label: '繁體中文', native: '繁體中文' },
-	{ code: 'zh-CN', label: '简体中文', native: '简体中文' },
-	{ code: 'ko', label: '한국어', native: '한국어' },
-	{ code: 'es', label: 'Español', native: 'Español' },
-];
+import Layout from '../layouts/Layout.astro';
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="google-site-verification" content="KVn6U5oa5V8dqifZuNdJjkbSLWu8OtQqopHZuMZgKLo" />
-		<link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
-		<title>{title}</title>
-	</head>
-	<body>
-		<div class="crystal-background" aria-hidden="true">
-			<div class="crystal-facet facet-1"></div>
-			<div class="crystal-facet facet-2"></div>
-			<div class="crystal-facet facet-3"></div>
-			<div class="crystal-facet facet-4"></div>
-		</div>
-
-		<div class="top-sos-banner notranslate">
-			<div class="container sos-banner-container">
-				<span class="sos-badge">SOS / 緊急通報</span>
-				<div class="sos-actions">
-					<a href="tel:119" class="sos-call-btn call-119">
-						<strong class="sos-num">119</strong>
-						<span class="sos-text">救急・消防</span>
-					</a>
-					<a href="tel:118" class="sos-call-btn call-118">
-						<strong class="sos-num">118</strong>
-						<span class="sos-text">海の事故</span>
-					</a>
-				</div>
+<Layout title="OFFICIAL SNS | 海のサインプロジェクト">
+	<main>
+		<section class="page-header">
+			<div class="container">
+				<h1>OFFICIAL SNS & MEDIA</h1>
+				<p>公式SNS・メディア一覧</p>
 			</div>
-		</div>
+		</section>
 
-		<header class="site-header">
-			<div class="container header-container">
-				<a href={baseUrl} class="logo-link notranslate">
-					<img 
-						src={`${baseUrl}logo.png`} 
-						alt="Logo" 
-						class="logo-img" 
-					/>
-					<span class="logo-text">海のサインプロジェクト</span>
-				</a>
+		<section class="section">
+			<div class="container flex-container">
+				<div class="card">
+					<p class="intro-text">
+						海のサインプロジェクトおよび協力団体である名護市の学生団体の最新情報、活動の裏側などを発信中・順次公開予定です。
+					</p>
 
-				<div class="header-right notranslate">
-					<div class="lang-switcher" id="langSwitcher">
-						<button 
-							type="button" 
-							class="lang-btn" 
-							id="langBtn" 
-							aria-label="言語切替 / Language Switcher"
-							aria-haspopup="true"
-							aria-expanded="false"
-						>
-							<span class="globe-icon" aria-hidden="true">🌐</span>
-							<span class="current-lang-text" id="currentLangLabel">JA</span>
-							<span class="dropdown-arrow">▾</span>
-						</button>
-
-						<div class="lang-dropdown" id="langDropdown" role="menu">
-							<div class="lang-dropdown-header">LANGUAGE / 言語</div>
-							<div class="lang-list">
-								{languages.map((lang) => (
-									<button 
-										type="button" 
-										class={`lang-option ${lang.code === 'ja' ? 'active' : ''}`}
-										data-lang={lang.code}
-										data-label={lang.code.toUpperCase().split('-')[0]}
-										role="menuitem"
-									>
-										<span class="lang-name">{lang.native}</span>
-										<span class="lang-code">{lang.code.toUpperCase()}</span>
-									</button>
-								))}
+					<div class="sns-grid">
+						<a href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/" target="_blank" rel="noopener noreferrer" class="sns-item blog">
+							<div class="sns-info">
+								<div class="sns-header">
+									<h3>海のサインプロジェクト 公式ブログ（明日の地図）</h3>
+									<span class="badge active">公式</span>
+								</div>
+								<p class="sns-id">海のサインプロジェクトの活動記事一覧</p>
 							</div>
-						</div>
+							<span class="arrow">↗</span>
+						</a>
+
+						<a href="https://note.com/umi_sign_project" target="_blank" rel="noopener noreferrer" class="sns-item note">
+							<div class="sns-info">
+								<div class="sns-header">
+									<h3>公式note</h3>
+									<span class="badge active">公式</span>
+								</div>
+								<p class="sns-id">海のサインプロジェクト公式note</p>
+							</div>
+							<span class="arrow">↗</span>
+						</a>
+
+						<a href="https://www.instagram.com/nago.creativep" target="_blank" rel="noopener noreferrer" class="sns-item instagram">
+							<div class="sns-info">
+								<div class="sns-header">
+									<h3>Nago city Youth Creative PROJECTs 公式Instagram</h3>
+									<span class="badge active">共催</span>
+								</div>
+								<p class="sns-id">@nago.creativep</p>
+							</div>
+							<span class="arrow">↗</span>
+						</a>
 					</div>
-
-					<button class="hamburger-btn" id="menuToggle" aria-label="メニューを開閉する" aria-expanded="false">
-						<span class="bar"></span>
-						<span class="bar"></span>
-						<span class="bar"></span>
-					</button>
 				</div>
-
-				<nav class="nav" id="siteNav">
-					<a href={baseUrl} class:list={["nav-item", { active: isActive('') }]}>
-						<span class="nav-en">TOP</span>
-						<span class="nav-ja">トップ</span>
-					</a>
-					<a href={`${baseUrl}about/`} class:list={["nav-item", { active: isActive('about') }]}>
-						<span class="nav-en">ABOUT</span>
-						<span class="nav-ja">概要・想い</span>
-					</a>
-					<a href={`${baseUrl}poster/`} class:list={["nav-item", { active: isActive('poster') }]}>
-						<span class="nav-en">POSTER</span>
-						<span class="nav-ja">看板・SOS</span>
-					</a>
-					<a href={`${baseUrl}sponsor/`} class:list={["nav-item", { active: isActive('sponsor') }]}>
-						<span class="nav-en">PARTNER</span>
-						<span class="nav-ja">協力パートナー</span>
-					</a>
-					<a href={`${baseUrl}sns/`} class:list={["nav-item", { active: isActive('sns') }]}>
-						<span class="nav-en">SNS</span>
-						<span class="nav-ja">公式SNS</span>
-					</a>
-					<a href={`${baseUrl}contact/`} class:list={["nav-item", "nav-item-cta", { active: isActive('contact') }]}>
-						<span class="nav-en">CONTACT</span>
-						<span class="nav-ja">お問い合わせ</span>
-					</a>
-				</nav>
 			</div>
-		</header>
+		</section>
+	</main>
+</Layout>
 
-		<main class="main-content">
-			<slot />
-		</main>
-
-		<footer class="site-footer">
-			<div class="container footer-container">
-				<p class="copyright notranslate">&copy; 海のサインプロジェクト Created by <a href="https://nagoyc.stki.org/" target="_blank" rel="noopener noreferrer">NYC</a> / Developer <a href="https://sites.google.com/view/meisi1/meisi" target="_blank" rel="noopener noreferrer">Jinn</a> All rights reserved.</p>
-			</div>
-		</footer>
-
-		<div id="google_translate_element" style="display:none !important;"></div>
-		<script type="text/javascript">
-			function googleTranslateElementInit() {
-				// @ts-ignore
-				new google.translate.TranslateElement({
-					pageLanguage: 'ja',
-					includedLanguages: 'ja,en,zh-TW,zh-CN,ko,es',
-					autoDisplay: false
-				}, 'google_translate_element');
-			}
-		</script>
-		<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-		<script>
-			const langBtn = document.getElementById('langBtn');
-			const langDropdown = document.getElementById('langDropdown');
-			const langSwitcher = document.getElementById('langSwitcher');
-			const currentLangLabel = document.getElementById('currentLangLabel');
-			const langOptions = document.querySelectorAll('.lang-option');
-
-			function getCookie(name: string) {
-				const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-				return v ? v[2] : null;
-			}
-
-			function removeGoogleTranslateCookies() {
-				const hostname = window.location.hostname;
-				const domainParts = hostname.split('.');
-				const domains = ['', hostname, `.${hostname}`];
-
-				for (let i = 0; i < domainParts.length - 1; i++) {
-					const rootDomain = domainParts.slice(i).join('.');
-					domains.push(rootDomain);
-					domains.push(`.${rootDomain}`);
-				}
-
-				const paths = ['/', window.location.pathname];
-
-				domains.forEach((dom) => {
-					paths.forEach((p) => {
-						const domainAttr = dom ? `; domain=${dom}` : '';
-						document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p}${domainAttr};`;
-						document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p};`;
-					});
-				});
-			}
-
-			const PROXY_SUFFIX = '.translate.goog';
-			const PROXY_PARAMS = ['_x_tr_sl', '_x_tr_tl', '_x_tr_hl', '_x_tr_pto'];
-			const isProxyPage = window.location.hostname.endsWith(PROXY_SUFFIX);
-			const canUseProxy = !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
-
-			function toProxyHost(host: string) {
-				return host.replace(/-/g, '--').replace(/\./g, '-') + PROXY_SUFFIX;
-			}
-			function fromProxyHost(host: string) {
-				return host
-					.slice(0, -PROXY_SUFFIX.length)
-					.split('--')
-					.map((part) => part.replace(/-/g, '.'))
-					.join('-');
-			}
-			function proxyUrl(lang: string) {
-				const url = new URL(window.location.href);
-				if (!isProxyPage) url.hostname = toProxyHost(url.hostname);
-				url.protocol = 'https:';
-				url.port = '';
-				PROXY_PARAMS.forEach((key) => url.searchParams.delete(key));
-				url.searchParams.set('_x_tr_sl', 'ja');
-				url.searchParams.set('_x_tr_tl', lang);
-				url.searchParams.set('_x_tr_hl', lang);
-				url.searchParams.set('_x_tr_pto', 'wapp');
-				return url.toString();
-			}
-			function originalUrl() {
-				const url = new URL(window.location.href);
-				url.hostname = fromProxyHost(url.hostname);
-				PROXY_PARAMS.forEach((key) => url.searchParams.delete(key));
-				url.searchParams.set('lang', 'ja');
-				return url.toString();
-			}
-			function kanaCount() {
-				const text = Array.from(document.querySelectorAll('main h2, main h3, main p'))
-					.slice(0, 20)
-					.map((el) => el.textContent ?? '')
-					.join('');
-				return (text.match(/[぀-ヿ]/g) || []).length;
-			}
-			let fallbackTimer: number | undefined;
-			function watchTranslation(lang: string) {
-				if (!canUseProxy || isProxyPage) return;
-				window.clearInterval(fallbackTimer);
-				const start = kanaCount();
-				if (start < 20) return;
-				let waited = 0;
-				fallbackTimer = window.setInterval(() => {
-					waited += 500;
-					if (kanaCount() < start * 0.3) {
-						window.clearInterval(fallbackTimer);
-					} else if (waited >= 6000) {
-						window.clearInterval(fallbackTimer);
-						window.location.href = proxyUrl(lang);
-					}
-				}, 500);
-			}
-
-			const pageParams = new URLSearchParams(window.location.search);
-			if (!isProxyPage && pageParams.get('lang') === 'ja') {
-				removeGoogleTranslateCookies();
-				pageParams.delete('lang');
-				const query = pageParams.toString();
-				window.history.replaceState(null, '', window.location.pathname + (query ? `?${query}` : '') + window.location.hash);
-			}
-
-			const savedLangCookie = getCookie('googtrans');
-			const proxyLang = isProxyPage ? pageParams.get('_x_tr_tl') : null;
-			if ((proxyLang || savedLangCookie) && currentLangLabel) {
-				const langParts = (proxyLang ?? savedLangCookie ?? '').split('/');
-				const langCode = langParts[langParts.length - 1];
-				if (langCode && langCode !== 'ja') {
-					if (!proxyLang) watchTranslation(langCode);
-					currentLangLabel.textContent = langCode.toUpperCase().split('-')[0];
-					langOptions.forEach(opt => {
-						if (opt.getAttribute('data-lang') === langCode) {
-							langOptions.forEach(o => o.classList.remove('active'));
-							opt.classList.add('active');
-						}
-					});
-				}
-			}
-
-			if (langBtn && langDropdown) {
-				langBtn.addEventListener('click', (e) => {
-					e.stopPropagation();
-					const isOpen = langDropdown.classList.toggle('is-open');
-					langBtn.setAttribute('aria-expanded', String(isOpen));
-				});
-
-				document.addEventListener('click', (e) => {
-					if (langSwitcher && !langSwitcher.contains(e.target as Node)) {
-						langDropdown.classList.remove('is-open');
-						langBtn.setAttribute('aria-expanded', 'false');
-					}
-				});
-
-				langOptions.forEach((option) => {
-					option.addEventListener('click', () => {
-						const targetLang = option.getAttribute('data-lang');
-						const label = option.getAttribute('data-label');
-
-						langOptions.forEach(opt => opt.classList.remove('active'));
-						option.classList.add('active');
-						if (currentLangLabel && label) {
-							currentLangLabel.textContent = label;
-						}
-
-						if (isProxyPage && targetLang) {
-							window.location.href = targetLang === 'ja' ? originalUrl() : proxyUrl(targetLang);
-							return;
-						}
-
-						if (targetLang === 'ja') {
-							window.clearInterval(fallbackTimer);
-							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-							if (select) {
-								select.value = 'ja';
-								select.dispatchEvent(new Event('change'));
-							}
-
-							const restoreBtn = document.querySelector('.goog-te-banner-frame')?.contentWindow?.document?.getElementById(':1.restore') as HTMLElement | null;
-							if (restoreBtn) {
-								restoreBtn.click();
-							}
-
-							removeGoogleTranslateCookies();
-							setTimeout(() => {
-								window.location.reload();
-							}, 120);
-						} else {
-							const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-							if (select && targetLang) {
-								select.value = targetLang;
-								select.dispatchEvent(new Event('change'));
-								watchTranslation(targetLang);
-							} else if (!select && targetLang && canUseProxy) {
-								window.location.href = proxyUrl(targetLang);
-							}
-						}
-
-						langDropdown.classList.remove('is-open');
-						langBtn.setAttribute('aria-expanded', 'false');
-					});
-				});
-			}
-
-			const toggleBtn = document.getElementById('menuToggle');
-			const nav = document.getElementById('siteNav');
-
-			if (toggleBtn && nav) {
-				toggleBtn.addEventListener('click', () => {
-					const isOpen = nav.classList.toggle('is-open');
-					toggleBtn.classList.toggle('is-active', isOpen);
-					toggleBtn.setAttribute('aria-expanded', String(isOpen));
-				});
-
-				nav.querySelectorAll('.nav-item').forEach((link) => {
-					link.addEventListener('click', () => {
-						nav.classList.remove('is-open');
-						toggleBtn.classList.remove('is-active');
-						toggleBtn.setAttribute('aria-expanded', 'false');
-					});
-				});
-			}
-		</script>
-	</body>
-</html>
-
-<style is:global>
-	:root {
-		--primary: #0284c7;
-		--primary-hover: #0369a1;
-		--accent-bg: #f0f9ff;
-		--text: #1e293b;
-		--text-muted: #64748b;
-		--bg: #f8fafc;
-		--border: #e2e8f0;
-		--ocean-gradient: radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%);
-	}
-
-	* {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-	}
-
-	html, body {
-		width: 100%;
-		overflow-x: hidden;
-	}
-
-	body {
-		top: 0 !important;
-		font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-		color: var(--text);
-		background: var(--bg);
-		line-height: 1.7;
-		letter-spacing: 0.03em;
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-		position: relative;
-	}
-
-	/* 最上部SOSバー（レスポンシブ崩れ対策） */
-	.top-sos-banner {
-		background: #0f172a;
-		border-bottom: 1px solid #1e293b;
-		padding: 0.4rem 0.75rem;
-		position: relative;
-		z-index: 60;
-		width: 100%;
-	}
-
-	.sos-banner-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.5rem;
-		max-width: 1100px;
-		margin: 0 auto;
-	}
-
-	.sos-badge {
-		font-size: 0.75rem;
-		font-weight: 900;
-		color: #f87171;
-		background: rgba(239, 68, 68, 0.15);
-		border: 1px solid rgba(239, 68, 68, 0.3);
-		padding: 0.15rem 0.5rem;
-		border-radius: 9999px;
-		letter-spacing: 0.05em;
-		white-space: nowrap;
-	}
-
-	.sos-actions {
-		display: flex;
-		gap: 0.4rem;
-		flex-shrink: 0;
-	}
-
-	.sos-call-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25rem;
-		padding: 0.25rem 0.55rem;
-		border-radius: 6px;
-		text-decoration: none;
+<style>
+	.page-header {
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
-		transition: opacity 0.2s;
-		white-space: nowrap;
-	}
-
-	.sos-call-btn:hover {
-		opacity: 0.9;
-	}
-
-	.call-119 {
-		background: #dc2626;
-	}
-
-	.call-118 {
-		background: #2563eb;
-	}
-
-	.sos-num {
-		font-size: 0.9rem;
-		font-weight: 900;
-		line-height: 1;
-	}
-
-	.sos-text {
-		font-size: 0.75rem;
-		font-weight: 700;
-	}
-
-	.container {
-		width: 100%;
-		max-width: 1100px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
-	.site-header {
-		background: rgba(255, 255, 255, 0.85);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		width: 100%;
-	}
-
-	.header-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		height: 64px;
-		gap: 0.5rem;
-	}
-
-	.logo-link {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		text-decoration: none;
-		flex-shrink: 1;
-		min-width: 0;
-	}
-
-	.logo-img {
-		height: 32px;
-		width: auto;
-		object-fit: contain;
-		flex-shrink: 0;
-	}
-
-	.logo-text {
-		font-weight: 700;
-		color: var(--primary);
-		font-size: 0.95rem;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.header-right {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		flex-shrink: 0;
-	}
-
-	.lang-switcher {
-		position: relative;
-	}
-
-	.lang-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.2rem;
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		padding: 0.25rem 0.5rem;
-		border-radius: 9999px;
-		cursor: pointer;
-		font-size: 0.75rem;
-		font-weight: 700;
-		color: #334155;
-	}
-
-	.lang-dropdown {
-		position: absolute;
-		top: calc(100% + 8px);
-		right: 0;
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-		min-width: 160px;
-		padding: 0.4rem;
-		display: none;
-		flex-direction: column;
-		z-index: 100;
-	}
-
-	.lang-dropdown.is-open {
-		display: flex;
-	}
-
-	.lang-dropdown-header {
-		font-size: 0.65rem;
-		font-weight: 800;
-		color: #94a3b8;
-		padding: 0.2rem 0.5rem 0.3rem;
-	}
-
-	.lang-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.1rem;
-	}
-
-	.lang-option {
-		display: flex;
-		justify-content: space-between;
-		padding: 0.45rem 0.65rem;
-		border-radius: 6px;
-		border: none;
-		background: transparent;
-		cursor: pointer;
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: #334155;
-	}
-
-	.lang-option.active {
-		background: #e0f2fe;
-		color: var(--primary);
-	}
-
-	.nav {
-		display: flex;
-		gap: 0.25rem;
-		align-items: center;
-	}
-
-	.nav-item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-decoration: none;
-		color: var(--text-muted);
-		padding: 0.35rem 0.65rem;
-		border-radius: 8px;
-		transition: all 0.2s ease;
-		line-height: 1.2;
-	}
-
-	.nav-en {
-		font-size: 0.8rem;
-		font-weight: 800;
-	}
-
-	.nav-ja {
-		font-size: 0.65rem;
-		font-weight: 600;
-		opacity: 0.85;
-	}
-
-	.nav-item:hover {
-		color: var(--primary);
-		background-color: var(--accent-bg);
-	}
-
-	.nav-item.active:not(.nav-item-cta) {
-		color: var(--primary);
-		background: #e0f2fe;
-	}
-
-	.nav-item-cta {
-		border: 1.5px solid var(--primary);
-		color: var(--primary) !important;
-		background-color: transparent;
-	}
-
-	.hamburger-btn {
-		display: none;
-		flex-direction: column;
-		justify-content: space-around;
-		width: 28px;
-		height: 24px;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-	}
-
-	.hamburger-btn .bar {
-		width: 100%;
-		height: 3px;
-		background-color: var(--primary);
-		border-radius: 9999px;
-		transition: all 0.3s ease;
-	}
-
-	.site-footer {
+		padding: 3.5rem 1.25rem 4.5rem;
 		text-align: center;
-		padding: 2.5rem 0;
-		color: var(--text-muted);
-		font-size: 0.85rem;
-		border-top: 1px solid var(--border);
-		background: rgba(255, 255, 255, 0.7);
-		margin-top: 4rem;
+	}
+	.page-header h1 {
+		font-size: 2.2rem;
+		font-weight: 800;
+		letter-spacing: 0.05em;
+		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
+	}
+	.page-header p {
+		color: #e0f2fe;
+		font-size: 0.95rem;
+		margin-top: 0.35rem;
+		font-weight: 500;
 	}
 
-	.copyright a {
+	.section {
+		padding-bottom: 4rem;
+	}
+	.flex-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2.25rem;
+		margin-top: -3rem;
+		position: relative;
+		z-index: 10;
+	}
+
+	.card {
+		background: #ffffff;
+		border-radius: 16px;
+		padding: 2.5rem 2rem;
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+		max-width: 800px;
+		margin: 0 auto;
+		width: 100%;
+		border: 1px solid var(--border, #e2e8f0);
+		box-sizing: border-box;
+	}
+	.intro-text {
+		text-align: center;
+		color: #475569;
+		line-height: 1.8;
+		font-size: 0.95rem;
+		margin-bottom: 2rem;
+	}
+
+	.sns-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.sns-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.25rem;
+		padding: 1.25rem 1.5rem;
+		border-radius: 12px;
+		border: 1px solid #e2e8f0;
+		background: #f8fafc;
+		text-decoration: none;
 		color: inherit;
-		text-decoration: underline;
+		transition: all 0.2s ease;
 	}
 
-	@media (max-width: 768px) {
-		.hamburger-btn {
-			display: flex;
-		}
-
-		.nav {
-			position: fixed;
-			top: 0;
-			right: -100%;
-			width: 100%;
-			height: 100vh;
-			background: rgba(255, 255, 255, 0.98);
-			flex-direction: column;
-			justify-content: center;
-			gap: 1rem;
-			padding: 2rem;
-			transition: right 0.3s ease;
-			z-index: 55;
-		}
-
-		.nav.is-open {
-			right: 0;
-		}
-
-		.nav-item {
-			padding: 0.75rem 2rem;
-			width: 220px;
-		}
-
-		.nav-en {
-			font-size: 1.1rem;
-		}
-
-		.nav-ja {
-			font-size: 0.8rem;
-		}
+	a.sns-item:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+		border-color: #0284c7;
+		background: #ffffff;
 	}
 
-	@media (max-width: 420px) {
-		.sos-badge {
-			display: none;
+	.sns-info {
+		flex: 1;
+	}
+	.sns-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+	.sns-info h3 {
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: #0f172a;
+		margin: 0;
+	}
+	.sns-id {
+		font-size: 0.85rem;
+		color: #0284c7;
+		font-weight: 600;
+		margin-top: 0.2rem;
+	}
+
+	.badge {
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.2rem 0.65rem;
+		border-radius: 9999px;
+	}
+	.badge.active {
+		background: #e0f2fe;
+		color: #0284c7;
+	}
+
+	.arrow {
+		font-size: 1.1rem;
+		color: #0284c7;
+		font-weight: bold;
+	}
+
+	@media (max-width: 640px) {
+		.page-header {
+			padding: 2.75rem 1rem 4.5rem;
 		}
-		.sos-banner-container {
-			justify-content: center;
+		.page-header h1 {
+			font-size: 1.85rem;
 		}
-		.sos-text {
-			font-size: 0.7rem;
+		.card {
+			padding: 1.5rem 1.15rem;
 		}
-		.logo-text {
-			font-size: 0.85rem;
+		.sns-item {
+			padding: 1rem;
+			gap: 0.85rem;
+		}
+		.sns-info h3 {
+			font-size: 0.95rem;
 		}
 	}
 </style>
