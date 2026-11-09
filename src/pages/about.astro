@@ -5,7 +5,6 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <Layout title="ABOUT | 海のサインプロジェクト">
 	<main>
-		<!-- ページヘッダー: 全ページ共通のオーシャングラデーションを適用 -->
 		<section class="page-header">
 			<div class="container">
 				<h1>ABOUT</h1>
@@ -16,10 +15,7 @@ const baseUrl = import.meta.env.BASE_URL;
 		<section class="section">
 			<div class="container flex-container">
 				
-				<!-- ブランドカード -->
 				<div class="card main-card">
-					
-					<!-- ロゴ＆チーム名のフィーチャーエリア -->
 					<div class="brand-banner">
 						<div class="brand-logo-container">
 							<img 
@@ -36,24 +32,23 @@ const baseUrl = import.meta.env.BASE_URL;
 
 					<div class="card-content">
 						<div class="block">
-							<h3>🔴 海岸注意看板の課題</h3>
+							<h3>海岸注意看板の課題</h3>
 							<p>普段何気なく目にしている海岸の注意看板。しかし、「文字が小さくて読みづらい」「危険な場所や注意すべきポイントが一目で伝わりにくい」といった課題が存在しています。</p>
 						</div>
 
 						<div class="block">
-							<h3>🔴 「見る看板」から「伝わる看板」へ</h3>
+							<h3>「見る看板」から「伝わる看板」へ</h3>
 							<p>事故を未然に防ぐためには、ただ設置されているだけの看板ではなく、子どもからお年寄り、海外から訪れる方まで、誰もが一瞬で直感的に危険を理解できる看板が必要です。</p>
 						</div>
 
 						<div class="block highlight-block">
-							<h3>🚀 本プロジェクトの狙い</h3>
+							<h3>本プロジェクトの狙い</h3>
 							<p>私たちは実際に名護市の海岸を調査し、危険箇所の把握やデザインの検討を行っています。</p>
 							<p>名護市の美しい海を、地域の方々や観光客の皆さんが「より安全に、安心して笑顔で楽しめる場所」にするため、伝わるデザインの模索・制作に取り組んでいます。</p>
 						</div>
 					</div>
 				</div>
 
-				<!-- カード2：体制・取り組み -->
 				<div class="card">
 					<h2>体制・取り組みについて</h2>
 					<p class="card-intro">
@@ -61,7 +56,7 @@ const baseUrl = import.meta.env.BASE_URL;
 					</p>
 
 					<div class="block">
-						<h3>🎯 主な活動目的</h3>
+						<h3>主な活動目的</h3>
 						<ul class="styled-list">
 							<li>名護市内の海岸線の安全調査と、既存看板の課題抽出</li>
 							<li>子どもや外国人も含め、誰にでも一目で伝わる安全看板のデザイン・制作</li>
@@ -71,7 +66,7 @@ const baseUrl = import.meta.env.BASE_URL;
 					</div>
 
 					<div class="block">
-						<h3>📌 主な取り組み内容</h3>
+						<h3>主な取り組み内容</h3>
 						<div class="grid-list">
 							<div class="grid-item">
 								<strong>1. 海岸フィールドワーク調査</strong>
@@ -119,37 +114,37 @@ const baseUrl = import.meta.env.BASE_URL;
 </Layout>
 
 <style>
-	/* ページヘッダー: サイト共通の変数を適用して色味を完全一致 */
 	.page-header {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
-		padding: 4.5rem 1.25rem 5.5rem;
+		padding: 3.5rem 1.25rem 4.5rem;
 		text-align: center;
 	}
 	.page-header h1 {
-		font-size: 2.5rem;
+		font-size: 2.2rem;
 		font-weight: 800;
 		letter-spacing: 0.05em;
 		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.5);
 	}
 	.page-header p {
 		color: #e0f2fe;
-		font-size: 1rem;
-		margin-top: 0.5rem;
+		font-size: 0.95rem;
+		margin-top: 0.35rem;
 		font-weight: 500;
 	}
 
-	/* メインレイアウト */
 	.section {
-		padding: 3rem 0;
+		padding-bottom: 4rem;
 	}
 	.flex-container {
 		display: flex;
 		flex-direction: column;
-		gap: 2.5rem;
+		gap: 2.25rem;
+		margin-top: -3rem;
+		position: relative;
+		z-index: 10;
 	}
 
-	/* カードスタイル: 背景・境界線をサイト共通ルールに統一 */
 	.card {
 		background: #ffffff;
 		border-radius: 16px;
@@ -162,7 +157,6 @@ const baseUrl = import.meta.env.BASE_URL;
 		overflow: hidden;
 	}
 
-	/* ブランドバナー */
 	.brand-banner {
 		display: flex;
 		align-items: center;
@@ -174,14 +168,14 @@ const baseUrl = import.meta.env.BASE_URL;
 		margin-bottom: 2rem;
 	}
 	.brand-logo-container {
-		width: 110px;
-		height: 110px;
+		width: 100px;
+		height: 100px;
 		background: #ffffff;
 		border-radius: 16px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 12px;
+		padding: 10px;
 		box-shadow: 0 4px 15px rgba(2, 132, 199, 0.12);
 		flex-shrink: 0;
 		border: 1px solid #e2e8f0;
@@ -241,18 +235,19 @@ const baseUrl = import.meta.env.BASE_URL;
 		font-size: 0.975rem;
 	}
 
-	/* ハイライトボックス */
 	.highlight-block {
 		background: #f0f9ff;
 		border: 1px solid #bae6fd;
 		padding: 1.5rem;
 		border-radius: 12px;
 	}
+	.highlight-block h3 {
+		color: #0284c7;
+	}
 	.highlight-block p + p {
 		margin-top: 0.75rem;
 	}
 
-	/* リストスタイル */
 	.styled-list {
 		list-style: none;
 		padding-left: 0;
@@ -273,7 +268,6 @@ const baseUrl = import.meta.env.BASE_URL;
 		left: 0.25rem;
 	}
 
-	/* グリッド風の活動内容 */
 	.grid-list {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -298,7 +292,6 @@ const baseUrl = import.meta.env.BASE_URL;
 		color: #475569;
 	}
 
-	/* プロフィールボックス */
 	.profile-box {
 		margin-top: 2rem;
 	}
@@ -323,7 +316,6 @@ const baseUrl = import.meta.env.BASE_URL;
 		font-weight: 500;
 	}
 
-	/* 主催者欄のロゴ */
 	.dd-with-logo {
 		display: flex;
 		align-items: center;
@@ -335,10 +327,15 @@ const baseUrl = import.meta.env.BASE_URL;
 		object-fit: contain;
 	}
 
-	/* スマホ表示対応 */
 	@media (max-width: 640px) {
+		.page-header {
+			padding: 2.75rem 1rem 4.5rem;
+		}
+		.page-header h1 {
+			font-size: 1.85rem;
+		}
 		.card {
-			padding: 1.5rem 1.25rem;
+			padding: 1.5rem 1.15rem;
 		}
 		.brand-banner {
 			flex-direction: column;
@@ -347,9 +344,9 @@ const baseUrl = import.meta.env.BASE_URL;
 			padding: 1.5rem 1rem;
 		}
 		.brand-logo-container {
-			width: 90px;
-			height: 90px;
-			padding: 10px;
+			width: 85px;
+			height: 85px;
+			padding: 8px;
 		}
 		.brand-title {
 			font-size: 1.45rem;
