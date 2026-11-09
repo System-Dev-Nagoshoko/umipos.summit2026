@@ -1,26 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// 共催団体（現在確定している団体）
-const coOrganizers: { name: string; logo: string; url: string }[] = [];
-
-// 協力パートナー（現在確定している団体）
 const partners = [
   { 
+    id: 'nsf',
     name: 'NSF PROJECTs', 
     role: '企画協賛', 
     logo: '/nsf.jpg', 
-    url: 'https://nsf.stki.org/' 
+    url: 'https://nsf.stki.org/',
+    description: '能登半島地震の復興支援を契機に発足した学生団体です。「能登の復興」と「中高生の防災意識向上」を目的に、全国の学生が連携しながら募金活動、防災サミットの開催、防災教育・政策提言などを幅広く行っています。'
   },
   { 
+    id: 'trans',
     name: 'TRANs', 
     role: 'ドメイン提供', 
     logo: '/trans.png', 
-    url: 'https://trans.stki.org/' 
+    url: 'https://trans.stki.org/',
+    description: '生徒会や学生団体のデジタル化・情報共有・システム統合に向け設立された機構です。当プロジェクトをはじめ、全国の学生主体プログラムへ共通ドメイン「stki.org」の基盤提供を行っています。'
   },
 ];
 
-// 後援団体（※正式決定後に順次追加）
+const coOrganizers: typeof partners = [];
 const supporters: { name: string; category: string }[] = [];
 ---
 
@@ -38,7 +38,6 @@ const supporters: { name: string; category: string }[] = [];
     </section>
 
     <div class="content-container">
-      <!-- ポリシー -->
       <section class="policy-card">
         <div class="info-icon">i</div>
         <div class="policy-text">
@@ -50,7 +49,6 @@ const supporters: { name: string; category: string }[] = [];
         </div>
       </section>
 
-      <!-- 共催団体（登録がある場合のみ自動表示） -->
       {coOrganizers.length > 0 && (
         <section class="card">
           <div class="card-header">
@@ -60,39 +58,55 @@ const supporters: { name: string; category: string }[] = [];
           </div>
           <div class="partner-grid">
             {coOrganizers.map((item) => (
-              <a href={item.url} target="_blank" rel="noopener noreferrer" class="partner-item">
+              <button 
+                type="button" 
+                class="partner-item partner-trigger"
+                data-name={item.name}
+                data-role="共催"
+                data-logo={item.logo}
+                data-url={item.url}
+                data-desc={item.description}
+              >
                 <img src={item.logo} alt={item.name} class="partner-logo" />
                 <div class="partner-info">
                   <span class="tag-role">共催</span>
                   <h3 class="notranslate">{item.name}</h3>
                 </div>
-              </a>
+                <span class="more-hint">詳細を見る ➔</span>
+              </button>
             ))}
           </div>
         </section>
       )}
 
-      <!-- 協力パートナー -->
       <section class="card">
         <div class="card-header">
           <span class="section-label">COOPERATION</span>
           <h2>協力パートナー</h2>
-          <p class="section-sub">ドメインやITインフラ提供、知見のご提供、活動連携などで支えてくださっているパートナーです</p>
+          <p class="section-sub">ロゴをタップすると詳細情報を確認できます</p>
         </div>
         <div class="partner-grid">
           {partners.map((partner) => (
-            <a href={partner.url} target="_blank" rel="noopener noreferrer" class="partner-item">
+            <button 
+              type="button" 
+              class="partner-item partner-trigger"
+              data-name={partner.name}
+              data-role={partner.role}
+              data-logo={partner.logo}
+              data-url={partner.url}
+              data-desc={partner.description}
+            >
               <img src={partner.logo} alt={partner.name} class="partner-logo" />
               <div class="partner-info">
                 <h3 class="notranslate">{partner.name}</h3>
                 <p class="role-text">{partner.role}</p>
               </div>
-            </a>
+              <span class="more-hint">詳細を見る ➔</span>
+            </button>
           ))}
         </div>
       </section>
 
-      <!-- 後援（確定した段階で自動表示） -->
       {supporters.length > 0 && (
         <section class="card">
           <div class="card-header">
@@ -111,7 +125,6 @@ const supporters: { name: string; category: string }[] = [];
         </section>
       )}
 
-      <!-- お問い合わせCTA -->
       <section class="cta-card">
         <h2>活動へのご協力・連携のご相談</h2>
         <p>
@@ -127,8 +140,83 @@ const supporters: { name: string; category: string }[] = [];
         </div>
       </section>
     </div>
+
+    <div id="partnerModal" class="modal-backdrop" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true">
+        <button type="button" id="modalClose" class="modal-close" aria-label="閉じる">✕</button>
+        <div class="modal-header">
+          <img id="modalLogo" src="" alt="" class="modal-logo" />
+          <div>
+            <span id="modalRole" class="modal-role-tag"></span>
+            <h3 id="modalTitle" class="modal-title notranslate"></h3>
+          </div>
+        </div>
+        <p id="modalDesc" class="modal-desc"></p>
+        <div class="modal-actions">
+          <a id="modalUrl" href="" target="_blank" rel="noopener noreferrer" class="modal-btn-primary">
+            公式サイトを見る ↗
+          </a>
+        </div>
+      </div>
+    </div>
   </main>
 </Layout>
+
+<script>
+  const modal = document.getElementById('partnerModal');
+  const modalClose = document.getElementById('modalClose');
+  const modalLogo = document.getElementById('modalLogo') as HTMLImageElement;
+  const modalTitle = document.getElementById('modalTitle');
+  const modalRole = document.getElementById('modalRole');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalUrl = document.getElementById('modalUrl') as HTMLAnchorElement;
+
+  const triggers = document.querySelectorAll('.partner-trigger');
+
+  triggers.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-name') || '';
+      const role = btn.getAttribute('data-role') || '';
+      const logo = btn.getAttribute('data-logo') || '';
+      const url = btn.getAttribute('data-url') || '';
+      const desc = btn.getAttribute('data-desc') || '';
+
+      if (modalLogo) {
+        modalLogo.src = logo;
+        modalLogo.alt = name;
+      }
+      if (modalTitle) modalTitle.textContent = name;
+      if (modalRole) modalRole.textContent = role;
+      if (modalDesc) modalDesc.textContent = desc;
+      if (modalUrl) modalUrl.href = url;
+
+      if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+    });
+  });
+
+  function closeModal() {
+    if (modal) {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+</script>
 
 <style>
   .page-wrapper {
@@ -137,7 +225,6 @@ const supporters: { name: string; category: string }[] = [];
     padding-bottom: 5rem;
   }
 
-  /* ヒーローエリア: パディングをコンパクトに調整し他ページと統一 */
   .hero-section {
     background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
     color: #ffffff;
@@ -253,6 +340,7 @@ const supporters: { name: string; category: string }[] = [];
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
   }
+
   .partner-item {
     display: flex;
     align-items: center;
@@ -261,9 +349,12 @@ const supporters: { name: string; category: string }[] = [];
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    text-decoration: none;
     color: inherit;
     transition: all 0.2s ease;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
   }
   .partner-item:hover {
     background: white;
@@ -272,14 +363,17 @@ const supporters: { name: string; category: string }[] = [];
     box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
   }
   .partner-logo {
-    width: 68px;
-    height: 68px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 6px;
     flex-shrink: 0;
+  }
+  .partner-info {
+    flex: 1;
   }
   .tag-role {
     font-size: 0.7rem;
@@ -301,6 +395,12 @@ const supporters: { name: string; category: string }[] = [];
     color: #0284c7;
     font-weight: 600;
     margin-top: 0.15rem;
+  }
+  .more-hint {
+    font-size: 0.75rem;
+    color: #0284c7;
+    font-weight: 700;
+    flex-shrink: 0;
   }
 
   .supporter-grid {
@@ -386,9 +486,123 @@ const supporters: { name: string; category: string }[] = [];
     background: rgba(255, 255, 255, 0.2);
   }
 
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+  }
+  .modal-backdrop.is-open .modal-card {
+    transform: translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-right: 2rem;
+  }
+  .modal-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+  .modal-role-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+  .modal-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+  .modal-desc {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modal-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #0284c7;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .modal-btn-primary:hover {
+    background: #0369a1;
+  }
+
   @media (max-width: 640px) {
     .hero-section {
-      padding: 2.75rem 1rem 4rem;
+      padding: 2.75rem 1rem 4.4rem;
     }
     .page-title {
       font-size: 1.65rem;
@@ -398,6 +612,9 @@ const supporters: { name: string; category: string }[] = [];
     }
     .cta-buttons {
       flex-direction: column;
+    }
+    .modal-card {
+      padding: 1.5rem 1.25rem;
     }
   }
 </style>
