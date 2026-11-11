@@ -10,7 +10,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 ---
 
 <Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
-  <!-- 背景クリスタル浮遊要素（カードの外側で浮遊） -->
+  <!-- 背景クリスタル浮遊要素 -->
   <div class="crystal-bg-container" aria-hidden="true">
     <div class="crystal crystal-1"></div>
     <div class="crystal crystal-2"></div>
@@ -109,10 +109,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             <section aria-labelledby="case-title" class="info-block">
               <h3 class="ss-subhead" id="case-title">その場の応急対応</h3>
               <dl class="ss-case">
-                <div><dt><a href="#rip-current" class="btn-open-dict">沖に流された</a></dt><dd>あわてず岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
-                <div><dt><a href="#jellyfish" class="btn-open-dict">クラゲに刺された</a></dt><dd>こすらず酢をかけて触手を取り、冷やす。</dd></div>
-                <div><dt><a href="#stonefish" class="btn-open-dict">オコゼを踏んだ</a></dt><dd>動かさず40〜45℃のお湯につけて病院へ。</dd></div>
-                <div><dt><a href="#alone" class="btn-open-dict">おぼれている人を見た</a></dt><dd>飛び込まず浮くものを投げ、118・119へ通報。</dd></div>
+                <div><dt><button type="button" class="btn-open-modal" data-target="rip-current">沖に流された</button></dt><dd>あわてず岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
+                <div><dt><button type="button" class="btn-open-modal" data-target="jellyfish">クラゲに刺された</button></dt><dd>こすらず酢をかけて触手を取り、冷やす。</dd></div>
+                <div><dt><button type="button" class="btn-open-modal" data-target="stonefish">オコゼを踏んだ</button></dt><dd>動かさず40〜45℃のお湯につけて病院へ。</dd></div>
+                <div><dt><button type="button" class="btn-open-modal" data-target="alone">おぼれている人を見た</button></dt><dd>飛び込まず浮くものを投げ、118・119へ通報。</dd></div>
               </dl>
             </section>
           </div>
@@ -136,14 +136,14 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
               <p class="ss-group__desc">{g.desc}</p>
               <div class="ss-grid">
                 {g.items.filter((item) => !item.hidden).map((item) => (
-                  <a class="ss-tile" id={`t-${item.id}`} href={`#${item.id}`}>
+                  <button type="button" class="ss-tile btn-open-modal" data-target={item.id} id={`t-${item.id}`}>
                     <div class="ss-tile__img-wrap">
                       {item.image
                         ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
                         : <span class="ss-tile__noimg">準備中</span>}
                     </div>
                     <span>{item.name}</span>
-                  </a>
+                  </button>
                 ))}
               </div>
 
@@ -171,10 +171,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   <!-- モーダル詳細パネル -->
   <div class="ss-panels">
     {genres.flatMap((g) => g.items).filter((item) => !item.hidden).map((item) => (
-      <section class="ss-panel" id={item.id} aria-labelledby={`${item.id}-title`}>
-        <a class="ss-panel__backdrop" href={`#t-${item.id}`} aria-label="とじる"></a>
+      <section class="ss-panel" id={`panel-${item.id}`} aria-labelledby={`${item.id}-title`} hidden>
+        <div class="ss-panel__backdrop btn-close-modal"></div>
         <div class="ss-panel__box">
-          <a class="ss-panel__close" href={`#t-${item.id}`} aria-label="とじる">×</a>
+          <button type="button" class="ss-panel__close btn-close-modal" aria-label="とじる">×</button>
           <div class="ss-panel__head">
             {item.image
               ? <img src={`${IMAGE_BASE}${item.image}`} alt={item.alt} loading="lazy" decoding="async" />
@@ -187,7 +187,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             ))}
           </dl>
           {item.note && <p class="ss-note">{item.note}</p>}
-          <a class="ss-panel__back" href={`#t-${item.id}`}>一覧にもどる</a>
+          <button type="button" class="ss-panel__back btn-close-modal">一覧にもどる</button>
         </div>
       </section>
     ))}
@@ -196,6 +196,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
 <script>
   function initApp() {
+    // タブ制御
     const btnSos = document.getElementById("tab-btn-sos");
     const btnGuide = document.getElementById("tab-btn-guide");
     const viewSos = document.getElementById("view-sos");
@@ -219,15 +220,56 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     btnSos?.addEventListener('click', () => switchTab('sos'));
     btnGuide?.addEventListener('click', () => switchTab('guide'));
 
-    const hash = window.location.hash;
-    if (hash && hash !== '#emergency') {
+    // モーダル開閉制御 (JS直接制御)
+    function openModal(id: string) {
+      // 辞書タブを開く
       switchTab('guide');
+      
+      // 対象パネルを表示
+      const panel = document.getElementById(`panel-${id}`);
+      if (panel) {
+        panel.classList.add('is-open');
+        panel.hidden = false;
+        document.body.style.overflow = 'hidden'; // 背面スクロール禁止
+      }
     }
 
-    document.querySelectorAll('.btn-open-dict').forEach(el => {
-      el.addEventListener('click', () => switchTab('guide'));
+    function closeModal() {
+      document.querySelectorAll('.ss-panel').forEach(p => {
+        p.classList.remove('is-open');
+        (p as HTMLElement).hidden = true;
+      });
+      document.body.style.overflow = '';
+    }
+
+    // ボタンにイベント割り当て
+    document.querySelectorAll('.btn-open-modal').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = (btn as HTMLElement).dataset.target || (btn.getAttribute('href') ?? '').replace('#', '');
+        if (targetId) openModal(targetId);
+      });
     });
 
+    document.querySelectorAll('.btn-close-modal').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal();
+      });
+    });
+
+    // キーボードのESCキーで閉じる
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // URLハッシュ初期判定 (例: /poster/#rip-current)
+    const hash = window.location.hash.replace('#', '');
+    if (hash && hash !== 'emergency' && hash !== 'report') {
+      openModal(hash);
+    }
+
+    // フォーム緊急判断ロジック
     const form = document.getElementById("report") as HTMLFormElement | null;
     if (!form || form.dataset.ready) return;
     form.dataset.ready = "1";
@@ -277,10 +319,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
     form.addEventListener("change", update);
     form.addEventListener("reset", () => setTimeout(update, 0));
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      return false;
-    });
     update();
   }
 
@@ -289,9 +327,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 </script>
 
 <style>
-  /* ==========================================================================
-     クリスタル浮遊背景アニメーション (背景装飾)
-     ========================================================================== */
+  /* 背景クリスタル */
   .crystal-bg-container {
     position: fixed;
     inset: 0;
@@ -299,7 +335,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     z-index: 0;
     overflow: hidden;
   }
-
   .crystal {
     position: absolute;
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
@@ -308,146 +343,34 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     transform: rotate(45deg);
     animation: crystalFloat 12s infinite ease-in-out alternate;
   }
-
-  .crystal-1 {
-    width: 200px;
-    height: 200px;
-    top: 10%;
-    left: -50px;
-    animation-duration: 14s;
-  }
-
-  .crystal-2 {
-    width: 300px;
-    height: 300px;
-    top: 50%;
-    right: -80px;
-    animation-duration: 18s;
-    animation-delay: -5s;
-  }
-
-  .crystal-3 {
-    width: 150px;
-    height: 150px;
-    bottom: 10%;
-    left: 15%;
-    animation-duration: 10s;
-    animation-delay: -2s;
-  }
-
+  .crystal-1 { width: 200px; height: 200px; top: 10%; left: -50px; animation-duration: 14s; }
+  .crystal-2 { width: 300px; height: 300px; top: 50%; right: -80px; animation-duration: 18s; animation-delay: -5s; }
+  .crystal-3 { width: 150px; height: 150px; bottom: 10%; left: 15%; animation-duration: 10s; animation-delay: -2s; }
   @keyframes crystalFloat {
-    0% {
-      transform: rotate(45deg) translateY(0px) scale(1);
-    }
-    100% {
-      transform: rotate(55deg) translateY(-30px) scale(1.05);
-    }
+    0% { transform: rotate(45deg) translateY(0px) scale(1); }
+    100% { transform: rotate(55deg) translateY(-30px) scale(1.05); }
   }
 
-  /* ==========================================================================
-     カード上の光・反射・擬似要素の無効化（見づらさ徹底排除）
-     ========================================================================== */
-  .card::before,
-  .card::after,
-  .quick-call-alert::before,
-  .quick-call-alert::after,
-  .emergency-top-card::before,
-  .emergency-top-card::after,
-  .ss-tel__btn::before,
-  .ss-tel__btn::after {
+  /* 擬似要素光削除 */
+  .card::before, .card::after, .quick-call-alert::before, .quick-call-alert::after {
     display: none !important;
     content: none !important;
   }
 
-  /* ==========================================================================
-     ベース設定
-     ========================================================================== */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { font-size: 16px; --container-max-width: 1000px; --radius-lg: 20px; --radius-md: 14px; --radius-sm: 8px; }
+  body { overflow-x: hidden; width: 100%; background-color: #f8fafc; margin: 0; }
+  .container { width: 100%; max-width: var(--container-max-width); margin: 0 auto; padding: 0 clamp(0.75rem, 3vw, 1.5rem); position: relative; z-index: 1; }
 
-  :root {
-    font-size: 16px;
-    --container-max-width: 1000px;
-    --radius-lg: 20px;
-    --radius-md: 14px;
-    --radius-sm: 8px;
-  }
+  .page-header { background: #075985; color: #fff; padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem); text-align: center; }
+  .page-header h1 { font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 900; margin: 0; }
+  .page-header p { color: #e0f2fe; font-size: clamp(0.9rem, 2.5vw, 1.15rem); margin-top: .4rem; font-weight: 600; }
 
-  body {
-    overflow-x: hidden;
-    width: 100%;
-    background-color: #f8fafc;
-  }
-
-  .container {
-    width: 100%;
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 clamp(0.75rem, 3vw, 1.5rem);
-    position: relative;
-    z-index: 1;
-  }
-
-  .page-header {
-    background: #075985;
-    color: #fff;
-    padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem);
-    text-align: center;
-    word-break: break-word;
-    position: relative;
-    z-index: 1;
-  }
-  .page-header h1 {
-    font-size: clamp(1.6rem, 5vw, 2.5rem);
-    font-weight: 900;
-    letter-spacing: .05em;
-    margin: 0;
-  }
-  .page-header p {
-    color: #e0f2fe;
-    font-size: clamp(0.9rem, 2.5vw, 1.15rem);
-    margin-top: .4rem;
-    font-weight: 600;
-  }
-
-  /* モード切り替えタブ */
-  .mode-nav-container {
-    max-width: 720px;
-    margin: clamp(-1.8rem, -3vw, -2.2rem) auto 1.25rem;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 20;
-  }
-  .mode-nav {
-    display: flex;
-    background: #e2e8f0;
-    padding: 5px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
-    gap: 4px;
-  }
-  .mode-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: clamp(0.65rem, 2vw, 0.9rem) clamp(0.5rem, 1.5vw, 1rem);
-    border: none;
-    background: transparent;
-    border-radius: 12px;
-    font-size: clamp(0.875rem, 2.2vw, 1.1rem);
-    font-weight: 800;
-    color: #475569;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .mode-btn.active {
-    background: #ffffff;
-    color: #0f172a;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
+  /* タブ */
+  .mode-nav-container { max-width: 720px; margin: clamp(-1.8rem, -3vw, -2.2rem) auto 1.25rem; padding: 0 1rem; position: relative; z-index: 20; }
+  .mode-nav { display: flex; background: #e2e8f0; padding: 5px; border-radius: 16px; gap: 4px; }
+  .mode-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem; padding: clamp(0.65rem, 2vw, 0.9rem); border: none; background: transparent; border-radius: 12px; font-size: clamp(0.875rem, 2.2vw, 1.1rem); font-weight: 800; color: #475569; cursor: pointer; }
+  .mode-btn.active { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
   .mode-btn.is-sos.active { color: #dc2626; }
   .mode-btn.is-guide.active { color: #0284c7; }
 
@@ -455,133 +378,36 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .view-panel { display: none; }
   .view-panel.active { display: block; }
 
-  /* カード */
-  .card {
-    background: #ffffff !important;
-    border-radius: var(--radius-lg);
-    padding: clamp(1.25rem, 4vw, 2.25rem);
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-    width: 100%;
-    border: 1px solid var(--border, #cbd5e1);
-  }
-  .card h2 {
-    font-size: clamp(1.2rem, 3.5vw, 1.5rem);
-    font-weight: 800;
-    margin: 0 0 1rem;
-    color: #0f172a;
-    border-bottom: 2px solid #e0f2fe;
-    padding-bottom: .5rem;
-  }
+  .card { background: #ffffff !important; border-radius: var(--radius-lg); padding: clamp(1.25rem, 4vw, 2.25rem); box-shadow: 0 4px 20px rgba(15,23,42,0.08); width: 100%; border: 1px solid #cbd5e1; }
+  .card h2 { font-size: clamp(1.2rem, 3.5vw, 1.5rem); font-weight: 800; margin: 0 0 1rem; color: #0f172a; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
 
-  /* SOSカード */
-  .emergency-top-card {
-    border: 2px solid #fca5a5 !important;
-  }
-  .quick-call-alert {
-    background: #fef2f2 !important;
-    border-radius: var(--radius-md);
-    padding: clamp(1rem, 3vw, 1.5rem);
-    border: 1px solid #fecdd3;
-  }
-  .alert-badge-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-  }
-  .alert-badge {
-    background: #dc2626;
-    color: #ffffff;
-    font-weight: 900;
-    font-size: 0.85rem;
-    padding: 0.25rem 0.65rem;
-    border-radius: 6px;
-    letter-spacing: 0.05em;
-    flex-shrink: 0;
-  }
-  .alert-badge-wrap h2 {
-    margin: 0;
-    border-bottom: none;
-    padding: 0;
-    color: #991b1b;
-    font-size: clamp(1.1rem, 3vw, 1.35rem);
-  }
-  .quick-call-desc {
-    font-size: clamp(0.875rem, 2vw, 1rem);
-    color: #7f1d1d;
-    margin: 0 0 1rem;
-    font-weight: 600;
-  }
+  .emergency-top-card { border: 2px solid #fca5a5 !important; }
+  .quick-call-alert { background: #fef2f2 !important; border-radius: var(--radius-md); padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid #fecdd3; }
+  .alert-badge-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .alert-badge { background: #dc2626; color: #ffffff; font-weight: 900; font-size: 0.85rem; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .alert-badge-wrap h2 { margin: 0; border: none; padding: 0; color: #991b1b; font-size: clamp(1.1rem, 3vw, 1.35rem); }
+  .quick-call-desc { font-size: clamp(0.875rem, 2vw, 1rem); color: #7f1d1d; margin: 0 0 1rem; font-weight: 600; }
 
-  .section-divider {
-    border: 0;
-    border-top: 2px dashed #e2e8f0;
-    margin: clamp(1.25rem, 3vw, 2rem) 0;
-  }
+  .section-divider { border: 0; border-top: 2px dashed #e2e8f0; margin: clamp(1.25rem, 3vw, 2rem) 0; }
 
-  /* 電話ボタン */
-  .ss-tel {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    padding: 0;
-    margin: 0;
-  }
+  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; padding: 0; margin: 0; }
   .ss-tel--top { margin-top: 0.5rem; }
   .ss-tel__wide { grid-column: 1 / -1; }
-  .ss-tel__btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(0.3rem, 1.5vw, 0.75rem);
-    padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem;
-    border-radius: var(--radius-md);
-    color: #fff;
-    font-weight: 800;
-    text-decoration: none;
-    text-align: center;
-    word-break: keep-all;
-    flex-wrap: wrap;
-    background-image: none !important;
-  }
-  .ss-tel__btn strong {
-    font-size: clamp(1.4rem, 4vw, 2rem);
-    line-height: 1;
-  }
-  .ss-tel__btn span {
-    font-size: clamp(0.85rem, 2.2vw, 1.05rem);
-  }
+  .ss-tel__btn { display: flex; align-items: center; justify-content: center; gap: clamp(0.3rem, 1.5vw, 0.75rem); padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem; border-radius: var(--radius-md); color: #fff; font-weight: 800; text-decoration: none; text-align: center; }
+  .ss-tel__btn strong { font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1; }
+  .ss-tel__btn span { font-size: clamp(0.85rem, 2.2vw, 1.05rem); }
   .id-119 { background: #dc2626 !important; }
   .id-118 { background: #1d4ed8 !important; }
   .id-guard, .ss-tel__btn--lifeguard { background: #047857 !important; }
-  .ss-tel__btn.is-disabled {
-    background: #e2e8f0 !important;
-    color: #94a3b8;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
 
-  /* チェックリスト */
   .ss-lead { color: #334155; font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.6; }
   .ss-subhead { font-size: clamp(1.05rem, 2.5vw, 1.2rem); font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
   .ss-report fieldset { border: 0; padding: 0; margin: 0; }
   .ss-report__list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; padding: 0; margin: 0; }
-  .ss-report__card {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: clamp(0.75rem, 2.5vw, 1.1rem);
-    border: 2px solid #e2e8f0;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    background: #fff;
-  }
-  .ss-report__card:hover { border-color: #cbd5e1; background: #f8fafc; }
+  .ss-report__card { display: flex; align-items: center; gap: 0.75rem; padding: clamp(0.75rem, 2.5vw, 1.1rem); border: 2px solid #e2e8f0; border-radius: var(--radius-md); cursor: pointer; background: #fff; }
   .ss-report__card:has(input:checked) { border-color: #f87171; background: #fef2f2; }
   .ss-report__card input { width: 1.3rem; height: 1.3rem; accent-color: #dc2626; flex-shrink: 0; }
-  .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; word-break: break-word; }
+  .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; }
   .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; }
   .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; }
   .ss-report__tags .is-119 { background: #dc2626; }
@@ -590,7 +416,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
   .ss-report__result { margin-top: 1.25rem; padding: clamp(1rem, 3vw, 1.5rem); border-radius: var(--radius-md); background: #f8fafc; border: 1px solid #e2e8f0; }
   .ss-report.is-active .ss-report__result { background: #fff7f7; border-color: #fecdd3; }
-  .ss-report__msg { font-weight: 800; font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: #0f172a; text-align: center; margin-bottom: 1rem; word-break: break-word; }
+  .ss-report__msg { font-weight: 800; font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: #0f172a; text-align: center; margin-bottom: 1rem; }
   .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font-size: 0.875rem; color: #64748b; text-decoration: underline; }
 
   .ss-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
@@ -599,109 +425,38 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-plainlist--cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem 1.5rem; }
 
   .ss-case div { padding: .65rem 0; border-bottom: 1px solid #e2e8f0; }
-  .ss-case dt a { color: #0284c7; font-weight: 800; font-size: clamp(0.9rem, 2.2vw, 1.05rem); text-decoration: underline; }
+  .ss-case dt button { background: none; border: none; padding: 0; color: #0284c7; font-weight: 800; font-size: clamp(0.9rem, 2.2vw, 1.05rem); text-decoration: underline; cursor: pointer; font-family: inherit; }
   .ss-case dd { color: #475569; font-size: clamp(0.85rem, 2vw, 0.95rem); line-height: 1.5; margin: 0.2rem 0 0; }
 
-  /* 辞典グリッド */
+  /* 辞典タイル */
   .ss-toc { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
   .ss-toc a { color: #0284c7; font-weight: 800; font-size: 0.95rem; text-decoration: none; }
   .ss-group { margin-top: 2rem; }
   .ss-group h3 { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 800; color: #0f172a; margin: 0 0 0.3rem; }
   .ss-group__desc { color: #475569; font-size: 0.95rem; margin: 0 0 1rem; }
 
-  .ss-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: clamp(0.75rem, 2vw, 1.25rem);
-  }
-  .ss-tile {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: #0f172a;
-    font-weight: 800;
-    font-size: clamp(0.85rem, 2vw, 0.95rem);
-    text-align: center;
-  }
-  .ss-tile__img-wrap {
-    width: 100%;
-    aspect-ratio: 1;
-    background: #fff;
-    border: 2px solid #e2e8f0;
-    border-radius: var(--radius-md);
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: clamp(0.75rem, 2vw, 1.25rem); }
+  .ss-tile { display: flex; flex-direction: column; gap: 0.5rem; border: none; background: transparent; color: #0f172a; font-weight: 800; font-size: clamp(0.85rem, 2vw, 0.95rem); text-align: center; cursor: pointer; padding: 0; font-family: inherit; }
+  .ss-tile__img-wrap { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #e2e8f0; border-radius: var(--radius-md); padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
   .ss-tile:hover .ss-tile__img-wrap { border-color: #0284c7; }
-  .ss-tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  .ss-tile__noimg {
-    color: #94a3b8;
-    font-size: 0.8rem;
-  }
+  .ss-tile img { width: 100%; height: 100%; object-fit: contain; }
+  .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
 
-  /* モーダル */
-  .ss-panel { display: none; }
-  .ss-panel:target {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    padding: clamp(0.5rem, 3vw, 1.5rem);
-  }
+  /* モーダル (JS直接制御) */
+  .ss-panel { display: none; position: fixed; inset: 0; z-index: 1000; padding: clamp(0.5rem, 3vw, 1.5rem); }
+  .ss-panel.is-open { display: flex !important; align-items: center; justify-content: center; }
   .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .65); }
-  .ss-panel__box {
-    position: relative;
-    width: min(560px, 100%);
-    max-height: calc(100vh - 2rem);
-    overflow-y: auto;
-    background: #fff;
-    border-radius: var(--radius-lg);
-    padding: clamp(1.25rem, 4vw, 2rem);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  }
-  .ss-panel__close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    font-size: 1.8rem;
-    line-height: 1;
-    text-decoration: none;
-    color: #64748b;
-    padding: 0.25rem 0.5rem;
-  }
-  .ss-panel__head {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-    padding-right: 1.5rem;
-  }
-  .ss-panel__head img {
-    width: clamp(80px, 20vw, 120px);
-    height: clamp(80px, 20vw, 120px);
-    object-fit: contain;
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius-sm);
-    flex-shrink: 0;
-  }
+  .ss-panel__box { position: relative; width: min(560px, 100%); max-height: calc(100vh - 2rem); overflow-y: auto; background: #fff; border-radius: var(--radius-lg); padding: clamp(1.25rem, 4vw, 2rem); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); z-index: 10; }
+  .ss-panel__close { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 1.8rem; line-height: 1; background: none; border: none; color: #64748b; cursor: pointer; }
+  .ss-panel__head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; padding-right: 1.5rem; }
+  .ss-panel__head img { width: clamp(80px, 20vw, 120px); height: clamp(80px, 20vw, 120px); object-fit: contain; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); flex-shrink: 0; }
   .ss-panel__head h2 { font-size: clamp(1.1rem, 3vw, 1.4rem); border: none; padding: 0; margin: 0; }
   .ss-panel__body dt { font-size: 0.875rem; color: #475569; font-weight: 800; margin-top: 0.75rem; }
   .ss-panel__body dd { color: #0f172a; font-size: 0.95rem; line-height: 1.6; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin: 0.25rem 0 0; }
-  .ss-panel__back { display: block; margin-top: 1.25rem; padding: .75rem; border-radius: var(--radius-sm); text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; text-decoration: none; }
+  .ss-panel__back { display: block; width: 100%; margin-top: 1.25rem; padding: .75rem; border-radius: var(--radius-sm); border: none; text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; cursor: pointer; font-size: 1rem; }
 
   @media (max-width: 480px) {
     .ss-tel { grid-template-columns: 1fr; }
     .ss-grid { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
-    .ss-report__tags { width: 100%; margin-top: 0.25rem; }
-    .ss-report__card { flex-wrap: wrap; }
   }
 </style>
