@@ -224,7 +224,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       
       const panel = document.getElementById(`panel-${id}`);
       if (panel) {
-        // 親要素のスタッキングコンテキストの影響を避けるため body 直下に移動
         if (panel.parentElement !== document.body) {
           document.body.appendChild(panel);
         }
@@ -410,8 +409,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-report__card:has(input:checked) { border-color: #f87171; background: #fef2f2; }
   .ss-report__card input { width: 1.3rem; height: 1.3rem; accent-color: #dc2626; flex-shrink: 0; }
   .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; }
-  .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; }
-  .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; }
+
+  /* カード内の通報先タグ（ポインターイベント無効化により誤タップ防止） */
+  .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; pointer-events: none; }
+  .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; user-select: none; pointer-events: none; }
   .ss-report__tags .is-119 { background: #dc2626; }
   .ss-report__tags .is-118 { background: #1d4ed8; }
   .ss-report__tags .is-lifeguard { background: #047857; }
@@ -445,8 +446,12 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
 
   /* ==========================================================================
-     モーダル完全画面固定（body直下へ移動し全画面をカバー）
+     モーダル完全画面固定（body直下移動＋全画面カバー）
      ========================================================================== */
+  .ss-panels {
+    position: static !important;
+  }
+
   .ss-panel {
     display: none;
     position: fixed !important;
