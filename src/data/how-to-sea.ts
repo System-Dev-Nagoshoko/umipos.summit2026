@@ -62,7 +62,7 @@ export const genres: Genre[] = [
       {
         id: "rip-current",
         name: "離岸流（カレント）注意",
-        image: "rip-current.svg",
+        image: "rip-current.png",
         alt: "離岸流のピクトグラム",
         rows: [
           ["意味", "岸から沖に向かって急速に流れる強い海水流が発生する場所です。"],
@@ -73,7 +73,7 @@ export const genres: Genre[] = [
       {
         id: "jellyfish",
         name: "ハブクラゲ・危険生物注意",
-        image: "jellyfish.svg",
+        image: "jellyfish.png",
         alt: "クラゲ注意のピクトグラム",
         rows: [
           ["意味", "毒針を持つ危険なクラゲや海の生物が出没するエリアです。"],
@@ -83,7 +83,7 @@ export const genres: Genre[] = [
       {
         id: "stonefish",
         name: "オニダルマオコゼ・刺傷注意",
-        image: "stonefish.svg",
+        image: "stonefish.png",
         alt: "オコゼ注意のピクトグラム",
         rows: [
           ["意味", "岩や砂に擬態した背の毒棘（トゲ）を持つ危険魚が潜んでいます。"],
@@ -93,7 +93,7 @@ export const genres: Genre[] = [
       {
         id: "alone",
         name: "おぼれている人・救助指示",
-        image: "drowning.svg",
+        image: "drowning.png",
         alt: "溺水注意のピクトグラム",
         rows: [
           ["意味", "溺れている人を見かけた際の緊急行動インジケーターです。"],
@@ -110,7 +110,7 @@ export const genres: Genre[] = [
       {
         id: "no-swimming",
         name: "遊泳禁止",
-        image: "no-swimming.svg",
+        image: "no-swimming.png",
         alt: "遊泳禁止のピクトグラム",
         rows: [
           ["意味", "波が高い、または潮の流れが速く危険なため、入水が禁止されています。"],
@@ -120,7 +120,7 @@ export const genres: Genre[] = [
       {
         id: "no-bbq",
         name: "火気厳禁・BBQ禁止",
-        image: "no-fire.svg",
+        image: "no-fire.png",
         alt: "火気禁止のピクトグラム",
         rows: [
           ["意味", "指定エリア外での直火・タバコ・バーベキューは禁止されています。"],
