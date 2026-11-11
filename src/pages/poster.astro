@@ -1,510 +1,147 @@
----
-/**
- * POSTER ページ：海のピクトグラム辞典（HOW TO SEA）
- * 看板のQRコードの行き先：/poster/#〇〇（〇〇は how-to-sea.ts の id）
- */
-import Layout from '../layouts/Layout.astro';
-import { genres, reportItems, IMAGE_BASE } from '../data/how-to-sea.ts';
+/* ==========================================================================
+   モーダル親要素の基準クリア（位置ずれ防止の最重要設定）
+   ========================================================================== */
+.ss-panels {
+  position: static !important;
+  transform: none !important;
+  filter: none !important;
+}
 
-const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as const;
----
+/* ==========================================================================
+   モーダル本体（画面スクロールに関わらず常に画面中央に固定）
+   ========================================================================== */
+.ss-panel {
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  z-index: 9999 !important; /* 他の要素より最前面に表示 */
+  padding: clamp(0.75rem, 3vw, 1.5rem);
+  box-sizing: border-box;
+}
 
-<Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
-  <!-- 背景クリスタル浮遊要素 -->
-  <div class="crystal-bg-container" aria-hidden="true">
-    <div class="crystal crystal-1"></div>
-    <div class="crystal crystal-2"></div>
-    <div class="crystal crystal-3"></div>
-  </div>
+.ss-panel.is-open {
+  display: flex !important;
+  align-items: center !important;     /* 上下中央揃え */
+  justify-content: center !important; /* 左右中央揃え */
+}
 
-  <section class="page-header">
-    <h1>PICTOGRAM GUIDE</h1>
-    <p>海の安全ガイド・緊急通報サポート</p>
-  </section>
+.ss-panel__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  cursor: pointer;
+}
 
-  <!-- モード切り替えタブ -->
-  <div class="mode-nav-container">
-    <div class="mode-nav" role="tablist" aria-label="表示モード切替">
-      <button role="tab" id="tab-btn-sos" aria-selected="true" aria-controls="view-sos" class="mode-btn is-sos active">
-        <span class="mode-icon" aria-hidden="true">🚨</span>
-        <span class="mode-text">緊急SOS・通報</span>
-      </button>
-      <button role="tab" id="tab-btn-guide" aria-selected="false" aria-controls="view-guide" class="mode-btn is-guide">
-        <span class="mode-icon" aria-hidden="true">📘</span>
-        <span class="mode-text">ピクトグラム辞典</span>
-      </button>
-    </div>
-  </div>
+.ss-panel__box {
+  position: relative;
+  width: min(540px, 100%);
+  max-height: min(85dvh, 600px);
+  overflow-y: auto;
+  background: #ffffff !important;
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  margin: auto !important; /* 位置強制固定 */
+}
 
-  <section class="section">
-    <div class="container">
+.ss-panel__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1.8rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
 
-      <!-- ================= 🚨 VIEW 1: 緊急通報ガイド ================= -->
-      <div id="view-sos" role="tabpanel" aria-labelledby="tab-btn-sos" class="view-panel active">
-        <div class="card emergency-top-card" id="emergency">
-          
-          <!-- 迷ったら電話 -->
-          <div class="quick-call-alert">
-            <div class="alert-badge-wrap">
-              <span class="alert-badge">緊急</span>
-              <h2>判断に迷ったら今すぐ電話してください</h2>
-            </div>
-            <p class="quick-call-desc">焦っている時や状況が分からない場合も、ためらわず連絡してください。</p>
-            <ul class="ss-tel ss-tel--top">
-              <li><a class="ss-tel__btn id-119" href="tel:119"><strong>119</strong><span>救急・消防</span></a></li>
-              <li><a class="ss-tel__btn id-118" href="tel:118"><strong>118</strong><span>海の事故 (海保)</span></a></li>
-              <li class="ss-tel__wide"><a class="ss-tel__btn ss-tel__btn--lifeguard id-guard" href="#report"><strong>監視所</strong><span>近くのビーチ監視員に報告する</span></a></li>
-            </ul>
-          </div>
+.ss-panel__close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
 
-          <hr class="section-divider" />
+.ss-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-right: 1.5rem;
+}
 
-          <!-- 状況チェック質問（onsubmit属性を削除してビルドエラーを回避） -->
-          <form class="ss-report" id="report" aria-describedby="report-msg">
-            <fieldset>
-              <legend class="ss-subhead">どのような状況ですか？（該当するものを選択）</legend>
-              <ul class="ss-report__list">
-                {reportItems.map((r, index) => (
-                  <li>
-                    <label class="ss-report__card">
-                      <input type="checkbox" id={`report-check-${index}`} data-call={r.call.join(" ")} />
-                      <span class="ss-report__text">{r.text}</span>
-                      <span class="ss-report__tags">
-                        {r.call.map((c) => <b class={`is-${c}`}>{callLabel[c]}</b>)}
-                      </span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
+.ss-panel__head img {
+  width: clamp(70px, 18vw, 110px);
+  height: clamp(70px, 18vw, 110px);
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: #fff;
+}
 
-            <div class="ss-report__result">
-              <div class="ss-report__msg" id="report-msg" aria-live="polite">
-                <p data-msg="none">選択すると、最適な通報先と優先案内が表示されます。</p>
-                <p data-msg="both" hidden><strong>119（救急）</strong> と <strong>118（海上保安庁）</strong> の両方に通報してください。</p>
-                <p data-msg="119" hidden><strong>119（救急・消防）</strong> に通報してください。</p>
-                <p data-msg="118" hidden><strong>118（海の事件・事故）</strong> に通報してください。</p>
-                <p data-msg="lifeguard" hidden><strong>近くのビーチ監視員</strong> に知らせてください。体調が悪化したらすぐ119へ。</p>
-                <p data-msg="also-lifeguard" hidden>※あわせて近くのビーチ監視員にも知らせてください。</p>
-              </div>
-              <ul class="ss-tel">
-                <li><a class="ss-tel__btn id-119" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
-                <li><a class="ss-tel__btn id-118" id="call-118" href="tel:118"><strong>118</strong><span>海の事件・事故</span></a></li>
-                <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard id-guard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員に連絡</span></li>
-              </ul>
-              <button type="reset" class="ss-report__reset">選択をリセット</button>
-            </div>
-          </form>
+.ss-panel__head h2 {
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #0f172a;
+  font-weight: 800;
+}
 
-          <div class="ss-two">
-            <section aria-labelledby="tell-title" class="info-block">
-              <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
-              <ul class="ss-plainlist">
-                <li><strong>場所：</strong>海岸の名前や近くの目印（建物・看板番号など）</li>
-                <li><strong>状況：</strong>おぼれた・刺された・ケガ・意識の有無など</li>
-                <li><strong>人数：</strong>何人が巻き込まれているか</li>
-              </ul>
-            </section>
+.ss-panel__body dt {
+  font-size: 0.875rem;
+  color: #475569;
+  font-weight: 800;
+  margin-top: 0.75rem;
+}
 
-            <section aria-labelledby="case-title" class="info-block">
-              <h3 class="ss-subhead" id="case-title">その場の応急対応</h3>
-              <dl class="ss-case">
-                <div><dt><button type="button" class="btn-open-modal" data-target="rip-current">沖に流された</button></dt><dd>あわてず岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
-                <div><dt><button type="button" class="btn-open-modal" data-target="jellyfish">クラゲに刺された</button></dt><dd>こすらず酢をかけて触手を取り、冷やす。</dd></div>
-                <div><dt><button type="button" class="btn-open-modal" data-target="stonefish">オコゼを踏んだ</button></dt><dd>動かさず40〜45℃のお湯につけて病院へ。</dd></div>
-                <div><dt><button type="button" class="btn-open-modal" data-target="alone">おぼれている人を見た</button></dt><dd>飛び込まず浮くものを投げ、118・119へ通報。</dd></div>
-              </dl>
-            </section>
-          </div>
+.ss-panel__body dd {
+  color: #0f172a;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+  margin: 0.25rem 0 0;
+}
 
-        </div>
-      </div>
+.ss-note {
+  font-size: 0.85rem;
+  color: #dc2626;
+  margin-top: 0.75rem;
+  font-weight: 700;
+}
 
-      <!-- ================= 📘 VIEW 2: ピクトグラム辞典 ================= -->
-      <div id="view-guide" role="tabpanel" aria-labelledby="tab-btn-guide" class="view-panel" hidden>
-        <div class="card">
-          <h2>ピクトグラム一覧（看板の絵の意味）</h2>
-          <p class="ss-lead">看板の絵をタップすると、詳しい意味と応急対処法が表示されます。</p>
+.ss-panel__back {
+  display: block;
+  width: 100%;
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  text-align: center;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
 
-          <nav class="ss-toc" aria-label="もくじ">
-            {genres.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
-          </nav>
+.ss-panel__back:hover {
+  background: #e2e8f0;
+}
 
-          {genres.map((g) => (
-            <section class="ss-group" id={g.id} aria-labelledby={`${g.id}-title`}>
-              <h3 id={`${g.id}-title`}>{g.title}</h3>
-              <p class="ss-group__desc">{g.desc}</p>
-              <div class="ss-grid">
-                {g.items.filter((item) => !item.hidden).map((item) => (
-                  <button type="button" class="ss-tile btn-open-modal" data-target={item.id} id={`t-${item.id}`}>
-                    <div class="ss-tile__img-wrap">
-                      {item.image
-                        ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
-                        : <span class="ss-tile__noimg">準備中</span>}
-                    </div>
-                    <span>{item.name}</span>
-                  </button>
-                ))}
-              </div>
-
-              {g.id === "cat-rules" && (
-                <Fragment>
-                  <h4 class="ss-subhead">このビーチで禁止されていること</h4>
-                  <ul class="ss-plainlist ss-plainlist--cols">
-                    <li>シュノーケルの使用</li>
-                    <li>防護ネットに触れる</li>
-                    <li>火気（タバコ・BBQ）</li>
-                    <li>遊泳区域でのペットの散歩</li>
-                    <li>監視台に登る</li>
-                    <li>小学生・中学生だけで泳ぐ</li>
-                  </ul>
-                </Fragment>
-              )}
-            </section>
-          ))}
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- モーダル詳細パネル -->
-  <div class="ss-panels">
-    {genres.flatMap((g) => g.items).filter((item) => !item.hidden).map((item) => (
-      <section class="ss-panel" id={`panel-${item.id}`} aria-labelledby={`${item.id}-title`} hidden>
-        <div class="ss-panel__backdrop btn-close-modal"></div>
-        <div class="ss-panel__box">
-          <button type="button" class="ss-panel__close btn-close-modal" aria-label="とじる">×</button>
-          <div class="ss-panel__head">
-            {item.image
-              ? <img src={`${IMAGE_BASE}${item.image}`} alt={item.alt} loading="lazy" decoding="async" />
-              : <span class="ss-panel__noimg">準備中</span>}
-            <div class="ss-panel__title"><h2 id={`${item.id}-title`}>{item.name}</h2></div>
-          </div>
-          <dl class="ss-panel__body">
-            {item.rows.map(([label, text]) => (
-              <Fragment><dt>{label}</dt><dd>{text}</dd></Fragment>
-            ))}
-          </dl>
-          {item.note && <p class="ss-note">{item.note}</p>}
-          <button type="button" class="ss-panel__back btn-close-modal">一覧にもどる</button>
-        </div>
-      </section>
-    ))}
-  </div>
-</Layout>
-
-<script>
-  function initApp() {
-    // タブ制御
-    const btnSos = document.getElementById("tab-btn-sos");
-    const btnGuide = document.getElementById("tab-btn-guide");
-    const viewSos = document.getElementById("view-sos");
-    const viewGuide = document.getElementById("view-guide");
-
-    function switchTab(mode: 'sos' | 'guide') {
-      if (!btnSos || !btnGuide || !viewSos || !viewGuide) return;
-      const isSos = mode === 'sos';
-      
-      btnSos.classList.toggle('active', isSos);
-      btnSos.setAttribute('aria-selected', isSos ? 'true' : 'false');
-      viewSos.classList.toggle('active', isSos);
-      viewSos.hidden = !isSos;
-
-      btnGuide.classList.toggle('active', !isSos);
-      btnGuide.setAttribute('aria-selected', !isSos ? 'true' : 'false');
-      viewGuide.classList.toggle('active', !isSos);
-      viewGuide.hidden = isSos;
-    }
-
-    btnSos?.addEventListener('click', () => switchTab('sos'));
-    btnGuide?.addEventListener('click', () => switchTab('guide'));
-
-    // モーダル開閉制御
-    function openModal(id: string) {
-      switchTab('guide');
-      
-      const panel = document.getElementById(`panel-${id}`);
-      if (panel) {
-        panel.classList.add('is-open');
-        panel.hidden = false;
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closeModal() {
-      document.querySelectorAll('.ss-panel').forEach(p => {
-        p.classList.remove('is-open');
-        (p as HTMLElement).hidden = true;
-      });
-      document.body.style.overflow = '';
-    }
-
-    document.querySelectorAll('.btn-open-modal').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = (btn as HTMLElement).dataset.target || (btn.getAttribute('href') ?? '').replace('#', '');
-        if (targetId) openModal(targetId);
-      });
-    });
-
-    document.querySelectorAll('.btn-close-modal').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeModal();
-      });
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    const hash = window.location.hash.replace('#', '');
-    if (hash && hash !== 'emergency' && hash !== 'report') {
-      openModal(hash);
-    }
-
-    // フォーム緊急判断ロジック（submitイベントリスナーでフォーム送信を確実に制御）
-    const form = document.getElementById("report") as HTMLFormElement | null;
-    if (!form || form.dataset.ready) return;
-    form.dataset.ready = "1";
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      return false;
-    });
-
-    const msg = document.getElementById("report-msg");
-    const btns: Record<string, HTMLElement | null> = {
-      "119": document.getElementById("call-119"),
-      "118": document.getElementById("call-118"),
-      lifeguard: document.getElementById("call-lifeguard"),
-    };
-
-    Object.values(btns).forEach((btn) => {
-      if (btn?.hasAttribute("href")) btn.dataset.href = btn.getAttribute("href") ?? "";
-    });
-
-    const setEnabled = (btn: HTMLElement | null, on: boolean) => {
-      if (!btn) return;
-      btn.classList.toggle("is-needed", on);
-      btn.classList.toggle("is-disabled", !on);
-      btn.setAttribute("aria-disabled", on ? "false" : "true");
-      const href = btn.dataset.href;
-      if (!href) return;
-      if (on) btn.setAttribute("href", href);
-      else btn.removeAttribute("href");
-    };
-
-    const update = () => {
-      const need: Record<string, boolean> = {};
-      form.querySelectorAll<HTMLInputElement>("input[data-call]:checked").forEach((box) => {
-        (box.dataset.call ?? "").split(" ").forEach((key) => (need[key] = true));
-      });
-      const any = Object.keys(need).length > 0;
-      Object.entries(btns).forEach(([key, btn]) => setEnabled(btn, !!need[key]));
-      form.classList.toggle("is-active", any);
-
-      let main = "none";
-      if (need["119"] && need["118"]) main = "both";
-      else if (need["119"]) main = "119";
-      else if (need["118"]) main = "118";
-      else if (need.lifeguard) main = "lifeguard";
-      const alsoLifeguard = (need["119"] || need["118"]) && need.lifeguard;
-      msg?.querySelectorAll<HTMLElement>("[data-msg]").forEach((el) => {
-        const key = el.dataset.msg;
-        el.hidden = !(key === main || (key === "also-lifeguard" && alsoLifeguard));
-      });
-    };
-
-    form.addEventListener("change", update);
-    form.addEventListener("reset", () => setTimeout(update, 0));
-    update();
-  }
-
-  initApp();
-  document.addEventListener("astro:page-load", initApp);
-</script>
-
-<style>
-  /* ==========================================================================
-     クリスタル浮遊背景アニメーション
-     ========================================================================== */
-  .crystal-bg-container {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .crystal {
-    position: absolute;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
-    transform: rotate(45deg);
-    animation: crystalFloat 12s infinite ease-in-out alternate;
-  }
-  .crystal-1 { width: 200px; height: 200px; top: 10%; left: -50px; animation-duration: 14s; }
-  .crystal-2 { width: 300px; height: 300px; top: 50%; right: -80px; animation-duration: 18s; animation-delay: -5s; }
-  .crystal-3 { width: 150px; height: 150px; bottom: 10%; left: 15%; animation-duration: 10s; animation-delay: -2s; }
-  @keyframes crystalFloat {
-    0% { transform: rotate(45deg) translateY(0px) scale(1); }
-    100% { transform: rotate(55deg) translateY(-30px) scale(1.05); }
-  }
-
-  /* 視認性を妨げるカード上の光・テカリ（擬似要素）の完全無効化 */
-  .card::before, .card::after, .quick-call-alert::before, .quick-call-alert::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; }
-  :root { font-size: 16px; --container-max-width: 1000px; --radius-lg: 20px; --radius-md: 14px; --radius-sm: 8px; }
-  body { overflow-x: hidden; width: 100%; background-color: #f8fafc; margin: 0; }
-  .container { width: 100%; max-width: var(--container-max-width); margin: 0 auto; padding: 0 clamp(0.75rem, 3vw, 1.5rem); position: relative; z-index: 1; }
-
-  .page-header { background: #075985; color: #fff; padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem); text-align: center; }
-  .page-header h1 { font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 900; margin: 0; }
-  .page-header p { color: #e0f2fe; font-size: clamp(0.9rem, 2.5vw, 1.15rem); margin-top: .4rem; font-weight: 600; }
-
-  /* タブ */
-  .mode-nav-container { max-width: 720px; margin: clamp(-1.8rem, -3vw, -2.2rem) auto 1.25rem; padding: 0 1rem; position: relative; z-index: 20; }
-  .mode-nav { display: flex; background: #e2e8f0; padding: 5px; border-radius: 16px; gap: 4px; }
-  .mode-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem; padding: clamp(0.65rem, 2vw, 0.9rem); border: none; background: transparent; border-radius: 12px; font-size: clamp(0.875rem, 2.2vw, 1.1rem); font-weight: 800; color: #475569; cursor: pointer; }
-  .mode-btn.active { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  .mode-btn.is-sos.active { color: #dc2626; }
-  .mode-btn.is-guide.active { color: #0284c7; }
-
-  .section { padding-bottom: 3rem; position: relative; z-index: 10; }
-  .view-panel { display: none; }
-  .view-panel.active { display: block; }
-
-  .card { background: #ffffff !important; border-radius: var(--radius-lg); padding: clamp(1.25rem, 4vw, 2.25rem); box-shadow: 0 4px 20px rgba(15,23,42,0.08); width: 100%; border: 1px solid #cbd5e1; }
-  .card h2 { font-size: clamp(1.2rem, 3.5vw, 1.5rem); font-weight: 800; margin: 0 0 1rem; color: #0f172a; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
-
-  .emergency-top-card { border: 2px solid #fca5a5 !important; }
-  .quick-call-alert { background: #fef2f2 !important; border-radius: var(--radius-md); padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid #fecdd3; }
-  .alert-badge-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
-  .alert-badge { background: #dc2626; color: #ffffff; font-weight: 900; font-size: 0.85rem; padding: 0.25rem 0.65rem; border-radius: 6px; }
-  .alert-badge-wrap h2 { margin: 0; border: none; padding: 0; color: #991b1b; font-size: clamp(1.1rem, 3vw, 1.35rem); }
-  .quick-call-desc { font-size: clamp(0.875rem, 2vw, 1rem); color: #7f1d1d; margin: 0 0 1rem; font-weight: 600; }
-
-  .section-divider { border: 0; border-top: 2px dashed #e2e8f0; margin: clamp(1.25rem, 3vw, 2rem) 0; }
-
-  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; padding: 0; margin: 0; }
-  .ss-tel--top { margin-top: 0.5rem; }
-  .ss-tel__wide { grid-column: 1 / -1; }
-  .ss-tel__btn { display: flex; align-items: center; justify-content: center; gap: clamp(0.3rem, 1.5vw, 0.75rem); padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem; border-radius: var(--radius-md); color: #fff; font-weight: 800; text-decoration: none; text-align: center; }
-  .ss-tel__btn strong { font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1; }
-  .ss-tel__btn span { font-size: clamp(0.85rem, 2.2vw, 1.05rem); }
-  .id-119 { background: #dc2626 !important; }
-  .id-118 { background: #1d4ed8 !important; }
-  .id-guard, .ss-tel__btn--lifeguard { background: #047857 !important; }
-
-  .ss-lead { color: #334155; font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.6; }
-  .ss-subhead { font-size: clamp(1.05rem, 2.5vw, 1.2rem); font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
-  .ss-report fieldset { border: 0; padding: 0; margin: 0; }
-  .ss-report__list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; padding: 0; margin: 0; }
-  .ss-report__card { display: flex; align-items: center; gap: 0.75rem; padding: clamp(0.75rem, 2.5vw, 1.1rem); border: 2px solid #e2e8f0; border-radius: var(--radius-md); cursor: pointer; background: #fff; }
-  .ss-report__card:has(input:checked) { border-color: #f87171; background: #fef2f2; }
-  .ss-report__card input { width: 1.3rem; height: 1.3rem; accent-color: #dc2626; flex-shrink: 0; }
-  .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; }
-  .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; }
-  .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; }
-  .ss-report__tags .is-119 { background: #dc2626; }
-  .ss-report__tags .is-118 { background: #1d4ed8; }
-  .ss-report__tags .is-lifeguard { background: #047857; }
-
-  .ss-report__result { margin-top: 1.25rem; padding: clamp(1rem, 3vw, 1.5rem); border-radius: var(--radius-md); background: #f8fafc; border: 1px solid #e2e8f0; }
-  .ss-report.is-active .ss-report__result { background: #fff7f7; border-color: #fecdd3; }
-  .ss-report__msg { font-weight: 800; font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: #0f172a; text-align: center; margin-bottom: 1rem; }
-  .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font-size: 0.875rem; color: #64748b; text-decoration: underline; }
-
-  .ss-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
-  .info-block { background: #f8fafc; padding: 1.1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
-  .ss-plainlist { padding-left: 1.2em; color: #334155; font-size: clamp(0.875rem, 2vw, 1rem); line-height: 1.7; margin: 0; }
-  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem 1.5rem; }
-
-  .ss-case div { padding: .65rem 0; border-bottom: 1px solid #e2e8f0; }
-  .ss-case dt button { background: none; border: none; padding: 0; color: #0284c7; font-weight: 800; font-size: clamp(0.9rem, 2.2vw, 1.05rem); text-decoration: underline; cursor: pointer; font-family: inherit; }
-  .ss-case dd { color: #475569; font-size: clamp(0.85rem, 2vw, 0.95rem); line-height: 1.5; margin: 0.2rem 0 0; }
-
-  /* 辞典タイル */
-  .ss-toc { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
-  .ss-toc a { color: #0284c7; font-weight: 800; font-size: 0.95rem; text-decoration: none; }
-  .ss-group { margin-top: 2rem; }
-  .ss-group h3 { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 800; color: #0f172a; margin: 0 0 0.3rem; }
-  .ss-group__desc { color: #475569; font-size: 0.95rem; margin: 0 0 1rem; }
-
-  .ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: clamp(0.75rem, 2vw, 1.25rem); }
-  .ss-tile { display: flex; flex-direction: column; gap: 0.5rem; border: none; background: transparent; color: #0f172a; font-weight: 800; font-size: clamp(0.85rem, 2vw, 0.95rem); text-align: center; cursor: pointer; padding: 0; font-family: inherit; }
-  .ss-tile__img-wrap { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #e2e8f0; border-radius: var(--radius-md); padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
-  .ss-tile:hover .ss-tile__img-wrap { border-color: #0284c7; }
-  .ss-tile img { width: 100%; height: 100%; object-fit: contain; }
-  .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
-
-  /* ==========================================================================
-     モーダル (スマホ画面でも上下がはみ出さず中央に配置)
-     ========================================================================== */
+@media (max-width: 480px) {
   .ss-panel {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    padding: clamp(0.75rem, 3vw, 1.5rem);
-    align-items: center;
-    justify-content: center;
+    padding: 0.75rem;
   }
-  .ss-panel.is-open { display: flex !important; }
-  .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .65); }
   .ss-panel__box {
-    position: relative;
-    width: min(540px, 100%);
-    max-height: min(85dvh, 600px);
-    overflow-y: auto;
-    background: #ffffff !important;
-    border-radius: var(--radius-lg);
-    padding: clamp(1.25rem, 4vw, 1.75rem);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-    z-index: 10;
-    margin: auto;
+    max-height: 82dvh;
+    padding: 1.25rem 1rem;
   }
-  .ss-panel__close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    font-size: 1.8rem;
-    line-height: 1;
-    background: none;
-    border: none;
-    color: #64748b;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-  }
-  .ss-panel__close:hover { background: #f1f5f9; color: #0f172a; }
-  .ss-panel__head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-right: 1.5rem; }
-  .ss-panel__head img {
-    width: clamp(70px, 18vw, 110px);
-    height: clamp(70px, 18vw, 110px);
-    object-fit: contain;
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius-sm);
-    flex-shrink: 0;
-    background: #fff;
-  }
-  .ss-panel__head h2 { font-size: clamp(1.1rem, 3vw, 1.35rem); border: none; padding: 0; margin: 0; color: #0f172a; font-weight: 800; }
-  .ss-panel__body dt { font-size: 0.875rem; color: #475569; font-weight: 800; margin-top: 0.75rem; }
-  .ss-panel__body dd { color: #0f172a; font-size: 0.95rem; line-height: 1.6; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin: 0.25rem 0 0; }
-  .ss-note { font-size: 0.85rem; color: #dc2626; margin-top: 0.75rem; font-weight: 700; }
-  .ss-panel__back { display: block; width: 100%; margin-top: 1.25rem; padding: .75rem; border-radius: var(--radius-sm); border: none; text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; cursor: pointer; font-size: 0.95rem; }
-  .ss-panel__back:hover { background: #e2e8f0; }
-
-  @media (max-width: 480px) {
-    .ss-tel { grid-template-columns: 1fr; }
-    .ss-grid { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
-    .ss-panel { padding: 0.75rem; }
-    .ss-panel__box { max-height: 82dvh; padding: 1.25rem 1rem; }
-  }
-</style>
+}
