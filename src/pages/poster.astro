@@ -441,7 +441,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
 
   /* ==========================================================================
-     モーダル背景・表示の完全画面固定（全画面カバー・中央配置）
+     モーダル完全画面固定（画面全体の切れ・白い抜けを完全に防止）
      ========================================================================== */
   .ss-panels {
     position: static !important;
@@ -450,14 +450,11 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-panel {
     display: none;
     position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
     height: 100dvh !important;
-    z-index: 99999 !important;
+    z-index: 999999 !important;
   }
   .ss-panel.is-open {
     display: flex !important;
@@ -468,16 +465,16 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   }
   .ss-panel__backdrop {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+    inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    background: rgba(15, 23, 42, 0.7) !important;
+    background: rgba(15, 23, 42, 0.75) !important;
     cursor: pointer;
   }
   .ss-panel__box {
     position: relative !important;
     width: min(540px, 100%) !important;
+    max-height: min(80vh, 580px) !important;
     max-height: min(80dvh, 580px) !important;
     overflow-y: auto !important;
     background: #ffffff !important;
