@@ -441,46 +441,50 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
 
   /* ==========================================================================
-     モーダル親要素・本体（完全画面中央固定）
+     モーダル背景・表示の完全画面固定（全画面カバー・中央配置）
      ========================================================================== */
   .ss-panels {
     position: static !important;
-    transform: none !important;
-    filter: none !important;
   }
 
   .ss-panel {
     display: none;
     position: fixed !important;
     top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
+    width: 100% !important;
+    height: 100% !important;
     height: 100dvh !important;
-    z-index: 9999 !important;
-    padding: clamp(0.75rem, 3vw, 1.5rem);
-    box-sizing: border-box;
+    z-index: 99999 !important;
   }
   .ss-panel.is-open {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    padding: 1rem !important;
+    box-sizing: border-box !important;
   }
   .ss-panel__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.65);
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(15, 23, 42, 0.7) !important;
     cursor: pointer;
   }
   .ss-panel__box {
-    position: relative;
-    width: min(540px, 100%);
-    max-height: min(85dvh, 600px);
-    overflow-y: auto;
+    position: relative !important;
+    width: min(540px, 100%) !important;
+    max-height: min(80dvh, 580px) !important;
+    overflow-y: auto !important;
     background: #ffffff !important;
-    border-radius: var(--radius-lg);
-    padding: clamp(1.25rem, 4vw, 1.75rem);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    border-radius: var(--radius-lg) !important;
+    padding: clamp(1.25rem, 4vw, 1.75rem) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+    z-index: 10 !important;
     margin: auto !important;
   }
   .ss-panel__close {
@@ -517,7 +521,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   @media (max-width: 480px) {
     .ss-tel { grid-template-columns: 1fr; }
     .ss-grid { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
-    .ss-panel { padding: 0.75rem; }
-    .ss-panel__box { max-height: 82dvh; padding: 1.25rem 1rem; }
+    .ss-panel__box { max-height: 82dvh !important; padding: 1.25rem 1rem !important; }
   }
 </style>
