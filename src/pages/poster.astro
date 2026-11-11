@@ -224,6 +224,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       
       const panel = document.getElementById(`panel-${id}`);
       if (panel) {
+        // 親要素のスタッキングコンテキストの影響を避けるため body 直下に移動
+        if (panel.parentElement !== document.body) {
+          document.body.appendChild(panel);
+        }
         panel.classList.add('is-open');
         panel.hidden = false;
         document.body.style.overflow = 'hidden';
@@ -441,16 +445,15 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tile__noimg { color: #94a3b8; font-size: 0.8rem; }
 
   /* ==========================================================================
-     モーダル完全画面固定（画面全体の切れ・白い抜けを完全に防止）
+     モーダル完全画面固定（body直下へ移動し全画面をカバー）
      ========================================================================== */
-  .ss-panels {
-    position: static !important;
-  }
-
   .ss-panel {
     display: none;
     position: fixed !important;
-    inset: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
     height: 100dvh !important;
@@ -465,7 +468,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   }
   .ss-panel__backdrop {
     position: absolute !important;
-    inset: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
     width: 100% !important;
     height: 100% !important;
     background: rgba(15, 23, 42, 0.75) !important;
