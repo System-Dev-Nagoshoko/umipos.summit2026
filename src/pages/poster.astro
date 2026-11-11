@@ -1,11 +1,10 @@
 ---
 /**
  * POSTER ページ：海のピクトグラム辞典（HOW TO SEA）
- * 本文コンポーネントを統合した単一ページファイル
  * 看板のQRコードの行き先：/poster/#〇〇（〇〇は how-to-sea.ts の id）
  */
 import Layout from '../layouts/Layout.astro';
-import { genres, reportItems, IMAGE_BASE } from '../data/how-to-sea';
+import { genres, reportItems, IMAGE_BASE } from '../data/how-to-sea.ts';
 
 const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as const;
 ---
@@ -13,30 +12,56 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 <Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
   <section class="page-header">
     <h1>PICTOGRAM GUIDE</h1>
-    <p>看板の絵の意味と、緊急時の応急手当・通報ガイド</p>
+    <p>海の安全ガイド・緊急通報サポート</p>
   </section>
+
+  <!-- モード切り替えタブ -->
+  <div class="mode-nav-container">
+    <div class="mode-nav" role="tablist" aria-label="表示モード切替">
+      <button role="tab" id="tab-btn-sos" aria-selected="true" aria-controls="view-sos" class="mode-btn is-sos active">
+        <span class="mode-icon">🚨</span>
+        <span class="mode-text">緊急SOS・通報</span>
+      </button>
+      <button role="tab" id="tab-btn-guide" aria-selected="false" aria-controls="view-guide" class="mode-btn is-guide">
+        <span class="mode-icon">📘</span>
+        <span class="mode-text">ピクトグラム辞典</span>
+      </button>
+    </div>
+  </div>
 
   <section class="section">
     <div class="container">
-      <div class="flex-container">
 
-        <!-- 緊急時SOSカード（最上部に配置してアクセス時間を短縮） -->
+      <!-- ================= 🚨 VIEW 1: 緊急通報ガイド ================= -->
+      <div id="view-sos" role="tabpanel" aria-labelledby="tab-btn-sos" class="view-panel active">
         <div class="card emergency-top-card" id="emergency">
-          <div class="emergency-alert-head">
-            <span class="alert-badge">SOS</span>
-            <h2>もしもの時・緊急通報ガイド</h2>
+          
+          <!-- 迷ったら電話（最上部案内） -->
+          <div class="quick-call-alert">
+            <div class="alert-badge-wrap">
+              <span class="alert-badge">緊急</span>
+              <h2>判断に迷ったら今すぐ電話してください</h2>
+            </div>
+            <p class="quick-call-desc">焦っている時や状況が分からない場合も、ためらわず連絡してください。</p>
+            <ul class="ss-tel ss-tel--top">
+              <li><a class="ss-tel__btn id-119" href="tel:119"><strong>119</strong><span>救急・消防</span></a></li>
+              <li><a class="ss-tel__btn id-118" href="tel:118"><strong>118</strong><span>海の事故 (海保)</span></a></li>
+              <li class="ss-tel__wide"><a class="ss-tel__btn ss-tel__btn--lifeguard id-guard" href="#call-lifeguard"><strong>監視所</strong><span>近くのビーチ監視員に知らせる</span></a></li>
+            </ul>
           </div>
-          <p class="ss-lead">当てはまる状況にチェックすると連絡先が表示されます。今すぐ電話する場合は上のボタン、または以下の赤・青の番号から直接お電話ください。</p>
 
+          <hr class="section-divider" />
+
+          <!-- 状況チェック質問 -->
           <form class="ss-report" id="report" aria-describedby="report-msg">
             <fieldset>
-              <legend class="ss-subhead">いま、どんな状況ですか（いくつでも）</legend>
+              <legend class="ss-subhead">どのような状況ですか？（該当するものを選択）</legend>
               <ul class="ss-report__list">
-                {reportItems.map((r) => (
+                {reportItems.map((r, index) => (
                   <li>
-                    <label>
-                      <input type="checkbox" data-call={r.call.join(" ")} />
-                      <span>{r.text}</span>
+                    <label class="ss-report__card">
+                      <input type="checkbox" id={`report-check-${index}`} data-call={r.call.join(" ")} />
+                      <span class="ss-report__text">{r.text}</span>
                       <span class="ss-report__tags">
                         {r.call.map((c) => <b class={`is-${c}`}>{callLabel[c]}</b>)}
                       </span>
@@ -48,48 +73,52 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
             <div class="ss-report__result">
               <div class="ss-report__msg" id="report-msg" aria-live="polite">
-                <p data-msg="none">当てはまるものにチェックすると通報先が表示されます。</p>
-                <p data-msg="both" hidden>119 と 118 の両方に電話してください。</p>
-                <p data-msg="119" hidden>119（救急・消防）に電話してください。</p>
-                <p data-msg="118" hidden>118（海の事件・事故）に電話してください。</p>
-                <p data-msg="lifeguard" hidden>近くのビーチ監視員に知らせてください。具合が悪くなったらすぐ119へ。</p>
-                <p data-msg="also-lifeguard" hidden>ビーチ監視員にも知らせてください。</p>
+                <p data-msg="none">選択すると、最適な通報先と優先案内が表示されます。</p>
+                <p data-msg="both" hidden><strong>119（救急）</strong> と <strong>118（海上保安庁）</strong> の両方に通報してください。</p>
+                <p data-msg="119" hidden><strong>119（救急・消防）</strong> に通報してください。</p>
+                <p data-msg="118" hidden><strong>118（海の事件・事故）</strong> に通報してください。</p>
+                <p data-msg="lifeguard" hidden><strong>近くのビーチ監視員</strong> に知らせてください。体調が悪化したらすぐ119へ。</p>
+                <p data-msg="also-lifeguard" hidden>※あわせて近くのビーチ監視員にも知らせてください。</p>
               </div>
               <ul class="ss-tel">
-                <li><a class="ss-tel__btn" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
-                <li><a class="ss-tel__btn" id="call-118" href="tel:118"><strong>118</strong><span>海の事件・事故<span class="ss-tel__sub">（海上保安庁）</span></span></a></li>
-                <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員</span></li>
+                <li><a class="ss-tel__btn id-119" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
+                <li><a class="ss-tel__btn id-118" id="call-118" href="tel:118"><strong>118</strong><span>海の事件・事故</span></a></li>
+                <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard id-guard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員に連絡</span></li>
               </ul>
               <button type="reset" class="ss-report__reset">選択をリセット</button>
             </div>
           </form>
 
           <div class="ss-two">
-            <section aria-labelledby="tell-title">
+            <section aria-labelledby="tell-title" class="info-block">
               <h3 class="ss-subhead" id="tell-title">電話で伝えること</h3>
               <ul class="ss-plainlist">
-                <li>場所（海岸の名前や近くの目印）</li>
-                <li>状況（おぼれた・刺された・ケガ等）</li>
-                <li>人数と傷病者の様子（意識の有無）</li>
+                <li><strong>場所：</strong>海岸の名前や近くの目印（建物・看板番号など）</li>
+                <li><strong>状況：</strong>おぼれた・刺された・ケガ・意識の有無など</li>
+                <li><strong>人数：</strong>何人が巻き込まれているか</li>
               </ul>
             </section>
 
-            <section aria-labelledby="case-title">
+            <section aria-labelledby="case-title" class="info-block">
               <h3 class="ss-subhead" id="case-title">その場の応急対応</h3>
               <dl class="ss-case">
-                <div><dt><a href="#rip-current">沖に流された</a></dt><dd>あわてず岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
-                <div><dt><a href="#jellyfish">クラゲに刺された</a></dt><dd>こすらず酢をかけて触手を取り、冷やす。</dd></div>
-                <div><dt><a href="#stonefish">オコゼを踏んだ</a></dt><dd>動かさず40〜45℃のお湯につけて病院へ。</dd></div>
-                <div><dt><a href="#alone">おぼれている人を見た</a></dt><dd>飛び込まず浮くものを投げ、118・119へ通報。</dd></div>
+                <div><dt><a href="#rip-current" class="btn-open-dict">沖に流された</a></dt><dd>あわてず岸と平行に泳ぐ。手を振って助けを呼ぶ。</dd></div>
+                <div><dt><a href="#jellyfish" class="btn-open-dict">クラゲに刺された</a></dt><dd>こすらず酢をかけて触手を取り、冷やす。</dd></div>
+                <div><dt><a href="#stonefish" class="btn-open-dict">オコゼを踏んだ</a></dt><dd>動かさず40〜45℃のお湯につけて病院へ。</dd></div>
+                <div><dt><a href="#alone" class="btn-open-dict">おぼれている人を見た</a></dt><dd>飛び込まず浮くものを投げ、118・119へ通報。</dd></div>
               </dl>
             </section>
           </div>
-        </div>
 
-        <!-- ピクトグラム一覧 -->
+        </div>
+      </div>
+
+      <!-- ================= 📘 VIEW 2: ピクトグラム辞典 ================= -->
+      <div id="view-guide" role="tabpanel" aria-labelledby="tab-btn-guide" class="view-panel" hidden>
         <div class="card">
           <h2>ピクトグラム一覧（看板の絵の意味）</h2>
-          <p class="ss-lead">看板の絵をタップすると、意味と対処法が表示されます。</p>
+          <p class="ss-lead">看板の絵をタップすると、詳しい意味と応急対処法が表示されます。</p>
+
           <nav class="ss-toc" aria-label="もくじ">
             {genres.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
           </nav>
@@ -125,11 +154,12 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             </section>
           ))}
         </div>
-
       </div>
+
     </div>
   </section>
 
+  <!-- モーダル詳細パネル -->
   <div class="ss-panels">
     {genres.flatMap((g) => g.items).filter((item) => !item.hidden).map((item) => (
       <section class="ss-panel" id={item.id} aria-labelledby={`${item.id}-title`}>
@@ -156,10 +186,47 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 </Layout>
 
 <script>
-  function initReport() {
-    const form = document.getElementById("report");
+  function initApp() {
+    // タブ切替の初期化
+    const btnSos = document.getElementById("tab-btn-sos");
+    const btnGuide = document.getElementById("tab-btn-guide");
+    const viewSos = document.getElementById("view-sos");
+    const viewGuide = document.getElementById("view-guide");
+
+    function switchTab(mode: 'sos' | 'guide') {
+      if (!btnSos || !btnGuide || !viewSos || !viewGuide) return;
+      const isSos = mode === 'sos';
+      
+      btnSos.classList.toggle('active', isSos);
+      btnSos.setAttribute('aria-selected', isSos ? 'true' : 'false');
+      viewSos.classList.toggle('active', isSos);
+      viewSos.hidden = !isSos;
+
+      btnGuide.classList.toggle('active', !isSos);
+      btnGuide.setAttribute('aria-selected', !isSos ? 'true' : 'false');
+      viewGuide.classList.toggle('active', !isSos);
+      viewGuide.hidden = isSos;
+    }
+
+    btnSos?.addEventListener('click', () => switchTab('sos'));
+    btnGuide?.addEventListener('click', () => switchTab('guide'));
+
+    // URLハッシュによる自動切り替え（ピクトグラム詳細リンクなどの場合は辞典タブを開く）
+    const hash = window.location.hash;
+    if (hash && hash !== '#emergency') {
+      switchTab('guide');
+    }
+
+    // 応急対応リンクなどから辞典タブを開くボタン
+    document.querySelectorAll('.btn-open-dict').forEach(el => {
+      el.addEventListener('click', () => switchTab('guide'));
+    });
+
+    // フォーム通報ロジック
+    const form = document.getElementById("report") as HTMLFormElement | null;
     if (!form || form.dataset.ready) return;
     form.dataset.ready = "1";
+
     const msg = document.getElementById("report-msg");
     const btns: Record<string, HTMLElement | null> = {
       "119": document.getElementById("call-119"),
@@ -209,150 +276,246 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     update();
   }
 
-  initReport();
-  document.addEventListener("astro:page-load", initReport);
+  initApp();
+  document.addEventListener("astro:page-load", initApp);
 </script>
 
 <style>
-  .page-header { background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%)); color: #fff; padding: 3.5rem 1.25rem 4.5rem; text-align: center; }
-  .page-header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: .05em; text-shadow: 0 2px 8px rgba(8, 47, 73, .5); }
-  .page-header p { color: #e0f2fe; font-size: 0.95rem; margin-top: .35rem; font-weight: 500; text-wrap: balance; }
-  
-  .section { padding-bottom: 4rem; position: relative; z-index: 10; }
-  .flex-container { display: flex; flex-direction: column; gap: 2.25rem; margin-top: -3rem; }
-  .card { background: #fff; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 25px -5px #0f172a0d; max-width: 1000px; margin: 0 auto; width: 100%; border: 1px solid var(--border, #e2e8f0); overflow: hidden; }
-  .card h2 { font-size: 1.45rem; font-weight: 700; margin-bottom: 1.25rem; color: #0f172a; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
-  .card::before { display: none; }
-
-  .emergency-top-card {
-    border: 2px solid #fecdd3 !important;
-    background: #ffffff !important;
+  /* 全体フォントサイズ・基本設定 */
+  :root {
+    font-size: 16px;
   }
 
-  .emergency-alert-head {
+  .page-header {
+    background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+    color: #fff;
+    padding: 3rem 1.25rem 4rem;
+    text-align: center;
+  }
+  .page-header h1 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-shadow: 0 2px 8px rgba(8, 47, 73, .5);
+  }
+  .page-header p {
+    color: #e0f2fe;
+    font-size: 1.1rem;
+    margin-top: .4rem;
+    font-weight: 600;
+  }
+
+  /* タブ切替ナビゲーション */
+  .mode-nav-container {
+    max-width: 800px;
+    margin: -2.2rem auto 1.5rem;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 20;
+  }
+  .mode-nav {
+    display: flex;
+    background: #e2e8f0;
+    padding: 6px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+  }
+  .mode-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .mode-btn.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .mode-btn.is-sos.active {
+    color: #dc2626;
+  }
+  .mode-btn.is-guide.active {
+    color: #0284c7;
+  }
+
+  .section { padding-bottom: 4rem; position: relative; z-index: 10; }
+  .view-panel { display: none; }
+  .view-panel.active { display: block; }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.25rem;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    border: 1px solid var(--border, #cbd5e1);
+  }
+  .card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    color: #0f172a;
+    border-bottom: 2px solid #e0f2fe;
+    padding-bottom: .5rem;
+  }
+
+  /* SOSカード */
+  .emergency-top-card {
+    border: 3px solid #fca5a5 !important;
+  }
+  .quick-call-alert {
+    background: #fef2f2;
+    border-radius: 14px;
+    padding: 1.5rem;
+    border: 1px solid #fecdd3;
+  }
+  .alert-badge-wrap {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
-
   .alert-badge {
     background: #dc2626;
     color: #ffffff;
     font-weight: 900;
-    font-size: 0.8rem;
-    padding: 0.2rem 0.65rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.75rem;
     border-radius: 6px;
     letter-spacing: 0.05em;
   }
-
-  .emergency-alert-head h2 {
-    margin-bottom: 0;
+  .alert-badge-wrap h2 {
+    margin: 0;
     border-bottom: none;
-    padding-bottom: 0;
+    padding: 0;
     color: #991b1b;
+    font-size: 1.35rem;
+  }
+  .quick-call-desc {
+    font-size: 1rem;
+    color: #7f1d1d;
+    margin-bottom: 1rem;
+    font-weight: 600;
   }
 
-  .ss-call-119 { --ss-call-119: #dc2626; }
-  .ss-call-118 { --ss-call-118: #1d4ed8; }
-  .ss-call-guard { --ss-call-guard: #047857; }
+  .section-divider {
+    border: 0;
+    border-top: 2px dashed #e2e8f0;
+    margin: 2rem 0;
+  }
 
-  .ss-lead { color: #334155; font-size: 0.95rem; line-height: 1.75; }
-  .ss-subhead { font-size: 1rem; font-weight: 700; color: #0f172a; margin: 1.5rem 0 0.5rem; }
-  .ss-note { font-size: .8rem; color: #b91c1c; margin-top: .75rem; }
-  .ss-plainlist { padding-left: 1.2em; color: #475569; font-size: .9rem; line-height: 1.7; }
-  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
+  /* 電話ボタン */
+  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
+  .ss-tel--top { margin-top: 0.5rem; }
+  .ss-tel__wide { grid-column: 1 / -1; }
+  .ss-tel__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.1rem;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .ss-tel__btn strong { font-size: 2rem; line-height: 1; }
+  .ss-tel__btn span { font-size: 1.05rem; }
+  .id-119 { background: #dc2626; }
+  .id-118 { background: #1d4ed8; }
+  .id-guard, .ss-tel__btn--lifeguard { background: #047857; }
+  .ss-tel__btn.is-disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; pointer-events: none; }
 
-  .ss-toc { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
-  .ss-toc a { color: var(--primary); font-weight: 700; font-size: .9rem; text-decoration: none; }
-  .ss-toc a:hover { text-decoration: underline; }
-
-  .ss-group { margin-top: 2.5rem; scroll-margin-top: 100px; }
-  .ss-group h3 { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem; }
-  .ss-group__desc { color: #475569; font-size: .9rem; line-height: 1.6; margin-bottom: 1.25rem; }
-
-  .ss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem 1.25rem; }
-  .ss-tile { display: flex; flex-direction: column; gap: .5rem; text-decoration: none; color: #0f172a; font-weight: 700; font-size: .9rem; line-height: 1.4; scroll-margin-top: 150px; }
-  .ss-tile img, .ss-tile__noimg { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: .75rem; transition: border-color .15s ease; }
-  .ss-tile:hover img, .ss-tile:hover .ss-tile__noimg { border-color: var(--primary); }
-  .ss-tile__noimg, .ss-panel__noimg { display: grid; place-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; color: #94a3b8; font-size: .8rem; font-weight: 700; }
-
-  :global(.main-content:has(.ss-panels)) { animation-name: ssPageFade; }
-  @keyframes ssPageFade { from { opacity: 0; } to { opacity: 1; } }
-  .ss-panel { display: none; }
-  .ss-panel:target { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 88px 1rem 1rem; }
-  .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .55); }
-  .ss-panel__box { position: relative; width: min(560px, 100%); max-height: 100%; overflow-y: auto; background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 24px 48px -16px rgba(15, 23, 42, .35); }
-  .ss-panel__close { position: absolute; top: .9rem; right: .9rem; width: 2.25rem; height: 2.25rem; border-radius: 8px; display: grid; place-items: center; color: #64748b; font-size: 1.4rem; line-height: 1; text-decoration: none; }
-  .ss-panel__close:hover { background: #f1f5f9; color: #0f172a; }
-  .ss-panel__head { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; padding-right: 2rem; }
-  .ss-panel__head img { width: 140px; height: 140px; flex-shrink: 0; object-fit: contain; border: 1px solid #e2e8f0; border-radius: 10px; padding: .6rem; }
-  .ss-panel__head h2 { font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.35; }
-  .ss-panel__body { display: grid; grid-template-columns: 6.5em 1fr; border-top: 1px solid #e2e8f0; }
-  .ss-panel__body dt, .ss-panel__body dd { padding: .75rem 0; border-bottom: 1px solid #e2e8f0; }
-  .ss-panel__body dt { font-size: .85rem; color: #475569; font-weight: 700; padding-top: .9rem; }
-  .ss-panel__body dd { color: #0f172a; font-size: .95rem; line-height: 1.75; }
-  .ss-panel__back { display: block; margin-top: 1.5rem; padding: .7rem; border-radius: 10px; text-align: center; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 700; text-decoration: none; }
-  .ss-panel__back:hover { background: #f8fafc; }
-
-  .ss-report { margin-top: 1.25rem; }
-  .ss-report fieldset { border: 0; }
-  .ss-report__list { list-style: none; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
-  .ss-report__list li + li { border-top: 1px solid #e2e8f0; }
-  .ss-report__list label { display: flex; align-items: center; gap: .85rem; padding: .85rem 1.1rem; cursor: pointer; font-size: .95rem; line-height: 1.5; color: #0f172a; }
-  .ss-report__list label:hover { background: #f8fafc; }
-  .ss-report__list label:has(input:checked) { background: #fef2f2; font-weight: 700; }
-  .ss-report__list input { width: 1.2rem; height: 1.2rem; flex-shrink: 0; accent-color: #dc2626; }
-  .ss-report__list label > span:first-of-type { flex: 1; }
-  .ss-report__tags { display: flex; gap: .3rem; flex-shrink: 0; }
-  .ss-report__tags b { font-size: .75rem; font-weight: 700; padding: .1rem .45rem; border-radius: 4px; color: #fff; line-height: 1.5; }
+  /* チェックリスト */
+  .ss-lead { color: #334155; font-size: 1.05rem; line-height: 1.7; }
+  .ss-subhead { font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
+  .ss-report fieldset { border: 0; padding: 0; }
+  .ss-report__list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .ss-report__card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s ease;
+  }
+  .ss-report__card:hover { border-color: #cbd5e1; background: #f8fafc; }
+  .ss-report__card:has(input:checked) { border-color: #f87171; background: #fef2f2; }
+  .ss-report__card input { width: 1.4rem; height: 1.4rem; accent-color: #dc2626; flex-shrink: 0; }
+  .ss-report__text { flex: 1; font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+  .ss-report__tags { display: flex; gap: .35rem; flex-shrink: 0; }
+  .ss-report__tags b { font-size: .8rem; font-weight: 800; padding: .2rem .5rem; border-radius: 6px; color: #fff; }
   .ss-report__tags .is-119 { background: #dc2626; }
   .ss-report__tags .is-118 { background: #1d4ed8; }
   .ss-report__tags .is-lifeguard { background: #047857; }
-  .ss-report__result { margin-top: 1.25rem; padding: 1.5rem; border-radius: 12px; background: #f8fafc; }
-  .ss-report.is-active .ss-report__result { background: #fff7f7; }
-  .ss-report__msg { font-weight: 700; font-size: 1.05rem; color: #0f172a; text-align: center; margin-bottom: 1rem; }
-  .ss-report__msg [data-msg="also-lifeguard"] { margin-top: .25rem; }
-  .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font: inherit; font-size: .85rem; color: #64748b; text-decoration: underline; text-underline-offset: 3px; }
 
-  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-  .ss-tel__wide { grid-column: 1 / -1; }
-  .ss-tel__btn { display: flex; align-items: baseline; justify-content: center; gap: .6rem; height: 100%; padding: 1rem; border-radius: 12px; color: #fff; font-weight: 700; text-decoration: none; text-align: center; }
-  .ss-tel__btn strong { font-size: 1.8rem; line-height: 1; letter-spacing: .02em; }
-  #call-119 { background: #dc2626; }
-  #call-118 { background: #1d4ed8; }
-  .ss-tel__btn--lifeguard { background: #047857; padding: .75rem 1rem; font-size: .9rem; align-items: center; }
-  .ss-tel__btn--lifeguard strong { font-size: 1.1rem; }
-  .ss-tel__btn.is-disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; pointer-events: none; }
+  .ss-report__result { margin-top: 1.5rem; padding: 1.5rem; border-radius: 14px; background: #f8fafc; border: 1px solid #e2e8f0; }
+  .ss-report.is-active .ss-report__result { background: #fff7f7; border-color: #fecdd3; }
+  .ss-report__msg { font-weight: 800; font-size: 1.15rem; color: #0f172a; text-align: center; margin-bottom: 1.25rem; }
+  .ss-report__reset { display: block; margin: 1.25rem auto 0; background: none; border: none; cursor: pointer; font-size: 0.95rem; color: #64748b; text-decoration: underline; }
 
-  .ss-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; margin-top: 1rem; }
+  .ss-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; margin-top: 2rem; }
+  .info-block { background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+  .ss-plainlist { padding-left: 1.2em; color: #334155; font-size: 1rem; line-height: 1.8; }
+  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 2rem; }
+
   .ss-case div { padding: .75rem 0; border-bottom: 1px solid #e2e8f0; }
-  .ss-case div:first-child { border-top: 1px solid #e2e8f0; }
-  .ss-case dt a { color: var(--primary); font-weight: 700; text-decoration: none; }
-  .ss-case dt a:hover { text-decoration: underline; }
-  .ss-case dd { color: #475569; font-size: .9rem; line-height: 1.7; margin-top: .15rem; }
+  .ss-case dt a { color: #0284c7; font-weight: 800; font-size: 1.05rem; text-decoration: underline; }
+  .ss-case dd { color: #475569; font-size: 0.95rem; line-height: 1.6; margin-top: .2rem; }
 
+  /* 辞典スタイル */
+  .ss-toc { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+  .ss-toc a { color: #0284c7; font-weight: 800; font-size: 1rem; text-decoration: none; }
+  .ss-group { margin-top: 2.5rem; }
+  .ss-group h3 { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
+  .ss-group__desc { color: #475569; font-size: 1rem; margin-bottom: 1.25rem; }
+
+  .ss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+  .ss-tile { display: flex; flex-direction: column; gap: .6rem; text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1rem; }
+  .ss-tile img, .ss-tile__noimg { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; padding: .75rem; }
+
+  /* モーダル */
+  .ss-panel { display: none; }
+  .ss-panel:target { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; }
+  .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .65); }
+  .ss-panel__box { position: relative; width: min(600px, 100%); max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+  .ss-panel__close { position: absolute; top: 1rem; right: 1rem; font-size: 1.8rem; text-decoration: none; color: #64748b; }
+  .ss-panel__head { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
+  .ss-panel__head img { width: 120px; height: 120px; object-fit: contain; border: 1px solid #e2e8f0; border-radius: 10px; }
+  .ss-panel__body dt { font-size: 0.95rem; color: #475569; font-weight: 800; margin-top: 0.75rem; }
+  .ss-panel__body dd { color: #0f172a; font-size: 1.05rem; line-height: 1.7; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; }
+  .ss-panel__back { display: block; margin-top: 1.5rem; padding: .8rem; border-radius: 10px; text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; text-decoration: none; }
+
+  /* レスポンシブ (スマホ表示時) */
   @media (max-width: 640px) {
-    .container { padding: 0 1rem; }
-    .card { padding: 1.5rem .85rem; }
-    .page-header { padding: 2.75rem 1rem 4.5rem; }
-    .page-header h1 { font-size: 1.85rem; }
-    .page-header p { font-size: .9rem; }
-    .ss-lead, .ss-group__desc { font-size: .9rem; }
-    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem .75rem; }
-    .ss-tile { font-size: .85rem; }
+    .page-header { padding: 2.5rem 1rem 3.5rem; }
+    .page-header h1 { font-size: 1.8rem; }
+    .mode-btn { font-size: 0.95rem; padding: 0.75rem 0.5rem; }
+    .card { padding: 1.25rem 1rem; border-radius: 16px; }
+    .alert-badge-wrap h2 { font-size: 1.15rem; }
+    .ss-tel { grid-template-columns: 1fr; }
+    .ss-tel__btn { padding: 0.9rem; }
+    .ss-report__card { padding: 0.85rem 1rem; }
+    .ss-report__text { font-size: 0.95rem; }
+    .ss-two { grid-template-columns: 1fr; gap: 1.25rem; }
+    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
     .ss-plainlist--cols { grid-template-columns: 1fr; }
-    .ss-panel:target { align-items: flex-end; padding: 72px 0 0; }
-    .ss-panel__box { width: 100%; border-radius: 14px 14px 0 0; padding: 1.25rem 1rem 1.4rem; }
-    .ss-panel__head img, .ss-panel__noimg { width: 88px; height: 88px; }
-    .ss-panel__head h2 { font-size: 1.2rem; }
-    .ss-panel__body { grid-template-columns: 1fr; }
-    .ss-panel__body dt { border-bottom: none; padding: .7rem 0 0; }
-    .ss-panel__body dd { padding: .15rem 0 .7rem; }
-    .ss-report__list label { padding: .65rem .7rem; font-size: .875rem; gap: .55rem; }
-    .ss-tel { gap: .5rem; }
-    .ss-tel__btn { flex-direction: column; align-items: center; gap: .25rem; padding: .7rem .4rem; font-size: .8rem; line-height: 1.4; }
-    .ss-tel__btn--lifeguard { flex-direction: row; gap: .5rem; }
-    .ss-two { grid-template-columns: 1fr; }
   }
 </style>
