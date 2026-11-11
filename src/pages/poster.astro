@@ -10,6 +10,13 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 ---
 
 <Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
+  <!-- 背景クリスタル浮遊要素 -->
+  <div class="crystal-bg-container" aria-hidden="true">
+    <div class="crystal crystal-1"></div>
+    <div class="crystal crystal-2"></div>
+    <div class="crystal crystal-3"></div>
+  </div>
+
   <section class="page-header">
     <h1>PICTOGRAM GUIDE</h1>
     <p>海の安全ガイド・緊急通報サポート</p>
@@ -19,11 +26,11 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   <div class="mode-nav-container">
     <div class="mode-nav" role="tablist" aria-label="表示モード切替">
       <button role="tab" id="tab-btn-sos" aria-selected="true" aria-controls="view-sos" class="mode-btn is-sos active">
-        <span class="mode-icon">🚨</span>
+        <span class="mode-icon" aria-hidden="true">🚨</span>
         <span class="mode-text">緊急SOS・通報</span>
       </button>
       <button role="tab" id="tab-btn-guide" aria-selected="false" aria-controls="view-guide" class="mode-btn is-guide">
-        <span class="mode-icon">📘</span>
+        <span class="mode-icon" aria-hidden="true">📘</span>
         <span class="mode-text">ピクトグラム辞典</span>
       </button>
     </div>
@@ -36,7 +43,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       <div id="view-sos" role="tabpanel" aria-labelledby="tab-btn-sos" class="view-panel active">
         <div class="card emergency-top-card" id="emergency">
           
-          <!-- 迷ったら電話（最上部案内） -->
+          <!-- 迷ったら電話 -->
           <div class="quick-call-alert">
             <div class="alert-badge-wrap">
               <span class="alert-badge">緊急</span>
@@ -46,14 +53,14 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
             <ul class="ss-tel ss-tel--top">
               <li><a class="ss-tel__btn id-119" href="tel:119"><strong>119</strong><span>救急・消防</span></a></li>
               <li><a class="ss-tel__btn id-118" href="tel:118"><strong>118</strong><span>海の事故 (海保)</span></a></li>
-              <li class="ss-tel__wide"><a class="ss-tel__btn ss-tel__btn--lifeguard id-guard" href="#call-lifeguard"><strong>監視所</strong><span>近くのビーチ監視員に知らせる</span></a></li>
+              <li class="ss-tel__wide"><a class="ss-tel__btn ss-tel__btn--lifeguard id-guard" href="#report"><strong>監視所</strong><span>近くのビーチ監視員に報告する</span></a></li>
             </ul>
           </div>
 
           <hr class="section-divider" />
 
           <!-- 状況チェック質問 -->
-          <form class="ss-report" id="report" aria-describedby="report-msg">
+          <form class="ss-report" id="report" aria-describedby="report-msg" onsubmit="return false;">
             <fieldset>
               <legend class="ss-subhead">どのような状況ですか？（該当するものを選択）</legend>
               <ul class="ss-report__list">
@@ -130,9 +137,11 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
               <div class="ss-grid">
                 {g.items.filter((item) => !item.hidden).map((item) => (
                   <a class="ss-tile" id={`t-${item.id}`} href={`#${item.id}`}>
-                    {item.image
-                      ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
-                      : <span class="ss-tile__noimg">準備中</span>}
+                    <div class="ss-tile__img-wrap">
+                      {item.image
+                        ? <img src={`${IMAGE_BASE}${item.image}`} alt="" loading="lazy" decoding="async" />
+                        : <span class="ss-tile__noimg">準備中</span>}
+                    </div>
                     <span>{item.name}</span>
                   </a>
                 ))}
@@ -187,7 +196,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
 <script>
   function initApp() {
-    // タブ切替の初期化
     const btnSos = document.getElementById("tab-btn-sos");
     const btnGuide = document.getElementById("tab-btn-guide");
     const viewSos = document.getElementById("view-sos");
@@ -211,18 +219,15 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     btnSos?.addEventListener('click', () => switchTab('sos'));
     btnGuide?.addEventListener('click', () => switchTab('guide'));
 
-    // URLハッシュによる自動切り替え（ピクトグラム詳細リンクなどの場合は辞典タブを開く）
     const hash = window.location.hash;
     if (hash && hash !== '#emergency') {
       switchTab('guide');
     }
 
-    // 応急対応リンクなどから辞典タブを開くボタン
     document.querySelectorAll('.btn-open-dict').forEach(el => {
       el.addEventListener('click', () => switchTab('guide'));
     });
 
-    // フォーム通報ロジック
     const form = document.getElementById("report") as HTMLFormElement | null;
     if (!form || form.dataset.ready) return;
     form.dataset.ready = "1";
@@ -272,7 +277,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
     form.addEventListener("change", update);
     form.addEventListener("reset", () => setTimeout(update, 0));
-    form.addEventListener("submit", (e) => e.preventDefault());
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      return false;
+    });
     update();
   }
 
@@ -281,91 +289,173 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 </script>
 
 <style>
-  /* 全体フォントサイズ・基本設定 */
+  /* ==========================================================================
+     クリスタル浮遊背景アニメーション (背景装飾)
+     ========================================================================== */
+  .crystal-bg-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .crystal {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    transform: rotate(45deg);
+    animation: crystalFloat 12s infinite ease-in-out alternate;
+  }
+
+  .crystal-1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: -50px;
+    animation-duration: 14s;
+  }
+
+  .crystal-2 {
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    right: -80px;
+    animation-duration: 18s;
+    animation-delay: -5s;
+  }
+
+  .crystal-3 {
+    width: 150px;
+    height: 150px;
+    bottom: 10%;
+    left: 15%;
+    animation-duration: 10s;
+    animation-delay: -2s;
+  }
+
+  @keyframes crystalFloat {
+    0% {
+      transform: rotate(45deg) translateY(0px) scale(1);
+    }
+    100% {
+      transform: rotate(55deg) translateY(-30px) scale(1.05);
+    }
+  }
+
+  /* ==========================================================================
+     ベース設定
+     ========================================================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   :root {
     font-size: 16px;
+    --container-max-width: 1000px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    background-color: #f8fafc;
+  }
+
+  .container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 clamp(0.75rem, 3vw, 1.5rem);
+    position: relative;
+    z-index: 1;
   }
 
   .page-header {
     background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
     color: #fff;
-    padding: 3rem 1.25rem 4rem;
+    padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem);
     text-align: center;
+    word-break: break-word;
+    position: relative;
+    z-index: 1;
   }
   .page-header h1 {
-    font-size: 2.4rem;
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
     font-weight: 900;
     letter-spacing: .05em;
-    text-shadow: 0 2px 8px rgba(8, 47, 73, .5);
+    margin: 0;
   }
   .page-header p {
     color: #e0f2fe;
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 2.5vw, 1.15rem);
     margin-top: .4rem;
     font-weight: 600;
   }
 
-  /* タブ切替ナビゲーション */
+  /* モード切り替えタブ */
   .mode-nav-container {
-    max-width: 800px;
-    margin: -2.2rem auto 1.5rem;
+    max-width: 720px;
+    margin: clamp(-1.8rem, -3vw, -2.2rem) auto 1.25rem;
     padding: 0 1rem;
     position: relative;
     z-index: 20;
   }
   .mode-nav {
     display: flex;
-    background: #e2e8f0;
-    padding: 6px;
+    background: rgba(226, 232, 240, 0.9);
+    backdrop-filter: blur(8px);
+    padding: 5px;
     border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+    gap: 4px;
   }
   .mode-btn {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.9rem 1rem;
+    gap: 0.4rem;
+    padding: clamp(0.65rem, 2vw, 0.9rem) clamp(0.5rem, 1.5vw, 1rem);
     border: none;
     background: transparent;
     border-radius: 12px;
-    font-size: 1.1rem;
+    font-size: clamp(0.875rem, 2.2vw, 1.1rem);
     font-weight: 800;
     color: #475569;
     cursor: pointer;
-    transition: all 0.2s ease;
+    white-space: nowrap;
   }
   .mode-btn.active {
     background: #ffffff;
     color: #0f172a;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
-  .mode-btn.is-sos.active {
-    color: #dc2626;
-  }
-  .mode-btn.is-guide.active {
-    color: #0284c7;
-  }
+  .mode-btn.is-sos.active { color: #dc2626; }
+  .mode-btn.is-guide.active { color: #0284c7; }
 
-  .section { padding-bottom: 4rem; position: relative; z-index: 10; }
+  .section { padding-bottom: 3rem; position: relative; z-index: 10; }
   .view-panel { display: none; }
   .view-panel.active { display: block; }
 
+  /* カード */
   .card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 2.25rem;
-    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
-    max-width: 960px;
-    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
     width: 100%;
     border: 1px solid var(--border, #cbd5e1);
   }
   .card h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3.5vw, 1.5rem);
     font-weight: 800;
-    margin-bottom: 1.25rem;
+    margin: 0 0 1rem;
     color: #0f172a;
     border-bottom: 2px solid #e0f2fe;
     padding-bottom: .5rem;
@@ -373,149 +463,232 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
   /* SOSカード */
   .emergency-top-card {
-    border: 3px solid #fca5a5 !important;
+    border: 2px solid #fca5a5 !important;
   }
   .quick-call-alert {
     background: #fef2f2;
-    border-radius: 14px;
-    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    padding: clamp(1rem, 3vw, 1.5rem);
     border: 1px solid #fecdd3;
   }
   .alert-badge-wrap {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     margin-bottom: 0.5rem;
+    flex-wrap: wrap;
   }
   .alert-badge {
     background: #dc2626;
     color: #ffffff;
     font-weight: 900;
-    font-size: 0.9rem;
-    padding: 0.3rem 0.75rem;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.65rem;
     border-radius: 6px;
     letter-spacing: 0.05em;
+    flex-shrink: 0;
   }
   .alert-badge-wrap h2 {
     margin: 0;
     border-bottom: none;
     padding: 0;
     color: #991b1b;
-    font-size: 1.35rem;
+    font-size: clamp(1.1rem, 3vw, 1.35rem);
   }
   .quick-call-desc {
-    font-size: 1rem;
+    font-size: clamp(0.875rem, 2vw, 1rem);
     color: #7f1d1d;
-    margin-bottom: 1rem;
+    margin: 0 0 1rem;
     font-weight: 600;
   }
 
   .section-divider {
     border: 0;
     border-top: 2px dashed #e2e8f0;
-    margin: 2rem 0;
+    margin: clamp(1.25rem, 3vw, 2rem) 0;
   }
 
   /* 電話ボタン */
-  .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
+  .ss-tel {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+  }
   .ss-tel--top { margin-top: 0.5rem; }
   .ss-tel__wide { grid-column: 1 / -1; }
   .ss-tel__btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    padding: 1.1rem;
-    border-radius: 14px;
+    gap: clamp(0.3rem, 1.5vw, 0.75rem);
+    padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem;
+    border-radius: var(--radius-md);
     color: #fff;
     font-weight: 800;
     text-decoration: none;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    word-break: keep-all;
+    flex-wrap: wrap;
   }
-  .ss-tel__btn strong { font-size: 2rem; line-height: 1; }
-  .ss-tel__btn span { font-size: 1.05rem; }
+  .ss-tel__btn strong {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    line-height: 1;
+  }
+  .ss-tel__btn span {
+    font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+  }
   .id-119 { background: #dc2626; }
   .id-118 { background: #1d4ed8; }
   .id-guard, .ss-tel__btn--lifeguard { background: #047857; }
-  .ss-tel__btn.is-disabled { background: #e2e8f0 !important; color: #94a3b8; cursor: not-allowed; pointer-events: none; }
+  .ss-tel__btn.is-disabled {
+    background: #e2e8f0 !important;
+    color: #94a3b8;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
   /* チェックリスト */
-  .ss-lead { color: #334155; font-size: 1.05rem; line-height: 1.7; }
-  .ss-subhead { font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
-  .ss-report fieldset { border: 0; padding: 0; }
-  .ss-report__list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .ss-lead { color: #334155; font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.6; }
+  .ss-subhead { font-size: clamp(1.05rem, 2.5vw, 1.2rem); font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
+  .ss-report fieldset { border: 0; padding: 0; margin: 0; }
+  .ss-report__list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; padding: 0; margin: 0; }
   .ss-report__card {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.1rem 1.25rem;
+    gap: 0.75rem;
+    padding: clamp(0.75rem, 2.5vw, 1.1rem);
     border: 2px solid #e2e8f0;
-    border-radius: 14px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     background: #fff;
-    transition: all 0.15s ease;
   }
   .ss-report__card:hover { border-color: #cbd5e1; background: #f8fafc; }
   .ss-report__card:has(input:checked) { border-color: #f87171; background: #fef2f2; }
-  .ss-report__card input { width: 1.4rem; height: 1.4rem; accent-color: #dc2626; flex-shrink: 0; }
-  .ss-report__text { flex: 1; font-size: 1.05rem; font-weight: 700; color: #0f172a; }
-  .ss-report__tags { display: flex; gap: .35rem; flex-shrink: 0; }
-  .ss-report__tags b { font-size: .8rem; font-weight: 800; padding: .2rem .5rem; border-radius: 6px; color: #fff; }
+  .ss-report__card input { width: 1.3rem; height: 1.3rem; accent-color: #dc2626; flex-shrink: 0; }
+  .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; word-break: break-word; }
+  .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; }
+  .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; }
   .ss-report__tags .is-119 { background: #dc2626; }
   .ss-report__tags .is-118 { background: #1d4ed8; }
   .ss-report__tags .is-lifeguard { background: #047857; }
 
-  .ss-report__result { margin-top: 1.5rem; padding: 1.5rem; border-radius: 14px; background: #f8fafc; border: 1px solid #e2e8f0; }
+  .ss-report__result { margin-top: 1.25rem; padding: clamp(1rem, 3vw, 1.5rem); border-radius: var(--radius-md); background: #f8fafc; border: 1px solid #e2e8f0; }
   .ss-report.is-active .ss-report__result { background: #fff7f7; border-color: #fecdd3; }
-  .ss-report__msg { font-weight: 800; font-size: 1.15rem; color: #0f172a; text-align: center; margin-bottom: 1.25rem; }
-  .ss-report__reset { display: block; margin: 1.25rem auto 0; background: none; border: none; cursor: pointer; font-size: 0.95rem; color: #64748b; text-decoration: underline; }
+  .ss-report__msg { font-weight: 800; font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: #0f172a; text-align: center; margin-bottom: 1rem; word-break: break-word; }
+  .ss-report__reset { display: block; margin: 1rem auto 0; background: none; border: none; cursor: pointer; font-size: 0.875rem; color: #64748b; text-decoration: underline; }
 
-  .ss-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; margin-top: 2rem; }
-  .info-block { background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; }
-  .ss-plainlist { padding-left: 1.2em; color: #334155; font-size: 1rem; line-height: 1.8; }
-  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 2rem; }
+  .ss-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+  .info-block { background: #f8fafc; padding: 1.1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
+  .ss-plainlist { padding-left: 1.2em; color: #334155; font-size: clamp(0.875rem, 2vw, 1rem); line-height: 1.7; margin: 0; }
+  .ss-plainlist--cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem 1.5rem; }
 
-  .ss-case div { padding: .75rem 0; border-bottom: 1px solid #e2e8f0; }
-  .ss-case dt a { color: #0284c7; font-weight: 800; font-size: 1.05rem; text-decoration: underline; }
-  .ss-case dd { color: #475569; font-size: 0.95rem; line-height: 1.6; margin-top: .2rem; }
+  .ss-case div { padding: .65rem 0; border-bottom: 1px solid #e2e8f0; }
+  .ss-case dt a { color: #0284c7; font-weight: 800; font-size: clamp(0.9rem, 2.2vw, 1.05rem); text-decoration: underline; }
+  .ss-case dd { color: #475569; font-size: clamp(0.85rem, 2vw, 0.95rem); line-height: 1.5; margin: 0.2rem 0 0; }
 
-  /* 辞典スタイル */
-  .ss-toc { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
-  .ss-toc a { color: #0284c7; font-weight: 800; font-size: 1rem; text-decoration: none; }
-  .ss-group { margin-top: 2.5rem; }
-  .ss-group h3 { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
-  .ss-group__desc { color: #475569; font-size: 1rem; margin-bottom: 1.25rem; }
+  /* 辞典グリッド */
+  .ss-toc { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
+  .ss-toc a { color: #0284c7; font-weight: 800; font-size: 0.95rem; text-decoration: none; }
+  .ss-group { margin-top: 2rem; }
+  .ss-group h3 { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 800; color: #0f172a; margin: 0 0 0.3rem; }
+  .ss-group__desc { color: #475569; font-size: 0.95rem; margin: 0 0 1rem; }
 
-  .ss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
-  .ss-tile { display: flex; flex-direction: column; gap: .6rem; text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1rem; }
-  .ss-tile img, .ss-tile__noimg { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; padding: .75rem; }
+  .ss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+  }
+  .ss-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    text-align: center;
+  }
+  .ss-tile__img-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ss-tile:hover .ss-tile__img-wrap { border-color: #0284c7; }
+  .ss-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .ss-tile__noimg {
+    color: #94a3b8;
+    font-size: 0.8rem;
+  }
 
   /* モーダル */
   .ss-panel { display: none; }
-  .ss-panel:target { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; }
+  .ss-panel:target {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    padding: clamp(0.5rem, 3vw, 1.5rem);
+  }
   .ss-panel__backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, .65); }
-  .ss-panel__box { position: relative; width: min(600px, 100%); max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
-  .ss-panel__close { position: absolute; top: 1rem; right: 1rem; font-size: 1.8rem; text-decoration: none; color: #64748b; }
-  .ss-panel__head { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
-  .ss-panel__head img { width: 120px; height: 120px; object-fit: contain; border: 1px solid #e2e8f0; border-radius: 10px; }
-  .ss-panel__body dt { font-size: 0.95rem; color: #475569; font-weight: 800; margin-top: 0.75rem; }
-  .ss-panel__body dd { color: #0f172a; font-size: 1.05rem; line-height: 1.7; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; }
-  .ss-panel__back { display: block; margin-top: 1.5rem; padding: .8rem; border-radius: 10px; text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; text-decoration: none; }
+  .ss-panel__box {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 4vw, 2rem);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  .ss-panel__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    text-decoration: none;
+    color: #64748b;
+    padding: 0.25rem 0.5rem;
+  }
+  .ss-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-right: 1.5rem;
+  }
+  .ss-panel__head img {
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(80px, 20vw, 120px);
+    object-fit: contain;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+  .ss-panel__head h2 { font-size: clamp(1.1rem, 3vw, 1.4rem); border: none; padding: 0; margin: 0; }
+  .ss-panel__body dt { font-size: 0.875rem; color: #475569; font-weight: 800; margin-top: 0.75rem; }
+  .ss-panel__body dd { color: #0f172a; font-size: 0.95rem; line-height: 1.6; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin: 0.25rem 0 0; }
+  .ss-panel__back { display: block; margin-top: 1.25rem; padding: .75rem; border-radius: var(--radius-sm); text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; text-decoration: none; }
 
-  /* レスポンシブ (スマホ表示時) */
-  @media (max-width: 640px) {
-    .page-header { padding: 2.5rem 1rem 3.5rem; }
-    .page-header h1 { font-size: 1.8rem; }
-    .mode-btn { font-size: 0.95rem; padding: 0.75rem 0.5rem; }
-    .card { padding: 1.25rem 1rem; border-radius: 16px; }
-    .alert-badge-wrap h2 { font-size: 1.15rem; }
+  @media (max-width: 480px) {
     .ss-tel { grid-template-columns: 1fr; }
-    .ss-tel__btn { padding: 0.9rem; }
-    .ss-report__card { padding: 0.85rem 1rem; }
-    .ss-report__text { font-size: 0.95rem; }
-    .ss-two { grid-template-columns: 1fr; gap: 1.25rem; }
-    .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
-    .ss-plainlist--cols { grid-template-columns: 1fr; }
+    .ss-grid { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
+    .ss-report__tags { width: 100%; margin-top: 0.25rem; }
+    .ss-report__card { flex-wrap: wrap; }
   }
 </style>
