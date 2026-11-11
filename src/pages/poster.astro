@@ -10,7 +10,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 ---
 
 <Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
-  <!-- 背景クリスタル浮遊要素 -->
+  <!-- 背景クリスタル浮遊要素（カードの外側で浮遊） -->
   <div class="crystal-bg-container" aria-hidden="true">
     <div class="crystal crystal-1"></div>
     <div class="crystal crystal-2"></div>
@@ -303,7 +303,6 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .crystal {
     position: absolute;
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
-    backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     transform: rotate(45deg);
@@ -346,6 +345,21 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   }
 
   /* ==========================================================================
+     カード上の光・反射・擬似要素の無効化（見づらさ徹底排除）
+     ========================================================================== */
+  .card::before,
+  .card::after,
+  .quick-call-alert::before,
+  .quick-call-alert::after,
+  .emergency-top-card::before,
+  .emergency-top-card::after,
+  .ss-tel__btn::before,
+  .ss-tel__btn::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* ==========================================================================
      ベース設定
      ========================================================================== */
   *, *::before, *::after {
@@ -376,7 +390,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   }
 
   .page-header {
-    background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+    background: #075985;
     color: #fff;
     padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem);
     text-align: center;
@@ -407,8 +421,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   }
   .mode-nav {
     display: flex;
-    background: rgba(226, 232, 240, 0.9);
-    backdrop-filter: blur(8px);
+    background: #e2e8f0;
     padding: 5px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
@@ -444,11 +457,10 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
   /* カード */
   .card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: #ffffff !important;
     border-radius: var(--radius-lg);
     padding: clamp(1.25rem, 4vw, 2.25rem);
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
     width: 100%;
     border: 1px solid var(--border, #cbd5e1);
   }
@@ -466,7 +478,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     border: 2px solid #fca5a5 !important;
   }
   .quick-call-alert {
-    background: #fef2f2;
+    background: #fef2f2 !important;
     border-radius: var(--radius-md);
     padding: clamp(1rem, 3vw, 1.5rem);
     border: 1px solid #fecdd3;
@@ -532,6 +544,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     text-align: center;
     word-break: keep-all;
     flex-wrap: wrap;
+    background-image: none !important;
   }
   .ss-tel__btn strong {
     font-size: clamp(1.4rem, 4vw, 2rem);
@@ -540,9 +553,9 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tel__btn span {
     font-size: clamp(0.85rem, 2.2vw, 1.05rem);
   }
-  .id-119 { background: #dc2626; }
-  .id-118 { background: #1d4ed8; }
-  .id-guard, .ss-tel__btn--lifeguard { background: #047857; }
+  .id-119 { background: #dc2626 !important; }
+  .id-118 { background: #1d4ed8 !important; }
+  .id-guard, .ss-tel__btn--lifeguard { background: #047857 !important; }
   .ss-tel__btn.is-disabled {
     background: #e2e8f0 !important;
     color: #94a3b8;
