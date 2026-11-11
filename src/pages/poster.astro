@@ -90,7 +90,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
               <ul class="ss-tel">
                 <li><a class="ss-tel__btn id-119" id="call-119" href="tel:119"><strong>119</strong>救急・消防</a></li>
                 <li><a class="ss-tel__btn id-118" id="call-118" href="tel:118"><strong>118</strong><span>海の事件・事故</span></a></li>
-                <li class="ss-tel__wide"><span class="ss-tel__btn ss-tel__btn--lifeguard id-guard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員に連絡</span></li>
+                <li class="ss-tel__wide"><a class="ss-tel__btn ss-tel__btn--lifeguard id-guard" id="call-lifeguard"><strong>監視所</strong>ビーチ監視員に連絡</a></li>
               </ul>
               <button type="reset" class="ss-report__reset">選択をリセット</button>
             </div>
@@ -394,12 +394,29 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-tel { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; padding: 0; margin: 0; }
   .ss-tel--top { margin-top: 0.5rem; }
   .ss-tel__wide { grid-column: 1 / -1; }
-  .ss-tel__btn { display: flex; align-items: center; justify-content: center; gap: clamp(0.3rem, 1.5vw, 0.75rem); padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem; border-radius: var(--radius-md); color: #fff; font-weight: 800; text-decoration: none; text-align: center; }
+  .ss-tel__btn { display: flex; align-items: center; justify-content: center; gap: clamp(0.3rem, 1.5vw, 0.75rem); padding: clamp(0.75rem, 2vw, 1.1rem) 0.5rem; border-radius: var(--radius-md); color: #fff; font-weight: 800; text-decoration: none; text-align: center; transition: opacity 0.2s ease, filter 0.2s ease; }
   .ss-tel__btn strong { font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1; }
   .ss-tel__btn span { font-size: clamp(0.85rem, 2.2vw, 1.05rem); }
   .id-119 { background: #dc2626 !important; }
   .id-118 { background: #1d4ed8 !important; }
   .id-guard, .ss-tel__btn--lifeguard { background: #047857 !important; }
+
+  /* 状況判定フォーム内のボタン非活性制御 */
+  .ss-report__result .ss-tel__btn.is-disabled,
+  .ss-report:not(.is-active) .ss-report__result .ss-tel__btn {
+    opacity: 0.35 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    filter: grayscale(40%);
+  }
+
+  .ss-report__result .ss-tel__btn.is-needed {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    filter: none !important;
+  }
 
   .ss-lead { color: #334155; font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.6; }
   .ss-subhead { font-size: clamp(1.05rem, 2.5vw, 1.2rem); font-weight: 800; color: #0f172a; margin: 1rem 0 0.75rem; }
@@ -410,7 +427,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-report__card input { width: 1.3rem; height: 1.3rem; accent-color: #dc2626; flex-shrink: 0; }
   .ss-report__text { flex: 1; font-size: clamp(0.875rem, 2.2vw, 1.05rem); font-weight: 700; color: #0f172a; }
 
-  /* カード内の通報先タグ（ポインターイベント無効化により誤タップ防止） */
+  /* カード内の通報先タグ（誤タップ防止） */
   .ss-report__tags { display: flex; gap: 0.25rem; flex-shrink: 0; flex-wrap: wrap; pointer-events: none; }
   .ss-report__tags b { font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; color: #fff; user-select: none; pointer-events: none; }
   .ss-report__tags .is-119 { background: #dc2626; }
