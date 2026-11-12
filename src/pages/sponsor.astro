@@ -22,6 +22,22 @@ const partners = [
 
 const coOrganizers: typeof partners = [];
 const supporters: { name: string; category: string }[] = [];
+
+// ▼ スペシャルサンクス①：制作・活動協力者
+const keyContributors = [
+  { name: '@chen_ming73', role: 'プロジェクトロゴ作成' },
+  { name: '@tamu_96_', role: 'ピクトグラム作成協力' },
+  { name: '@sorato613', role: 'ピクトグラム作成協力' },
+];
+
+// ▼ スペシャルサンクス②：アンケート協力者（見出しタイトルなし）
+const surveySupporters = [
+  '@hirochan710',
+  '@ruuuuka_1127',
+  '@63ma_lg',
+  '@_9lxqlm',
+  '@k.m._1120',
+];
 ---
 
 <Layout title="連携・協力パートナー | 海のサインプロジェクト">
@@ -122,6 +138,50 @@ const supporters: { name: string; category: string }[] = [];
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* ▼ スペシャルサンクスセクション */}
+      {(keyContributors.length > 0 || surveySupporters.length > 0) && (
+        <section class="card">
+          <div class="card-header">
+            <span class="section-label">SPECIAL THANKS</span>
+            <h2>スペシャルサンクス</h2>
+            <p class="section-sub">
+              ロゴ・ピクトグラム制作やアンケート調査など、プロジェクトの推進に温かくご協力いただいた皆さまです
+            </p>
+          </div>
+
+          {/* 1. 制作・活動協力者 */}
+          {keyContributors.length > 0 && (
+            <div class="thanks-block">
+              <div class="contributor-grid">
+                {keyContributors.map((person) => (
+                  <div class="contributor-item">
+                    <span class="contributor-role">{person.role}</span>
+                    <span class="contributor-name notranslate">{person.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 2. アンケート協力者（タイトルなし） */}
+          {surveySupporters.length > 0 && (
+            <div class="thanks-block">
+              <div class="survey-grid">
+                {surveySupporters.map((account) => (
+                  <div class="survey-item">
+                    <span class="survey-name notranslate">{account}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <p class="thanks-note">
+            ※順不同（掲載をご了承いただいた方のみ記載しております）
+          </p>
         </section>
       )}
 
@@ -431,6 +491,75 @@ const supporters: { name: string; category: string }[] = [];
     border-radius: 4px;
   }
 
+  /* ▼ スペシャルサンクス用スタイル */
+  .thanks-block + .thanks-block {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed #e2e8f0;
+  }
+
+  /* 制作・活動協力者（メイン協力者カード） */
+  .contributor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+  }
+  .contributor-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 1rem 0.85rem;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .contributor-role {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: #ffffff;
+    border: 1px solid #bae6fd;
+    padding: 0.15rem 0.65rem;
+    border-radius: 9999px;
+  }
+  .contributor-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  /* アンケート協力者（コンパクトグリッド） */
+  .survey-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.65rem;
+  }
+  .survey-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 0.75rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .survey-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .thanks-note {
+    margin-top: 1.25rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
   .cta-card {
     background: linear-gradient(135deg, #0369a1 0%, #082f49 100%);
     color: white;
@@ -609,6 +738,9 @@ const supporters: { name: string; category: string }[] = [];
     }
     .card {
       padding: 1.25rem;
+    }
+    .survey-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
     .cta-buttons {
       flex-direction: column;
