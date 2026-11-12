@@ -1,6 +1,6 @@
 ---
 /**
- * POSTER ページ：海のピクトグラム辞典（HOW TO SEA）
+ * POSTER ページ：緊急SOS・安全ガイド（HOW TO SEA）
  * 看板のQRコードの行き先：/poster/#〇〇（〇〇は how-to-sea.ts の id）
  */
 import Layout from '../layouts/Layout.astro';
@@ -9,7 +9,7 @@ import { genres, reportItems, IMAGE_BASE } from '../data/how-to-sea.ts';
 const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as const;
 ---
 
-<Layout title="海のピクトグラム辞典 | 海のサインプロジェクト">
+<Layout title="緊急SOS・安全ガイド | 海のサインプロジェクト">
   <!-- 背景クリスタル浮遊要素 -->
   <div class="crystal-bg-container" aria-hidden="true">
     <div class="crystal crystal-1"></div>
@@ -18,8 +18,9 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   </div>
 
   <section class="page-header">
-    <h1>PICTOGRAM GUIDE</h1>
-    <p>海の安全ガイド・緊急通報サポート</p>
+    <h1>緊急SOS・安全ガイド</h1>
+    <p class="header-sub">海の安全ガイド・緊急通報サポート</p>
+    <p class="header-guide">急ぎの通報は下のボタンから、看板のマークを調べたい時は「ピクトグラム辞典」をタップしてください。</p>
   </section>
 
   <!-- モード切り替えタブ -->
@@ -363,9 +364,22 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   body { overflow-x: hidden; width: 100%; background-color: #f8fafc; margin: 0; }
   .container { width: 100%; max-width: var(--container-max-width); margin: 0 auto; padding: 0 clamp(0.75rem, 3vw, 1.5rem); position: relative; z-index: 1; }
 
-  .page-header { background: #075985; color: #fff; padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3rem, 6vw, 4.5rem); text-align: center; }
-  .page-header h1 { font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 900; margin: 0; }
-  .page-header p { color: #e0f2fe; font-size: clamp(0.9rem, 2.5vw, 1.15rem); margin-top: .4rem; font-weight: 600; }
+  .page-header { background: #075985; color: #fff; padding: clamp(2rem, 5vw, 3.5rem) 1rem clamp(3.25rem, 6vw, 4.75rem); text-align: center; }
+  .page-header h1 { font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 900; margin: 0; letter-spacing: 0.02em; }
+  .page-header .header-sub { color: #e0f2fe; font-size: clamp(0.95rem, 2.5vw, 1.15rem); margin: 0.4rem 0 0; font-weight: 700; }
+  .page-header .header-guide {
+    display: inline-block;
+    max-width: 680px;
+    margin: 0.75rem auto 0;
+    padding: 0.45rem 0.9rem;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: clamp(0.82rem, 2vw, 0.95rem);
+    line-height: 1.5;
+    font-weight: 600;
+  }
 
   /* タブ */
   .mode-nav-container { max-width: 720px; margin: clamp(-1.8rem, -3vw, -2.2rem) auto 1.25rem; padding: 0 1rem; position: relative; z-index: 20; }
