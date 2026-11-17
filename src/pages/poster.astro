@@ -193,6 +193,36 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       </section>
     ))}
   </div>
+
+  <!-- 緊急発信 確認＆カウントダウンモーダル -->
+  <section class="ss-panel ss-call-modal" id="call-confirm-modal" aria-labelledby="call-modal-title" hidden>
+    <div class="ss-panel__backdrop" id="call-modal-backdrop"></div>
+    <div class="ss-panel__box ss-call-modal__box">
+      
+      <!-- ステップ1：1テンポ確認画面 -->
+      <div id="call-step-confirm">
+        <span class="ss-call-modal__badge" id="call-modal-badge">緊急通報の確認</span>
+        <h2 class="ss-call-modal__title" id="call-modal-title">119番に発信しますか？</h2>
+        <p class="ss-call-modal__desc">間違い電話を防ぐため確認しています。<br>緊急時のみ「発信する」を押してください。</p>
+        <div class="ss-call-modal__actions">
+          <button type="button" class="ss-call-modal__btn is-primary" id="btn-call-proceed">発信する</button>
+          <button type="button" class="ss-call-modal__btn is-cancel" id="btn-call-cancel-1">キャンセル</button>
+        </div>
+      </div>
+
+      <!-- ステップ2：カウントダウン画面 -->
+      <div id="call-step-countdown" hidden>
+        <p class="ss-call-modal__title" id="call-countdown-title">119番へ発信準備中...</p>
+        <div class="ss-call-modal__timer" id="call-timer-num">3</div>
+        <p class="ss-call-modal__desc">秒後に電話アプリを起動します</p>
+        <div class="ss-call-modal__actions">
+          <button type="button" class="ss-call-modal__btn is-cancel" id="btn-call-cancel-2">発信をキャンセル</button>
+          <button type="button" class="ss-call-modal__btn is-skip" id="btn-call-now">待たずに今すぐ発信</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </Layout>
 
 <script>
@@ -236,6 +266,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
     function closeModal() {
       document.querySelectorAll('.ss-panel').forEach(p => {
+        if (p.id === 'call-confirm-modal') return;
         p.classList.remove('is-open');
         (p as HTMLElement).hidden = true;
       });
@@ -266,6 +297,133 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
       openModal(hash);
     }
 
+    // ========================================================================
+    // 119・118 誤発信防止（1テンポ確認 ＋ 3秒カウントダウン）
+    // ========================================================================
+    const callModal = document.getElementById("call-confirm-modal");
+    const callBackdrop = document.getElementById("call-modal-backdrop");
+    const stepConfirm = document.getElementById("call-step-confirm");
+    const stepCountdown = document.getElementById("call-step-countdown");
+    const callBadge = document.getElementById("call-modal-badge");
+    const callTitle = document.getElementById("call-modal-title");
+    const countdownTitle = document.getElementById("call-countdown-title");
+    const timerNum = document.getElementById("call-timer-num");
+    const btnProceed = document.getElementById("btn-call-proceed");
+    const btnCancel1 = document.getElementById("btn-call-cancel-1");
+    const btnCancel2 = document.getElementById("btn-call-cancel-2");
+    const btnCallNow = document.getElementById("btn-call-now");
+
+    let pendingTel = "";
+    let callTimer: number | null = null;
+    const COUNTDOWN_SEC = 3; // カウントダウン秒数
+
+    const CALL_META: Record<string, { label: string; colorClass: string }> = {
+      "119": { label: "救急・消防", colorClass: "is-119" },
+      "118": { label: "海上保安庁（海の事故）", colorClass: "is-118" },
+    };
+
+    function closeCallModal() {
+      if (callTimer !== null) {
+        window.clearInterval(callTimer);
+        callTimer = null;
+      }
+      if (callModal) {
+        callModal.classList.remove("is-open");
+        callModal.hidden = true;
+      }
+      document.body.style.overflow = "";
+    }
+
+    function executePhoneCall() {
+      const tel = pendingTel;
+      closeCallModal();
+      if (tel) {
+        window.location.href = `tel:${tel}`;
+      }
+    }
+
+    function openCallConfirm(tel: string) {
+      if (!callModal || !stepConfirm || !stepCountdown || !callTitle || !btnProceed) return;
+
+      closeModal();
+
+      if (callModal.parentElement !== document.body) {
+        document.body.appendChild(callModal);
+      }
+
+      pendingTel = tel;
+      const meta = CALL_META[tel] ?? { label: "緊急通報", colorClass: "is-119" };
+
+      callTitle.textContent = `${tel}番（${meta.label}）に発信しますか？`;
+      if (callBadge) {
+        callBadge.className = `ss-call-modal__badge ${meta.colorClass}`;
+      }
+      btnProceed.className = `ss-call-modal__btn is-primary ${meta.colorClass}`;
+
+      stepConfirm.hidden = false;
+      stepCountdown.hidden = true;
+
+      callModal.classList.add("is-open");
+      callModal.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function startCallCountdown() {
+      if (!stepConfirm || !stepCountdown || !countdownTitle || !timerNum) return;
+
+      let left = COUNTDOWN_SEC;
+      countdownTitle.textContent = `${pendingTel}番へ発信します`;
+      timerNum.textContent = String(left);
+      timerNum.className = `ss-call-modal__timer ${pendingTel === "118" ? "is-118" : "is-119"}`;
+
+      stepConfirm.hidden = true;
+      stepCountdown.hidden = false;
+
+      callTimer = window.setInterval(() => {
+        left -= 1;
+        timerNum.textContent = String(left);
+        if (left <= 0) {
+          executePhoneCall();
+        }
+      }, 1000);
+    }
+
+    document.querySelectorAll<HTMLAnchorElement>("a.id-119, a.id-118").forEach((link) => {
+      if (link.dataset.callGuardReady) return;
+      link.dataset.callGuardReady = "1";
+
+      link.addEventListener("click", (e) => {
+        if (link.classList.contains("is-disabled") || link.getAttribute("aria-disabled") === "true") {
+          e.preventDefault();
+          return;
+        }
+        const rawHref = link.getAttribute("href") || link.dataset.href || "";
+        const tel = rawHref.replace("tel:", "").trim();
+        if (tel === "119" || tel === "118") {
+          e.preventDefault();
+          openCallConfirm(tel);
+        }
+      });
+    });
+
+    if (callModal && !callModal.dataset.ready) {
+      callModal.dataset.ready = "1";
+      btnProceed?.addEventListener("click", startCallCountdown);
+      btnCancel1?.addEventListener("click", closeCallModal);
+      btnCancel2?.addEventListener("click", closeCallModal);
+      callBackdrop?.addEventListener("click", closeCallModal);
+      btnCallNow?.addEventListener("click", executePhoneCall);
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && callModal.classList.contains("is-open")) {
+          closeCallModal();
+        }
+      });
+    }
+
+    // ========================================================================
+    // 状況チェックフォーム制御
+    // ========================================================================
     const form = document.getElementById("report") as HTMLFormElement | null;
     if (!form || form.dataset.ready) return;
     form.dataset.ready = "1";
@@ -556,6 +714,90 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .ss-note { font-size: 0.85rem; color: #dc2626; margin-top: 0.75rem; font-weight: 700; }
   .ss-panel__back { display: block; width: 100%; margin-top: 1.25rem; padding: .75rem; border-radius: var(--radius-sm); border: none; text-align: center; background: #f1f5f9; color: #0f172a; font-weight: 800; cursor: pointer; font-size: 0.95rem; }
   .ss-panel__back:hover { background: #e2e8f0; }
+
+  /* ==========================================================================
+     緊急発信 確認＆カウントダウンモーダル
+     ========================================================================== */
+  .ss-call-modal__box {
+    max-width: 400px !important;
+    text-align: center;
+  }
+  .ss-call-modal__badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+    background: #dc2626;
+  }
+  .ss-call-modal__badge.is-118 {
+    background: #1d4ed8;
+  }
+  .ss-call-modal__title {
+    font-size: clamp(1.2rem, 3.5vw, 1.45rem);
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0 0 0.65rem;
+    border: none;
+    padding: 0;
+  }
+  .ss-call-modal__desc {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    font-weight: 600;
+  }
+  .ss-call-modal__timer {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0.5rem 0 0.75rem;
+    color: #dc2626;
+  }
+  .ss-call-modal__timer.is-118 {
+    color: #1d4ed8;
+  }
+  .ss-call-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .ss-call-modal__btn {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .ss-call-modal__btn:active {
+    transform: scale(0.98);
+  }
+  .ss-call-modal__btn.is-primary.is-119 {
+    background: #dc2626;
+    color: #ffffff;
+  }
+  .ss-call-modal__btn.is-primary.is-118 {
+    background: #1d4ed8;
+    color: #ffffff;
+  }
+  .ss-call-modal__btn.is-cancel {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+  .ss-call-modal__btn.is-skip {
+    background: transparent;
+    color: #64748b;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    padding: 0.5rem;
+  }
 
   @media (max-width: 480px) {
     .ss-tel { grid-template-columns: 1fr; }
