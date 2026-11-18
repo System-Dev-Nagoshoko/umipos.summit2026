@@ -83,22 +83,22 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	// メディアごとの設定（統合した /api/rss に接続）
+	// 静的ビルド環境でも確実に動くよう、メディアごとに独立したAPIパスを指定
 	const MEDIA_CONFIG = {
 		blog: {
-			apiUrl: '/api/rss?type=blog',
+			apiUrl: '/api/rss',
 			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
 			archiveLabel: 'ブログ一覧を見る ↗',
 			filterKeywords: [] // フィルタなし
 		},
 		note: {
-			apiUrl: '/api/rss?type=note',
+			apiUrl: '/api/rss-note',
 			archiveUrl: 'https://note.com/umi_sign_project',
 			archiveLabel: 'note一覧を見る ↗',
 			filterKeywords: [] // フィルタなし
 		},
 		youtube: {
-			apiUrl: '/api/rss?type=youtube',
+			apiUrl: '/api/rss-youtube',
 			archiveUrl: 'https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA',
 			archiveLabel: 'YouTubeチャンネルへ ↗',
 			// タイトルまたは説明文にこのキーワードが含まれる動画のみ抽出
@@ -132,37 +132,49 @@ import Layout from '../layouts/Layout.astro';
 
 		try {
 			const res = await fetch(config.apiUrl);
-			if (!res.ok) throw new Error('ネットワーク応答エラー');
+			if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
 			const xmlText = await res.text();
 
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
+			if (xmlDoc.querySelector("parsererror")) {
+				throw new Error('XMLの解析に失敗しました');
+			}
+
 			// RSS 2.0 (<item>) と Atom/YouTube (<entry>) の両方に対応
-			const isAtom = xmlDoc.querySelectorAll("entry").length > 0;
-			const rawItems = Array.from(xmlDoc.querySelectorAll(isAtom ? "entry" : "item"));
+			const entries = Array.from(xmlDoc.getElementsByTagName("entry"));
+			const items = Array.from(xmlDoc.getElementsByTagName("item"));
+			const isAtom = entries.length > 0;
+			const rawItems = isAtom ? entries : items;
 
 			const parsedItems = rawItems.map((item) => {
-				const title = item.querySelector("title")?.textContent || '無題';
+				const title = item.getElementsByTagName("title")[0]?.textContent?.trim() || '無題';
 				
-				// リンクの取得（Atom形式は <link href="..."> 属性）
+				// リンクの取得（YouTubeは rel="alternate" の href 属性を確実に取得）
 				let link = '#';
 				if (isAtom) {
-					link = item.querySelector("link")?.getAttribute("href") || '#';
+					const links = Array.from(item.getElementsByTagName("link"));
+					const altLink = links.find(l => l.getAttribute("rel") === "alternate") || links[0];
+					link = altLink?.getAttribute("href") || '#';
 				} else {
-					link = item.querySelector("link")?.textContent || '#';
+					link = item.getElementsByTagName("link")[0]?.textContent?.trim() || '#';
 				}
 
 				// 日付の取得（YouTubeは <published>）
-				const pubDateStr = item.querySelector(isAtom ? "published" : "pubDate")?.textContent || '';
+				const pubDateStr = (isAtom 
+					? item.getElementsByTagName("published")[0]?.textContent 
+					: item.getElementsByTagName("pubDate")[0]?.textContent) || '';
+				
 				const dateObj = new Date(pubDateStr);
 				const formattedDate = !isNaN(dateObj.getTime())
 					? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
 					: '';
 
-				// 検索フィルタ用のテキスト（タイトル＋概要欄）
-				const description = item.querySelector("description")?.textContent || 
-				                    item.getElementsByTagName("media:description")[0]?.textContent || '';
+				// 検索フィルタ用のテキスト（名前空間付き media:description も確実に取得）
+				const descNormal = item.getElementsByTagName("description")[0]?.textContent || '';
+				const descMedia = item.getElementsByTagNameNS("*", "description")[0]?.textContent || '';
+				const description = `${descNormal} ${descMedia}`;
 
 				return { title, link, date: formattedDate, fullText: `${title} ${description}` };
 			});
@@ -179,7 +191,7 @@ import Layout from '../layouts/Layout.astro';
 			renderPosts(topPosts, container);
 
 		} catch (error) {
-			console.error('RSS読み込みエラー:', error);
+			console.error(`[${type}] RSS読み込みエラー:`, error);
 			container.innerHTML = '<p class="no-posts">情報の読み込みに失敗しました。</p>';
 		}
 	}
@@ -200,20 +212,22 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	// タブボタンのイベント登録
-	document.querySelectorAll('.tab-btn').forEach((btn) => {
-		btn.addEventListener('click', (e) => {
-			const target = e.currentTarget as HTMLButtonElement;
-			const source = target.dataset.source as MediaType;
-			if (!source) return;
+	function initTabs() {
+		const buttons = document.querySelectorAll('.tab-btn');
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const source = (btn as HTMLButtonElement).dataset.source as MediaType;
+				if (!source) return;
 
-			document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-			target.classList.add('active');
+				buttons.forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
 
-			loadMedia(source);
+				loadMedia(source);
+			});
 		});
-	});
+	}
 
-	// 初期表示（明日の地図）
+	initTabs();
 	loadMedia('blog');
 </script>
 
