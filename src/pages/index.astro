@@ -20,6 +20,33 @@ import Layout from '../layouts/Layout.astro';
 						沖縄の海を守る「海のサインプロジェクト」始動！
 					</p>
 				</div>
+
+				<!-- ▼ 追加：カウントダウンタイマー ▼ -->
+				<div class="countdown-box" id="countdown-container">
+					<div class="countdown-label" id="countdown-title">🏆 うみぽす甲子園2026 決勝大会まで</div>
+					<div class="countdown-grid" id="countdown-grid">
+						<div class="time-unit">
+							<span class="time-num" id="cd-days">--</span>
+							<span class="time-text">DAYS</span>
+						</div>
+						<span class="time-sep">:</span>
+						<div class="time-unit">
+							<span class="time-num" id="cd-hours">--</span>
+							<span class="time-text">HOURS</span>
+						</div>
+						<span class="time-sep">:</span>
+						<div class="time-unit">
+							<span class="time-num" id="cd-minutes">--</span>
+							<span class="time-text">MINS</span>
+						</div>
+						<span class="time-sep">:</span>
+						<div class="time-unit">
+							<span class="time-num" id="cd-seconds">--</span>
+							<span class="time-text">SECS</span>
+						</div>
+					</div>
+				</div>
+				<!-- ▲ 追加ここまで ▲ -->
 			</div>
 		</section>
 
@@ -48,6 +75,39 @@ import Layout from '../layouts/Layout.astro';
 
 					<div class="info-box">
 						<p>📢 今後も活動の様子や制作の裏側をブログやSNSでお届けしていきます。ぜひチェック＆応援よろしくお願いいたします！</p>
+					</div>
+				</div>
+
+				<div class="card featured-video-card">
+					<div class="video-badge-row">
+						<span class="video-tag">🎬 PICK UP MOVIE</span>
+						<span class="video-sub">うみぽす甲子園 公式チャンネル公開動画</span>
+					</div>
+					<h2>プロジェクト紹介・活動動画をチェック！</h2>
+					<p class="video-desc">
+						私たちの取り組みや想いを動画で分かりやすく紹介しています。ぜひご覧ください！
+					</p>
+
+					<div class="video-wrapper">
+						<iframe
+							src="https://www.youtube-nocookie.com/embed/E9Af2iGSPHk?rel=0"
+							title="海のサインプロジェクト 紹介動画"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+							loading="lazy"
+						></iframe>
+					</div>
+
+					<div class="video-actions">
+						<a
+							href="https://www.youtube.com/watch?v=E9Af2iGSPHk"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="youtube-watch-btn"
+						>
+							YouTubeで高評価・コメントする ↗
+						</a>
 					</div>
 				</div>
 
@@ -83,32 +143,76 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	// 静的ビルド環境でも確実に動くよう、メディアごとに独立したAPIパスを指定
+	// ==========================================
+	// 1. カウントダウン設定（目標日時をここで変更）
+	// ==========================================
+	const TARGET_DATE_STR = '2026-12-13T10:00:00+09:00'; // 例: 2026年12月13日 10:00（日本時間）
+	const EVENT_ENDED_TEXT = '🎉 決勝大会開催中 / 応援ありがとうございました！';
+
+	function initCountdown() {
+		const targetTime = new Date(TARGET_DATE_STR).getTime();
+		const daysEl = document.getElementById('cd-days');
+		const hoursEl = document.getElementById('cd-hours');
+		const minutesEl = document.getElementById('cd-minutes');
+		const secondsEl = document.getElementById('cd-seconds');
+		const gridEl = document.getElementById('countdown-grid');
+		const titleEl = document.getElementById('countdown-title');
+
+		if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+		function updateTimer() {
+			const now = Date.now();
+			const diff = targetTime - now;
+
+			if (diff <= 0) {
+				if (titleEl) titleEl.textContent = EVENT_ENDED_TEXT;
+				if (gridEl) gridEl.style.display = 'none';
+				return;
+			}
+
+			const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+			const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+			const minutes = Math.floor((diff / 1000 / 60) % 60);
+			const seconds = Math.floor((diff / 1000) % 60);
+
+			daysEl!.textContent = String(days).padStart(2, '0');
+			hoursEl!.textContent = String(hours).padStart(2, '0');
+			minutesEl!.textContent = String(minutes).padStart(2, '0');
+			secondsEl!.textContent = String(seconds).padStart(2, '0');
+		}
+
+		updateTimer();
+		setInterval(updateTimer, 1000);
+	}
+
+	initCountdown();
+
+	// ==========================================
+	// 2. 最新活動メディア（RSS）読み込み設定
+	// ==========================================
 	const MEDIA_CONFIG = {
 		blog: {
 			apiUrl: '/api/rss',
 			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
 			archiveLabel: 'ブログ一覧を見る ↗',
-			filterKeywords: [] // フィルタなし
+			filterKeywords: []
 		},
 		note: {
 			apiUrl: '/api/rss-note',
 			archiveUrl: 'https://note.com/umi_sign_project',
 			archiveLabel: 'note一覧を見る ↗',
-			filterKeywords: [] // フィルタなし
+			filterKeywords: []
 		},
 		youtube: {
 			apiUrl: '/api/rss-youtube',
 			archiveUrl: 'https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA',
 			archiveLabel: 'YouTubeチャンネルへ ↗',
-			// タイトルまたは説明文にこのキーワードが含まれる動画のみ抽出
 			filterKeywords: ['海のサインプロジェクト', '海のサイン']
 		}
 	};
 
 	type MediaType = keyof typeof MEDIA_CONFIG;
 
-	// キャッシュ用（タブ切り替えのたびに再通信しないようにする）
 	const cache: Partial<Record<MediaType, { title: string; link: string; date: string }[]>> = {};
 
 	async function loadMedia(type: MediaType) {
@@ -122,7 +226,6 @@ import Layout from '../layouts/Layout.astro';
 			archiveLink.textContent = config.archiveLabel;
 		}
 
-		// キャッシュがあれば即座に描画
 		if (cache[type]) {
 			renderPosts(cache[type]!, container);
 			return;
@@ -142,7 +245,6 @@ import Layout from '../layouts/Layout.astro';
 				throw new Error('XMLの解析に失敗しました');
 			}
 
-			// RSS 2.0 (<item>) と Atom/YouTube (<entry>) の両方に対応
 			const entries = Array.from(xmlDoc.getElementsByTagName("entry"));
 			const items = Array.from(xmlDoc.getElementsByTagName("item"));
 			const isAtom = entries.length > 0;
@@ -151,7 +253,6 @@ import Layout from '../layouts/Layout.astro';
 			const parsedItems = rawItems.map((item) => {
 				const title = item.getElementsByTagName("title")[0]?.textContent?.trim() || '無題';
 				
-				// リンクの取得（YouTubeは rel="alternate" の href 属性を確実に取得）
 				let link = '#';
 				if (isAtom) {
 					const links = Array.from(item.getElementsByTagName("link"));
@@ -161,7 +262,6 @@ import Layout from '../layouts/Layout.astro';
 					link = item.getElementsByTagName("link")[0]?.textContent?.trim() || '#';
 				}
 
-				// 日付の取得（YouTubeは <published>）
 				const pubDateStr = (isAtom 
 					? item.getElementsByTagName("published")[0]?.textContent 
 					: item.getElementsByTagName("pubDate")[0]?.textContent) || '';
@@ -171,7 +271,6 @@ import Layout from '../layouts/Layout.astro';
 					? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
 					: '';
 
-				// 検索フィルタ用のテキスト（名前空間付き media:description も確実に取得）
 				const descNormal = item.getElementsByTagName("description")[0]?.textContent || '';
 				const descMedia = item.getElementsByTagNameNS("*", "description")[0]?.textContent || '';
 				const description = `${descNormal} ${descMedia}`;
@@ -179,7 +278,6 @@ import Layout from '../layouts/Layout.astro';
 				return { title, link, date: formattedDate, fullText: `${title} ${description}` };
 			});
 
-			// キーワードフィルタリング（YouTube用）
 			const filteredItems = config.filterKeywords.length > 0
 				? parsedItems.filter(post => 
 					config.filterKeywords.some(keyword => post.fullText.includes(keyword))
@@ -211,7 +309,6 @@ import Layout from '../layouts/Layout.astro';
 		`).join('');
 	}
 
-	// タブボタンのイベント登録
 	function initTabs() {
 		const buttons = document.querySelectorAll('.tab-btn');
 		buttons.forEach((btn) => {
@@ -236,7 +333,7 @@ import Layout from '../layouts/Layout.astro';
 	.hero {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
-		padding: 3.5rem 1.25rem 5rem;
+		padding: 3.5rem 1.25rem 5.25rem;
 		text-align: center;
 		position: relative;
 	}
@@ -313,6 +410,64 @@ import Layout from '../layouts/Layout.astro';
 		letter-spacing: 0.03em;
 		margin-top: 0.25rem;
 		text-shadow: 0 1px 4px rgba(8, 47, 73, 0.5);
+	}
+
+	/* カウントダウンUI */
+	.countdown-box {
+		margin-top: 1.75rem;
+		background: rgba(8, 47, 73, 0.45);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border: 1px solid rgba(125, 211, 252, 0.35);
+		border-radius: 16px;
+		padding: 1rem 1.75rem 1.15rem;
+		box-shadow: 0 8px 24px rgba(8, 47, 73, 0.35);
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.65rem;
+	}
+	.countdown-label {
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #bae6fd;
+		letter-spacing: 0.05em;
+	}
+	.countdown-grid {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	.time-unit {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		border-radius: 10px;
+		min-width: 3.6rem;
+		padding: 0.45rem 0.5rem;
+	}
+	.time-num {
+		font-size: 1.65rem;
+		font-weight: 900;
+		line-height: 1.1;
+		color: #ffffff;
+		font-variant-numeric: tabular-nums;
+		text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+	}
+	.time-text {
+		font-size: 0.65rem;
+		font-weight: 700;
+		color: #7dd3fc;
+		letter-spacing: 0.08em;
+		margin-top: 0.2rem;
+	}
+	.time-sep {
+		font-size: 1.35rem;
+		font-weight: 800;
+		color: rgba(255, 255, 255, 0.55);
+		margin-bottom: 0.8rem;
 	}
 
 	.section {
@@ -413,6 +568,85 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 700;
 		text-align: center;
 		line-height: 1.6;
+	}
+
+	/* 注目YouTube動画カード */
+	.featured-video-card {
+		background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 32%);
+		border: 2px solid #7dd3fc;
+		box-shadow: 0 14px 32px -6px rgba(2, 132, 199, 0.14);
+	}
+	.video-badge-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+		margin-bottom: 0.85rem;
+	}
+	.video-tag {
+		display: inline-flex;
+		align-items: center;
+		background: #0284c7;
+		color: #ffffff;
+		font-weight: 800;
+		font-size: 0.78rem;
+		letter-spacing: 0.04em;
+		padding: 0.32rem 0.85rem;
+		border-radius: 9999px;
+		box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+	}
+	.video-sub {
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #0369a1;
+	}
+	.video-desc {
+		color: #475569;
+		font-size: 0.95rem;
+		line-height: 1.7;
+		margin-bottom: 1.35rem;
+	}
+	.video-wrapper {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 14px;
+		overflow: hidden;
+		background: #0f172a;
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+		border: 1px solid #bae6fd;
+	}
+	.video-wrapper iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.video-actions {
+		margin-top: 1.25rem;
+		display: flex;
+		justify-content: center;
+	}
+	.youtube-watch-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+		background: #dc2626;
+		color: #ffffff;
+		font-weight: 700;
+		font-size: 0.9rem;
+		padding: 0.7rem 1.5rem;
+		border-radius: 9999px;
+		text-decoration: none;
+		box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+		transition: all 0.2s ease;
+	}
+	.youtube-watch-btn:hover {
+		background: #b91c1c;
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
 	}
 
 	/* ヘッダー＆タブ切り替えUI */
@@ -525,11 +759,29 @@ import Layout from '../layouts/Layout.astro';
 
 	@media (max-width: 640px) {
 		.hero {
-			padding: 2.75rem 1rem 4.5rem;
+			padding: 2.75rem 1rem 4.75rem;
 		}
 		.hero-catch-title {
 			font-size: 1.95rem;
 			line-height: 1.3;
+		}
+		.countdown-box {
+			padding: 0.85rem 1rem 1rem;
+			width: 100%;
+			max-width: 340px;
+		}
+		.countdown-grid {
+			gap: 0.35rem;
+		}
+		.time-unit {
+			min-width: 3.1rem;
+			padding: 0.4rem 0.3rem;
+		}
+		.time-num {
+			font-size: 1.35rem;
+		}
+		.time-sep {
+			font-size: 1.1rem;
 		}
 		.card {
 			padding: 1.4rem 1rem;
