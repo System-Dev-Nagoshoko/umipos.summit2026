@@ -47,25 +47,33 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 
 					<div class="info-box">
-						<p>📢 今後も活動の様子や制作の裏側をブログでお届けしていきます。ぜひチェック＆応援よろしくお願いいたします！</p>
+						<p>📢 今後も活動の様子や制作の裏側をブログやSNSでお届けしていきます。ぜひチェック＆応援よろしくお願いいたします！</p>
 					</div>
 				</div>
 
 				<div class="card blog-card">
 					<div class="blog-header">
-						<h2>📝 最新活動ブログ（明日の地図）</h2>
+						<h2>📢 最新活動メディア</h2>
+						
+						<div class="tab-controls" role="tablist">
+							<button type="button" class="tab-btn active" data-source="blog">明日の地図</button>
+							<button type="button" class="tab-btn" data-source="note">note</button>
+							<button type="button" class="tab-btn" data-source="youtube">YouTube</button>
+						</div>
+
 						<a 
+							id="external-archive-link"
 							href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/" 
 							target="_blank" 
 							rel="noopener noreferrer" 
 							class="all-posts-link"
 						>
-							ブログ一覧を見る ↗
+							一覧を見る ↗
 						</a>
 					</div>
 
 					<div id="blog-list-container" class="blog-list">
-						<p class="loading-text">最新記事を読み込み中...</p>
+						<p class="loading-text">最新情報を読み込み中...</p>
 					</div>
 				</div>
 
@@ -75,54 +83,142 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	async function fetchLatestPosts() {
+	// メディアごとの設定
+	const MEDIA_CONFIG = {
+		blog: {
+			apiUrl: '/api/rss',
+			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
+			archiveLabel: 'ブログ一覧を見る ↗',
+			filterKeywords: [] // フィルタなし
+		},
+		note: {
+			apiUrl: '/api/media-rss?type=note',
+			archiveUrl: 'https://note.com/umi_sign_project',
+			archiveLabel: 'note一覧を見る ↗',
+			filterKeywords: [] // フィルタなし
+		},
+		youtube: {
+			apiUrl: '/api/media-rss?type=youtube',
+			archiveUrl: 'https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA',
+			archiveLabel: 'YouTubeチャンネルへ ↗',
+			// タイトルまたは説明文にこのキーワードが含まれる動画のみ抽出
+			filterKeywords: ['海のサインプロジェクト', '海のサイン']
+		}
+	};
+
+	type MediaType = keyof typeof MEDIA_CONFIG;
+
+	// キャッシュ用（タブ切り替えのたびに再通信しないようにする）
+	const cache: Partial<Record<MediaType, { title: string; link: string; date: string }[]>> = {};
+
+	async function loadMedia(type: MediaType) {
 		const container = document.getElementById('blog-list-container');
+		const archiveLink = document.getElementById('external-archive-link') as HTMLAnchorElement | null;
 		if (!container) return;
 
+		const config = MEDIA_CONFIG[type];
+		if (archiveLink) {
+			archiveLink.href = config.archiveUrl;
+			archiveLink.textContent = config.archiveLabel;
+		}
+
+		// キャッシュがあれば即座に描画
+		if (cache[type]) {
+			renderPosts(cache[type]!, container);
+			return;
+		}
+
+		container.innerHTML = '<p class="loading-text">最新情報を読み込み中...</p>';
+
 		try {
-			const res = await fetch('/api/rss');
+			const res = await fetch(config.apiUrl);
 			if (!res.ok) throw new Error('ネットワーク応答エラー');
 			const xmlText = await res.text();
 
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-			const items = Array.from(xmlDoc.querySelectorAll("item"));
 
-			if (items.length > 0) {
-				const postsHtml = items.slice(0, 3).map((item) => {
-					const title = item.querySelector("title")?.textContent || '無題';
-					const link = item.querySelector("link")?.textContent || '#';
-					const pubDate = item.querySelector("pubDate")?.textContent || '';
+			// RSS 2.0 (<item>) と Atom/YouTube (<entry>) の両方に対応
+			const isAtom = xmlDoc.querySelectorAll("entry").length > 0;
+			const rawItems = Array.from(xmlDoc.querySelectorAll(isAtom ? "entry" : "item"));
 
-					const dateObj = new Date(pubDate);
-					const formattedDate = !isNaN(dateObj.getTime())
-						? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
-						: '';
+			const parsedItems = rawItems.map((item) => {
+				const title = item.querySelector("title")?.textContent || '無題';
+				
+				// リンクの取得（Atom形式は <link href="..."> 属性）
+				let link = '#';
+				if (isAtom) {
+					link = item.querySelector("link")?.getAttribute("href") || '#';
+				} else {
+					link = item.querySelector("link")?.textContent || '#';
+				}
 
-					return `
-						<a href="${link}" target="_blank" rel="noopener noreferrer" class="blog-item">
-							<div class="blog-date">${formattedDate}</div>
-							<div class="blog-title">${title}</div>
-							<div class="blog-arrow">↗</div>
-						</a>
-					`;
-				}).join('');
+				// 日付の取得（YouTubeは <published>）
+				const pubDateStr = item.querySelector(isAtom ? "published" : "pubDate")?.textContent || '';
+				const dateObj = new Date(pubDateStr);
+				const formattedDate = !isNaN(dateObj.getTime())
+					? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
+					: '';
 
-				container.innerHTML = postsHtml;
-			} else {
-				container.innerHTML = '<p class="no-posts">最新記事はありません。</p>';
-			}
+				// 検索フィルタ用のテキスト（タイトル＋概要欄）
+				const description = item.querySelector("description")?.textContent || 
+				                    item.getElementsByTagName("media:description")[0]?.textContent || '';
+
+				return { title, link, date: formattedDate, fullText: `${title} ${description}` };
+			});
+
+			// キーワードフィルタリング（YouTube用）
+			const filteredItems = config.filterKeywords.length > 0
+				? parsedItems.filter(post => 
+					config.filterKeywords.some(keyword => post.fullText.includes(keyword))
+				  )
+				: parsedItems;
+
+			const topPosts = filteredItems.slice(0, 3).map(({ title, link, date }) => ({ title, link, date }));
+			cache[type] = topPosts;
+			renderPosts(topPosts, container);
+
 		} catch (error) {
 			console.error('RSS読み込みエラー:', error);
-			container.innerHTML = '<p class="no-posts">記事の読み込みに失敗しました。</p>';
+			container.innerHTML = '<p class="no-posts">情報の読み込みに失敗しました。</p>';
 		}
 	}
 
-	fetchLatestPosts();
+	function renderPosts(posts: { title: string; link: string; date: string }[], container: HTMLElement) {
+		if (posts.length === 0) {
+			container.innerHTML = '<p class="no-posts">該当する投稿はまだありません。</p>';
+			return;
+		}
+
+		container.innerHTML = posts.map((post) => `
+			<a href="${post.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
+				<div class="blog-date">${post.date}</div>
+				<div class="blog-title">${post.title}</div>
+				<div class="blog-arrow">↗</div>
+			</a>
+		`).join('');
+	}
+
+	// タブボタンのイベント登録
+	document.querySelectorAll('.tab-btn').forEach((btn) => {
+		btn.addEventListener('click', (e) => {
+			const target = e.currentTarget as HTMLButtonElement;
+			const source = target.dataset.source as MediaType;
+			if (!source) return;
+
+			document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+			target.classList.add('active');
+
+			loadMedia(source);
+		});
+	});
+
+	// 初期表示（明日の地図）
+	loadMedia('blog');
 </script>
 
 <style>
-	/* ヒーローエリア: 他ページと高さを統一しコンパクト化 */
+	/* ヒーローエリア */
 	.hero {
 		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
@@ -184,13 +280,8 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 2px 8px rgba(8, 47, 73, 0.6);
 	}
 
-	.line-from {
-		color: #f0f9ff;
-	}
-
-	.line-to {
-		color: #ffffff;
-	}
+	.line-from { color: #f0f9ff; }
+	.line-to { color: #ffffff; }
 
 	.highlight-aqua {
 		position: relative;
@@ -310,19 +401,49 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.6;
 	}
 
+	/* ヘッダー＆タブ切り替えUI */
 	.blog-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 1.25rem;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 0.85rem;
 	}
 	.blog-header h2 {
 		margin-bottom: 0;
 		border-bottom: none;
 		padding-bottom: 0;
 	}
+
+	.tab-controls {
+		display: inline-flex;
+		background: #f1f5f9;
+		padding: 0.25rem;
+		border-radius: 10px;
+		border: 1px solid #e2e8f0;
+		gap: 0.25rem;
+	}
+	.tab-btn {
+		background: transparent;
+		border: none;
+		padding: 0.45rem 0.95rem;
+		border-radius: 7px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: #64748b;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	.tab-btn:hover {
+		color: #0f172a;
+	}
+	.tab-btn.active {
+		background: #ffffff;
+		color: #0284c7;
+		box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+	}
+
 	.all-posts-link {
 		font-size: 0.85rem;
 		color: #0284c7;
@@ -401,6 +522,16 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.card h2 {
 			font-size: 1.25rem;
+		}
+		.tab-controls {
+			width: 100%;
+			justify-content: space-between;
+		}
+		.tab-btn {
+			flex: 1;
+			text-align: center;
+			padding: 0.45rem 0.5rem;
+			font-size: 0.8rem;
 		}
 		:global(.blog-item) {
 			flex-direction: column;
