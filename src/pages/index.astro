@@ -68,7 +68,7 @@ import Layout from '../layouts/Layout.astro';
 							rel="noopener noreferrer" 
 							class="all-posts-link"
 						>
-							一覧を見る ↗
+							ブログ一覧を見る ↗
 						</a>
 					</div>
 
@@ -83,22 +83,22 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	// メディアごとの設定
+	// メディアごとの設定（統合した /api/rss に接続）
 	const MEDIA_CONFIG = {
 		blog: {
-			apiUrl: '/api/rss',
+			apiUrl: '/api/rss?type=blog',
 			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
 			archiveLabel: 'ブログ一覧を見る ↗',
 			filterKeywords: [] // フィルタなし
 		},
 		note: {
-			apiUrl: '/api/media-rss?type=note',
+			apiUrl: '/api/rss?type=note',
 			archiveUrl: 'https://note.com/umi_sign_project',
 			archiveLabel: 'note一覧を見る ↗',
 			filterKeywords: [] // フィルタなし
 		},
 		youtube: {
-			apiUrl: '/api/media-rss?type=youtube',
+			apiUrl: '/api/rss?type=youtube',
 			archiveUrl: 'https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA',
 			archiveLabel: 'YouTubeチャンネルへ ↗',
 			// タイトルまたは説明文にこのキーワードが含まれる動画のみ抽出
