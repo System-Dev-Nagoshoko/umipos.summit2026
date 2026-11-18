@@ -21,7 +21,7 @@ import Layout from '../layouts/Layout.astro';
 					</p>
 				</div>
 
-				<!-- ▼ 追加：カウントダウンタイマー ▼ -->
+				<!-- カウントダウンタイマー（2026年11月21日 10:00） -->
 				<div class="countdown-box" id="countdown-container">
 					<div class="countdown-label" id="countdown-title">🏆 うみぽす甲子園2026 決勝大会まで</div>
 					<div class="countdown-grid" id="countdown-grid">
@@ -46,13 +46,13 @@ import Layout from '../layouts/Layout.astro';
 						</div>
 					</div>
 				</div>
-				<!-- ▲ 追加ここまで ▲ -->
 			</div>
 		</section>
 
 		<section class="section">
 			<div class="container flex-container">
 				
+				<!-- チーム紹介カード -->
 				<div class="card main-card">
 					<div class="status-tag">TEAM PROFILE</div>
 					<h2>はじめまして！「海のサインプロジェクト」です</h2>
@@ -78,20 +78,21 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
+				<!-- 最終発表 YouTube動画カード -->
 				<div class="card featured-video-card">
 					<div class="video-badge-row">
-						<span class="video-tag">🎬 PICK UP MOVIE</span>
-						<span class="video-sub">うみぽす甲子園 公式チャンネル公開動画</span>
+						<span class="video-tag">🏆 FINAL PRESENTATION</span>
+						<span class="video-sub">うみぽす甲子園2026 最終発表動画</span>
 					</div>
-					<h2>プロジェクト紹介・活動動画をチェック！</h2>
+					<h2>最終発表はこちら</h2>
 					<p class="video-desc">
-						私たちの取り組みや想いを動画で分かりやすく紹介しています。ぜひご覧ください！
+						私たちが取り組んできた「伝わる看板」の制作成果と想いをまとめた最終発表です。ぜひご覧ください！
 					</p>
 
 					<div class="video-wrapper">
 						<iframe
 							src="https://www.youtube-nocookie.com/embed/E9Af2iGSPHk?rel=0"
-							title="海のサインプロジェクト 紹介動画"
+							title="海のサインプロジェクト 最終発表"
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 							referrerpolicy="strict-origin-when-cross-origin"
 							allowfullscreen
@@ -111,6 +112,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 				</div>
 
+				<!-- 最新活動メディア（タブ切り替え） -->
 				<div class="card blog-card">
 					<div class="blog-header">
 						<h2>📢 最新活動メディア</h2>
@@ -144,9 +146,9 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	// ==========================================
-	// 1. カウントダウン設定（目標日時をここで変更）
+	// 1. カウントダウン設定（2026年11月21日 午前10:00）
 	// ==========================================
-	const TARGET_DATE_STR = '2026-12-13T10:00:00+09:00'; // 例: 2026年12月13日 10:00（日本時間）
+	const TARGET_DATE_STR = '2026-11-21T10:00:00+09:00';
 	const EVENT_ENDED_TEXT = '🎉 決勝大会開催中 / 応援ありがとうございました！';
 
 	function initCountdown() {
@@ -570,7 +572,7 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.6;
 	}
 
-	/* 注目YouTube動画カード */
+	/* 最終発表 YouTube動画カード */
 	.featured-video-card {
 		background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 32%);
 		border: 2px solid #7dd3fc;
