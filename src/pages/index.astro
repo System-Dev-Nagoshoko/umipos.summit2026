@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
+<Layout title="【最終発表会】海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
 		<section class="hero">
 			<div class="container hero-inner">
 				<div class="badge">
 					<span class="badge-dot"></span>
-					うみぽす甲子園2026 ファイナリスト
+					うみぽす甲子園2026 最終発表会 ファイナリスト
 				</div>
 				
 				<div class="hero-text-wrap">
@@ -17,13 +17,16 @@ import Layout from '../layouts/Layout.astro';
 						<span class="line-to">「<span class="highlight-aqua">伝わる看板</span>」へ</span>
 					</h1>
 					<p class="hero-caption">
-						沖縄の海を守る「海のサインプロジェクト」始動！
+						沖縄・名護の海を守る「海のサインプロジェクト」最終発表特設ページ
 					</p>
 				</div>
 
-				<!-- カウントダウンタイマー（2026年11月21日 10:00） -->
+				<!-- 最終発表会カウントダウン -->
 				<div class="countdown-box" id="countdown-container">
-					<div class="countdown-label" id="countdown-title">🏆 うみぽす甲子園2026 決勝大会まで</div>
+					<div class="countdown-header">
+						<span class="countdown-label" id="countdown-title">🏆 うみぽす甲子園2026 最終発表会まで</span>
+						<span class="countdown-date-note">2026年11月21日(土) 10:00 START</span>
+					</div>
 					<div class="countdown-grid" id="countdown-grid">
 						<div class="time-unit">
 							<span class="time-num" id="cd-days">--</span>
@@ -52,33 +55,7 @@ import Layout from '../layouts/Layout.astro';
 		<section class="section">
 			<div class="container flex-container">
 				
-				<!-- チーム紹介カード -->
-				<div class="card main-card">
-					<div class="status-tag">TEAM PROFILE</div>
-					<h2>はじめまして！「海のサインプロジェクト」です</h2>
-					<p class="desc">
-						私たちは、「見る看板ではなく、伝わる看板へ」をテーマに、誰もが安心して楽しめる名護の海を目指して活動している高校生チームです。
-					</p>
-
-					<div class="outline-box">
-						<h3>🌊 なぜこの活動を始めたのか？</h3>
-						<p class="box-desc">
-							普段、何気なく見ている海岸の注意看板。実は「文字が小さくて読みづらい」「どこに危険があるのか伝わりにくい」といった課題があります。<br />
-							そこで私たちは、実際に名護市の海岸を調査！子どもからお年寄りまで、国籍や年齢を問わず一目で危険が「伝わる」看板デザインを模索・制作しています。
-						</p>
-					</div>
-
-					<div class="message-box">
-						<h3>💡 私たちの想い</h3>
-						<p>「名護市の美しい海を、みんながもっと安全に、笑顔で楽しめる場所にしたい」<br />そんな想いを込めて、メンバー一丸となって活動中です！</p>
-					</div>
-
-					<div class="info-box">
-						<p>📢 今後も活動の様子や制作の裏側をブログやSNSでお届けしていきます。ぜひチェック＆応援よろしくお願いいたします！</p>
-					</div>
-				</div>
-
-				<!-- 最終発表 YouTube動画カード -->
+				<!-- 1. 最優先配置：最終発表動画カード -->
 				<div class="card featured-video-card">
 					<div class="video-badge-row">
 						<span class="video-tag">🏆 FINAL PRESENTATION</span>
@@ -86,7 +63,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<h2>最終発表はこちら</h2>
 					<p class="video-desc">
-						私たちが取り組んできた「伝わる看板」の制作成果と想いをまとめた最終発表です。ぜひご覧ください！
+						私たちが名護の海岸調査から制作まで取り組んできた「伝わる看板」の集大成です。ぜひ動画でプレゼンテーションをご覧ください！
 					</p>
 
 					<div class="video-wrapper">
@@ -107,15 +84,59 @@ import Layout from '../layouts/Layout.astro';
 							rel="noopener noreferrer"
 							class="youtube-watch-btn"
 						>
-							YouTubeで高評価・コメントする ↗
+							YouTubeで高評価・応援コメントする ↗
+						</a>
+						<a
+							href="https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="channel-sub-btn"
+						>
+							公式チャンネルを見る ↗
 						</a>
 					</div>
 				</div>
 
-				<!-- 最新活動メディア（タブ切り替え） -->
+				<!-- 2. 発表プレゼン要約＆チーム紹介カード -->
+				<div class="card main-card">
+					<div class="status-tag">PRESENTATION SUMMARY</div>
+					<h2>「海のサインプロジェクト」発表のポイント</h2>
+					<p class="desc">
+						私たちは、「見る看板ではなく、伝わる看板へ」をテーマに、誰もが安心して楽しめる名護の海を目指して活動している高校生チームです。
+					</p>
+
+					<!-- 発表の3ステップ要約 -->
+					<div class="presentation-steps">
+						<div class="step-item">
+							<span class="step-num">POINT 01｜課題発見</span>
+							<h4>文字が多くて伝わらない海岸看板</h4>
+							<p>名護市の海岸を実際に調査し、観光客や子ども・海外の方にとって危険箇所が直感的に分かりにくい課題を特定しました。</p>
+						</div>
+						<div class="step-item">
+							<span class="step-num">POINT 02｜デザイン制作</span>
+							<h4>一目で危険が「伝わる」サインへ</h4>
+							<p>ピクトグラムや視認性の高い配色・レイアウトを取り入れ、年齢や言語を問わず瞬時に理解できる新しい看板をデザインしました。</p>
+						</div>
+						<div class="step-item">
+							<span class="step-num">POINT 03｜未来への展望</span>
+							<h4>名護の海から全国へ広がる安全意識</h4>
+							<p>海での水難事故ゼロを目指し、地域と連携しながら「伝わる看板」の社会実装・普及に取り組んでいきます。</p>
+						</div>
+					</div>
+
+					<div class="message-box">
+						<h3>💡 私たちの想い</h3>
+						<p>「名護市の美しい海を、みんながもっと安全に、笑顔で楽しめる場所にしたい」<br />最終発表会では、これまでの調査と制作のすべてを全力で伝えます。応援よろしくお願いいたします！</p>
+					</div>
+				</div>
+
+				<!-- 3. 最新活動メディア（これまでの歩み・アーカイブ） -->
 				<div class="card blog-card">
 					<div class="blog-header">
-						<h2>📢 最新活動メディア</h2>
+						<div>
+							<div class="archive-sub-tag">ACTIVITY LOG</div>
+							<h2>📢 これまでの活動記録・メディア</h2>
+						</div>
 						
 						<div class="tab-controls" role="tablist">
 							<button type="button" class="tab-btn active" data-source="blog">明日の地図</button>
@@ -146,10 +167,10 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	// ==========================================
-	// 1. カウントダウン設定（2026年11月21日 午前10:00）
+	// 1. 最終発表会カウントダウン（2026年11月21日 10:00）
 	// ==========================================
 	const TARGET_DATE_STR = '2026-11-21T10:00:00+09:00';
-	const EVENT_ENDED_TEXT = '🎉 決勝大会開催中 / 応援ありがとうございました！';
+	const EVENT_ENDED_TEXT = '🔴 最終発表会 開催中！ぜひ動画をご覧ください！';
 
 	function initCountdown() {
 		const targetTime = new Date(TARGET_DATE_STR).getTime();
@@ -167,7 +188,10 @@ import Layout from '../layouts/Layout.astro';
 			const diff = targetTime - now;
 
 			if (diff <= 0) {
-				if (titleEl) titleEl.textContent = EVENT_ENDED_TEXT;
+				if (titleEl) {
+					titleEl.textContent = EVENT_ENDED_TEXT;
+					titleEl.classList.add('is-live');
+				}
 				if (gridEl) gridEl.style.display = 'none';
 				return;
 			}
@@ -333,9 +357,9 @@ import Layout from '../layouts/Layout.astro';
 <style>
 	/* ヒーローエリア */
 	.hero {
-		background: var(--ocean-gradient, radial-gradient(circle at 50% 30%, #0369a1 0%, #075985 55%, #082f49 100%));
+		background: var(--ocean-gradient, radial-gradient(circle at 50% 25%, #0369a1 0%, #075985 55%, #082f49 100%));
 		color: #ffffff;
-		padding: 3.5rem 1.25rem 5.25rem;
+		padding: 3.5rem 1.25rem 5.5rem;
 		text-align: center;
 		position: relative;
 	}
@@ -351,25 +375,25 @@ import Layout from '../layouts/Layout.astro';
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.14);
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
-		border: 1px solid rgba(255, 255, 255, 0.25);
-		padding: 0.4rem 1.15rem;
+		border: 1px solid rgba(125, 211, 252, 0.45);
+		padding: 0.45rem 1.25rem;
 		border-radius: 9999px;
 		font-size: 0.85rem;
-		font-weight: 700;
+		font-weight: 800;
 		color: #ffffff;
 		letter-spacing: 0.04em;
 		margin-bottom: 1.5rem;
-		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 	}
 	.badge-dot {
 		width: 8px;
 		height: 8px;
 		background-color: #38bdf8;
 		border-radius: 50%;
-		box-shadow: 0 0 8px #38bdf8;
+		box-shadow: 0 0 10px #38bdf8;
 	}
 
 	.hero-text-wrap {
@@ -400,7 +424,7 @@ import Layout from '../layouts/Layout.astro';
 		position: relative;
 		display: inline-block;
 		color: #ffffff;
-		background: linear-gradient(transparent 62%, rgba(56, 189, 248, 0.5) 62%, rgba(14, 165, 233, 0.65) 100%);
+		background: linear-gradient(transparent 62%, rgba(56, 189, 248, 0.55) 62%, rgba(14, 165, 233, 0.7) 100%);
 		padding: 0 0.15em;
 		border-radius: 2px;
 	}
@@ -416,42 +440,58 @@ import Layout from '../layouts/Layout.astro';
 
 	/* カウントダウンUI */
 	.countdown-box {
-		margin-top: 1.75rem;
-		background: rgba(8, 47, 73, 0.45);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid rgba(125, 211, 252, 0.35);
-		border-radius: 16px;
-		padding: 1rem 1.75rem 1.15rem;
-		box-shadow: 0 8px 24px rgba(8, 47, 73, 0.35);
+		margin-top: 1.85rem;
+		background: rgba(8, 47, 73, 0.55);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid rgba(125, 211, 252, 0.4);
+		border-radius: 18px;
+		padding: 1.15rem 2rem 1.3rem;
+		box-shadow: 0 10px 28px rgba(8, 47, 73, 0.4);
 		display: inline-flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.65rem;
+		gap: 0.75rem;
+	}
+	.countdown-header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
 	}
 	.countdown-label {
-		font-size: 0.85rem;
+		font-size: 0.92rem;
+		font-weight: 800;
+		color: #ffffff;
+		letter-spacing: 0.04em;
+	}
+	.countdown-label.is-live {
+		font-size: 1.05rem;
+		color: #fde047;
+	}
+	.countdown-date-note {
+		font-size: 0.78rem;
 		font-weight: 700;
-		color: #bae6fd;
-		letter-spacing: 0.05em;
+		color: #7dd3fc;
+		letter-spacing: 0.06em;
 	}
 	.countdown-grid {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
+		gap: 0.65rem;
 	}
 	.time-unit {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.18);
+		background: rgba(255, 255, 255, 0.12);
+		border: 1px solid rgba(255, 255, 255, 0.22);
 		border-radius: 10px;
-		min-width: 3.6rem;
-		padding: 0.45rem 0.5rem;
+		min-width: 3.75rem;
+		padding: 0.5rem 0.55rem;
 	}
 	.time-num {
-		font-size: 1.65rem;
+		font-size: 1.75rem;
 		font-weight: 900;
 		line-height: 1.1;
 		color: #ffffff;
@@ -473,8 +513,8 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	.section {
-		margin-top: -3rem;
-		padding-bottom: 4rem;
+		margin-top: -3.25rem;
+		padding-bottom: 4.5rem;
 		position: relative;
 		z-index: 10;
 	}
@@ -488,23 +528,25 @@ import Layout from '../layouts/Layout.astro';
 		background: #ffffff;
 		border-radius: 16px;
 		padding: 2.5rem;
-		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06);
 		max-width: 1000px;
 		margin: 0 auto;
 		width: 100%;
 		border: 1px solid var(--border, #e2e8f0);
 	}
 
-	.status-tag {
+	.status-tag,
+	.archive-sub-tag {
 		display: inline-block;
 		background: #f0f9ff;
 		color: #0284c7;
 		border: 1px solid #bae6fd;
 		font-weight: 700;
-		font-size: 0.75rem;
-		padding: 0.3rem 0.75rem;
+		font-size: 0.72rem;
+		padding: 0.25rem 0.7rem;
 		border-radius: 9999px;
-		margin-bottom: 1rem;
+		margin-bottom: 0.65rem;
+		letter-spacing: 0.04em;
 	}
 	.card h2 {
 		font-size: 1.5rem;
@@ -522,61 +564,11 @@ import Layout from '../layouts/Layout.astro';
 		margin-bottom: 1.75rem;
 	}
 
-	.outline-box {
-		background: #f8fafc;
-		padding: 1.35rem 1.5rem;
-		border-radius: 12px;
-		border: 1px solid #e2e8f0;
-		margin-bottom: 1.25rem;
-	}
-	.outline-box h3 {
-		font-size: 1.1rem;
-		color: #0284c7;
-		margin-bottom: 0.5rem;
-		font-weight: 700;
-	}
-	.box-desc {
-		color: #334155;
-		line-height: 1.75;
-		font-size: 0.95rem;
-	}
-
-	.message-box {
-		background: #f0f9ff;
-		border-left: 4px solid #0284c7;
-		padding: 1.25rem 1.5rem;
-		border-radius: 8px;
-		margin-bottom: 1.5rem;
-	}
-	.message-box h3 {
-		font-size: 1.1rem;
-		color: #0284c7;
-		margin-bottom: 0.35rem;
-		font-weight: 700;
-	}
-	.message-box p {
-		color: #1e293b;
-		line-height: 1.7;
-		font-size: 0.95rem;
-	}
-
-	.info-box {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1rem 1.25rem;
-		font-size: 0.925rem;
-		color: #0284c7;
-		font-weight: 700;
-		text-align: center;
-		line-height: 1.6;
-	}
-
-	/* 最終発表 YouTube動画カード */
+	/* 最終発表 YouTube動画カード（メイン注目枠） */
 	.featured-video-card {
-		background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 32%);
-		border: 2px solid #7dd3fc;
-		box-shadow: 0 14px 32px -6px rgba(2, 132, 199, 0.14);
+		background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 35%);
+		border: 2px solid #38bdf8;
+		box-shadow: 0 18px 36px -8px rgba(2, 132, 199, 0.18);
 	}
 	.video-badge-row {
 		display: flex;
@@ -588,14 +580,14 @@ import Layout from '../layouts/Layout.astro';
 	.video-tag {
 		display: inline-flex;
 		align-items: center;
-		background: #0284c7;
+		background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
 		color: #ffffff;
 		font-weight: 800;
 		font-size: 0.78rem;
-		letter-spacing: 0.04em;
-		padding: 0.32rem 0.85rem;
+		letter-spacing: 0.05em;
+		padding: 0.35rem 0.9rem;
 		border-radius: 9999px;
-		box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+		box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
 	}
 	.video-sub {
 		font-size: 0.85rem;
@@ -603,8 +595,8 @@ import Layout from '../layouts/Layout.astro';
 		color: #0369a1;
 	}
 	.video-desc {
-		color: #475569;
-		font-size: 0.95rem;
+		color: #334155;
+		font-size: 0.96rem;
 		line-height: 1.7;
 		margin-bottom: 1.35rem;
 	}
@@ -615,7 +607,7 @@ import Layout from '../layouts/Layout.astro';
 		border-radius: 14px;
 		overflow: hidden;
 		background: #0f172a;
-		box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+		box-shadow: 0 12px 28px -5px rgba(15, 23, 42, 0.25);
 		border: 1px solid #bae6fd;
 	}
 	.video-wrapper iframe {
@@ -626,9 +618,11 @@ import Layout from '../layouts/Layout.astro';
 		border: 0;
 	}
 	.video-actions {
-		margin-top: 1.25rem;
+		margin-top: 1.35rem;
 		display: flex;
 		justify-content: center;
+		gap: 0.85rem;
+		flex-wrap: wrap;
 	}
 	.youtube-watch-btn {
 		display: inline-flex;
@@ -639,7 +633,7 @@ import Layout from '../layouts/Layout.astro';
 		color: #ffffff;
 		font-weight: 700;
 		font-size: 0.9rem;
-		padding: 0.7rem 1.5rem;
+		padding: 0.72rem 1.55rem;
 		border-radius: 9999px;
 		text-decoration: none;
 		box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
@@ -650,12 +644,86 @@ import Layout from '../layouts/Layout.astro';
 		transform: translateY(-2px);
 		box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
 	}
+	.channel-sub-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+		background: #f1f5f9;
+		color: #0f172a;
+		border: 1px solid #cbd5e1;
+		font-weight: 700;
+		font-size: 0.88rem;
+		padding: 0.72rem 1.35rem;
+		border-radius: 9999px;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+	.channel-sub-btn:hover {
+		background: #e2e8f0;
+		transform: translateY(-2px);
+	}
+
+	/* 発表3ステップ要約グリッド */
+	.presentation-steps {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+	.step-item {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		padding: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+	}
+	.step-num {
+		font-size: 0.75rem;
+		font-weight: 800;
+		color: #0284c7;
+		letter-spacing: 0.03em;
+	}
+	.step-item h4 {
+		font-size: 1rem;
+		font-weight: 800;
+		color: #0f172a;
+		margin: 0;
+		line-height: 1.4;
+	}
+	.step-item p {
+		font-size: 0.88rem;
+		color: #475569;
+		line-height: 1.65;
+		margin: 0;
+	}
+
+	.message-box {
+		background: #f0f9ff;
+		border-left: 4px solid #0284c7;
+		padding: 1.25rem 1.5rem;
+		border-radius: 8px;
+	}
+	.message-box h3 {
+		font-size: 1.05rem;
+		color: #0284c7;
+		margin-bottom: 0.35rem;
+		font-weight: 700;
+	}
+	.message-box p {
+		color: #1e293b;
+		line-height: 1.7;
+		font-size: 0.95rem;
+		margin: 0;
+	}
 
 	/* ヘッダー＆タブ切り替えUI */
 	.blog-header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: flex-end;
 		margin-bottom: 1.25rem;
 		flex-wrap: wrap;
 		gap: 0.85rem;
@@ -759,6 +827,12 @@ import Layout from '../layouts/Layout.astro';
 		padding: 1.5rem 0;
 	}
 
+	@media (max-width: 768px) {
+		.presentation-steps {
+			grid-template-columns: 1fr;
+		}
+	}
+
 	@media (max-width: 640px) {
 		.hero {
 			padding: 2.75rem 1rem 4.75rem;
@@ -768,7 +842,7 @@ import Layout from '../layouts/Layout.astro';
 			line-height: 1.3;
 		}
 		.countdown-box {
-			padding: 0.85rem 1rem 1rem;
+			padding: 0.95rem 1rem 1.1rem;
 			width: 100%;
 			max-width: 340px;
 		}
@@ -790,6 +864,13 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.card h2 {
 			font-size: 1.25rem;
+		}
+		.video-actions {
+			flex-direction: column;
+		}
+		.youtube-watch-btn,
+		.channel-sub-btn {
+			width: 100%;
 		}
 		.tab-controls {
 			width: 100%;
