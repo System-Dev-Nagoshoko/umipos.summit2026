@@ -7,6 +7,7 @@ import Layout from '../layouts/Layout.astro';
 import { genres, reportItems, IMAGE_BASE } from '../data/how-to-sea.ts';
 
 const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as const;
+const HOWTO_SEA_VIDEO_ID = "fRMJ7AsYGEg";
 ---
 
 <Layout title="緊急SOS・安全ガイド | 海のサインプロジェクト">
@@ -123,6 +124,50 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
 
       <!-- ================= 📘 VIEW 2: ピクトグラム辞典 ================= -->
       <div id="view-guide" role="tabpanel" aria-labelledby="tab-btn-guide" class="view-panel" hidden>
+        
+        <!-- 🎬 安全啓発動画「How to SEA」埋め込みカード -->
+        <div class="card howto-video-card">
+          <div class="video-badge-row">
+            <span class="video-tag">🎬 SAFETY MOVIE</span>
+            <span class="video-sub">海に入る前にサッと確認！</span>
+          </div>
+          <h2>安全啓発動画「How to SEA」</h2>
+          <p class="video-desc">
+            ライフジャケットの着用や海で遊ぶ際の基本ルールを分かりやすくまとめました。海に入る前にぜひご覧ください！
+          </p>
+
+          <div class="video-wrapper">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${HOWTO_SEA_VIDEO_ID}?rel=0`}
+              title="How to SEA｜海に入る前に知っておきたい安全ルール"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <div class="video-actions">
+            <a
+              href={`https://www.youtube.com/watch?v=${HOWTO_SEA_VIDEO_ID}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="youtube-watch-btn"
+            >
+              YouTubeで見る ↗
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="channel-sub-btn"
+            >
+              公式チャンネルを見る ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 📘 ピクトグラム一覧カード -->
         <div class="card">
           <h2>ピクトグラム一覧（看板の絵の意味）</h2>
           <p class="ss-lead">看板の絵をタップすると、詳しい意味と応急対処法が表示されます。</p>
@@ -554,6 +599,100 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
   .card { background: #ffffff !important; border-radius: var(--radius-lg); padding: clamp(1.25rem, 4vw, 2.25rem); box-shadow: 0 4px 20px rgba(15,23,42,0.08); width: 100%; border: 1px solid #cbd5e1; }
   .card h2 { font-size: clamp(1.2rem, 3.5vw, 1.5rem); font-weight: 800; margin: 0 0 1rem; color: #0f172a; border-bottom: 2px solid #e0f2fe; padding-bottom: .5rem; }
 
+  /* 🎬 安全啓発動画「How to SEA」カード */
+  .howto-video-card {
+    background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 35%) !important;
+    border: 2px solid #38bdf8 !important;
+    margin-bottom: 1.5rem;
+  }
+  .video-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.65rem;
+  }
+  .video-tag {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+  .video-sub {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0369a1;
+  }
+  .video-desc {
+    color: #334155;
+    font-size: clamp(0.88rem, 2vw, 1rem);
+    line-height: 1.65;
+    margin: 0 0 1.15rem;
+  }
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0f172a;
+    border: 1px solid #bae6fd;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video-actions {
+    margin-top: 1.1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .youtube-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .youtube-watch-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+  }
+  .channel-sub-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .channel-sub-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+  }
+
   .emergency-top-card { border: 2px solid #fca5a5 !important; }
   .quick-call-alert { background: #fef2f2 !important; border-radius: var(--radius-md); padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid #fecdd3; }
   .alert-badge-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
@@ -803,5 +942,7 @@ const callLabel = { "119": "119", "118": "118", lifeguard: "監視員" } as cons
     .ss-tel { grid-template-columns: 1fr; }
     .ss-grid { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
     .ss-panel__box { max-height: 82dvh !important; padding: 1.25rem 1rem !important; }
+    .video-actions { flex-direction: column; }
+    .youtube-watch-btn, .channel-sub-btn { width: 100%; }
   }
 </style>
