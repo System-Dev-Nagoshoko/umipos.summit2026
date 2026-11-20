@@ -92,7 +92,7 @@ import Layout from '../layouts/Layout.astro';
 							rel="noopener noreferrer"
 							class="channel-sub-btn"
 						>
-							公式チャンネルを見る ↗
+							大会公式チャンネルを見る ↗
 						</a>
 					</div>
 				</div>
@@ -214,32 +214,188 @@ import Layout from '../layouts/Layout.astro';
 	initCountdown();
 
 	// ==========================================
-	// 2. 最新活動メディア（RSS）読み込み設定
+	// 2. 最新活動メディア（RSSライブ自動取得・複数チャンネル統合対応）
 	// ==========================================
-	const MEDIA_CONFIG = {
+	type FeedSource = {
+		rssUrl: string;
+		fallbackApiUrl?: string;
+		filterKeywords: string[];
+	};
+
+	type MediaConfigItem = {
+		feeds: FeedSource[];
+		archiveUrl: string;
+		archiveLabel: string;
+	};
+
+	const MEDIA_CONFIG: Record<'blog' | 'note' | 'youtube', MediaConfigItem> = {
 		blog: {
-			apiUrl: '/api/rss',
+			feeds: [
+				{
+					rssUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/',
+					fallbackApiUrl: '/api/rss',
+					filterKeywords: []
+				}
+			],
 			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
-			archiveLabel: 'ブログ一覧を見る ↗',
-			filterKeywords: []
+			archiveLabel: 'ブログ一覧を見る ↗'
 		},
 		note: {
-			apiUrl: '/api/rss-note',
+			feeds: [
+				{
+					rssUrl: 'https://note.com/umi_sign_project/rss',
+					fallbackApiUrl: '/api/rss-note',
+					filterKeywords: []
+				}
+			],
 			archiveUrl: 'https://note.com/umi_sign_project',
-			archiveLabel: 'note一覧を見る ↗',
-			filterKeywords: []
+			archiveLabel: 'note一覧を見る ↗'
 		},
 		youtube: {
-			apiUrl: '/api/rss-youtube',
-			archiveUrl: 'https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA',
-			archiveLabel: 'YouTubeチャンネルへ ↗',
-			filterKeywords: ['海のサインプロジェクト', '海のサイン']
+			// プロジェクト公式YouTube（全動画）＋ うみぽす甲子園公式（該当ショート・発表動画）を統合取得
+			feeds: [
+				{
+					rssUrl: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCIgVHeQ7JWG11Ld9ztQjyDw',
+					filterKeywords: []
+				},
+				{
+					rssUrl: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCNMQaHzpu6nnxoiiGwo_OrA',
+					fallbackApiUrl: '/api/rss-youtube',
+					filterKeywords: ['海のサインプロジェクト', '海のサイン', '伝わる看板', 'How to SEA']
+				}
+			],
+			archiveUrl: 'https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw',
+			archiveLabel: '公式YouTubeへ ↗'
 		}
 	};
 
 	type MediaType = keyof typeof MEDIA_CONFIG;
+	type PostItem = { title: string; link: string; date: string; timestamp: number };
 
-	const cache: Partial<Record<MediaType, { title: string; link: string; date: string }[]>> = {};
+	const cache: Partial<Record<MediaType, PostItem[]>> = {};
+
+	function escapeHtml(str: string): string {
+		return str.replace(/[&<>"']/g, (m) => ({
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#39;'
+		}[m] || m));
+	}
+
+	function formatDate(dateStr: string): { formatted: string; timestamp: number } {
+		if (!dateStr) return { formatted: '', timestamp: 0 };
+		const normalized = dateStr.includes(' ') && !dateStr.includes('T')
+			? dateStr.replace(' ', 'T') + '+09:00'
+			: dateStr;
+		const dateObj = new Date(normalized);
+		if (isNaN(dateObj.getTime())) return { formatted: '', timestamp: 0 };
+
+		const formatted = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
+		return { formatted, timestamp: dateObj.getTime() };
+	}
+
+	function parseXmlToPosts(xmlText: string, filterKeywords: string[]): PostItem[] {
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+		if (xmlDoc.querySelector('parsererror')) return [];
+
+		const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
+		const items = Array.from(xmlDoc.getElementsByTagName('item'));
+		const isAtom = entries.length > 0;
+		const rawItems = isAtom ? entries : items;
+
+		const parsedItems = rawItems.map((item) => {
+			const title = item.getElementsByTagName('title')[0]?.textContent?.trim() || '無題';
+
+			let link = '#';
+			if (isAtom) {
+				const links = Array.from(item.getElementsByTagName('link'));
+				const altLink = links.find((l) => l.getAttribute('rel') === 'alternate') || links[0];
+				link = altLink?.getAttribute('href') || '#';
+			} else {
+				link = item.getElementsByTagName('link')[0]?.textContent?.trim() || '#';
+			}
+
+			const pubDateStr = (isAtom
+				? item.getElementsByTagName('published')[0]?.textContent || item.getElementsByTagName('updated')[0]?.textContent
+				: item.getElementsByTagName('pubDate')[0]?.textContent) || '';
+
+			const { formatted, timestamp } = formatDate(pubDateStr);
+
+			const descNormal = item.getElementsByTagName('description')[0]?.textContent || '';
+			const descMedia = item.getElementsByTagNameNS('*', 'description')[0]?.textContent || '';
+			const fullText = `${title} ${descNormal} ${descMedia}`;
+
+			return { title, link, date: formatted, timestamp, fullText };
+		});
+
+		const filtered = filterKeywords.length > 0
+			? parsedItems.filter((post) => filterKeywords.some((kw) => post.fullText.includes(kw)))
+			: parsedItems;
+
+		return filtered.map(({ title, link, date, timestamp }) => ({ title, link, date, timestamp }));
+	}
+
+	async function fetchSingleFeed(feed: FeedSource): Promise<PostItem[]> {
+		const cacheBuster = Date.now();
+
+		// 1. rss2json API でリアルタイム取得
+		try {
+			const res = await fetch(
+				`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.rssUrl)}&_=${cacheBuster}`
+			);
+			if (res.ok) {
+				const data = await res.json();
+				if (data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
+					const items = data.items
+						.filter((item: any) =>
+							feed.filterKeywords.length === 0 ||
+							feed.filterKeywords.some((kw) => `${item.title} ${item.description || ''}`.includes(kw))
+						)
+						.map((item: any) => {
+							const { formatted, timestamp } = formatDate(item.pubDate || '');
+							return {
+								title: item.title || '無題',
+								link: item.link || '#',
+								date: formatted,
+								timestamp
+							};
+						});
+					if (items.length > 0) return items;
+				}
+			}
+		} catch (_) {}
+
+		// 2. フォールバック：allorigins 経由で最新XMLを直接パース
+		try {
+			const res = await fetch(
+				`https://api.allorigins.win/get?url=${encodeURIComponent(feed.rssUrl)}&_=${cacheBuster}`
+			);
+			if (res.ok) {
+				const json = await res.json();
+				if (json.contents) {
+					const posts = parseXmlToPosts(json.contents, feed.filterKeywords);
+					if (posts.length > 0) return posts;
+				}
+			}
+		} catch (_) {}
+
+		// 3. 最終フォールバック：既存の /api/rss* エンドポイント
+		if (feed.fallbackApiUrl) {
+			try {
+				const res = await fetch(`${feed.fallbackApiUrl}?_=${cacheBuster}`);
+				if (res.ok) {
+					const xmlText = await res.text();
+					const posts = parseXmlToPosts(xmlText, feed.filterKeywords);
+					if (posts.length > 0) return posts;
+				}
+			} catch (_) {}
+		}
+
+		return [];
+	}
 
 	async function loadMedia(type: MediaType) {
 		const container = document.getElementById('blog-list-container');
@@ -259,77 +415,39 @@ import Layout from '../layouts/Layout.astro';
 
 		container.innerHTML = '<p class="loading-text">最新情報を読み込み中...</p>';
 
-		try {
-			const res = await fetch(config.apiUrl);
-			if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
-			const xmlText = await res.text();
+		// 複数ソース（YouTubeの2チャンネル等）を並列取得して統合・重複除去・新着順に並べ替え
+		const results = await Promise.all(config.feeds.map((feed) => fetchSingleFeed(feed)));
+		const merged = results.flat();
 
-			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-
-			if (xmlDoc.querySelector("parsererror")) {
-				throw new Error('XMLの解析に失敗しました');
+		const uniqueMap = new Map<string, PostItem>();
+		for (const item of merged) {
+			if (!uniqueMap.has(item.link)) {
+				uniqueMap.set(item.link, item);
 			}
+		}
 
-			const entries = Array.from(xmlDoc.getElementsByTagName("entry"));
-			const items = Array.from(xmlDoc.getElementsByTagName("item"));
-			const isAtom = entries.length > 0;
-			const rawItems = isAtom ? entries : items;
+		const topPosts = Array.from(uniqueMap.values())
+			.sort((a, b) => b.timestamp - a.timestamp)
+			.slice(0, 4);
 
-			const parsedItems = rawItems.map((item) => {
-				const title = item.getElementsByTagName("title")[0]?.textContent?.trim() || '無題';
-				
-				let link = '#';
-				if (isAtom) {
-					const links = Array.from(item.getElementsByTagName("link"));
-					const altLink = links.find(l => l.getAttribute("rel") === "alternate") || links[0];
-					link = altLink?.getAttribute("href") || '#';
-				} else {
-					link = item.getElementsByTagName("link")[0]?.textContent?.trim() || '#';
-				}
-
-				const pubDateStr = (isAtom 
-					? item.getElementsByTagName("published")[0]?.textContent 
-					: item.getElementsByTagName("pubDate")[0]?.textContent) || '';
-				
-				const dateObj = new Date(pubDateStr);
-				const formattedDate = !isNaN(dateObj.getTime())
-					? `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`
-					: '';
-
-				const descNormal = item.getElementsByTagName("description")[0]?.textContent || '';
-				const descMedia = item.getElementsByTagNameNS("*", "description")[0]?.textContent || '';
-				const description = `${descNormal} ${descMedia}`;
-
-				return { title, link, date: formattedDate, fullText: `${title} ${description}` };
-			});
-
-			const filteredItems = config.filterKeywords.length > 0
-				? parsedItems.filter(post => 
-					config.filterKeywords.some(keyword => post.fullText.includes(keyword))
-				  )
-				: parsedItems;
-
-			const topPosts = filteredItems.slice(0, 3).map(({ title, link, date }) => ({ title, link, date }));
+		if (topPosts.length > 0) {
 			cache[type] = topPosts;
 			renderPosts(topPosts, container);
-
-		} catch (error) {
-			console.error(`[${type}] RSS読み込みエラー:`, error);
-			container.innerHTML = '<p class="no-posts">情報の読み込みに失敗しました。</p>';
+		} else {
+			container.innerHTML = '<p class="no-posts">最新の投稿は上の「一覧を見る ↗」からご覧いただけます。</p>';
 		}
 	}
 
-	function renderPosts(posts: { title: string; link: string; date: string }[], container: HTMLElement) {
+	function renderPosts(posts: PostItem[], container: HTMLElement) {
 		if (posts.length === 0) {
 			container.innerHTML = '<p class="no-posts">該当する投稿はまだありません。</p>';
 			return;
 		}
 
 		container.innerHTML = posts.map((post) => `
-			<a href="${post.link}" target="_blank" rel="noopener noreferrer" class="blog-item">
-				<div class="blog-date">${post.date}</div>
-				<div class="blog-title">${post.title}</div>
+			<a href="${escapeHtml(post.link)}" target="_blank" rel="noopener noreferrer" class="blog-item">
+				<div class="blog-date">${escapeHtml(post.date)}</div>
+				<div class="blog-title">${escapeHtml(post.title)}</div>
 				<div class="blog-arrow">↗</div>
 			</a>
 		`).join('');
@@ -342,7 +460,7 @@ import Layout from '../layouts/Layout.astro';
 				const source = (btn as HTMLButtonElement).dataset.source as MediaType;
 				if (!source) return;
 
-				buttons.forEach(b => b.classList.remove('active'));
+				buttons.forEach((b) => b.classList.remove('active'));
 				btn.classList.add('active');
 
 				loadMedia(source);
