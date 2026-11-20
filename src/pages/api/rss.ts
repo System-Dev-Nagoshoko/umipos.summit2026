@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 export const GET: APIRoute = async () => {
 	const RSS_URL = 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/feed/';
 
@@ -10,7 +12,10 @@ export const GET: APIRoute = async () => {
 		if (!res.ok) throw new Error('Fetch failed');
 		return new Response(await res.text(), {
 			status: 200,
-			headers: { 'Content-Type': 'application/xml; charset=utf-8' }
+			headers: {
+				'Content-Type': 'application/xml; charset=utf-8',
+				'Cache-Control': 'no-store, max-age=0'
+			}
 		});
 	} catch {
 		return new Response('Error fetching RSS', { status: 500 });
