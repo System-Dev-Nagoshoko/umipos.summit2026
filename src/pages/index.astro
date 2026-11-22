@@ -6,21 +6,26 @@ import Layout from '../layouts/Layout.astro';
 	<main>
 		<section class="hero">
 			<div class="container hero-inner">
-				<div class="badge"><span class="badge-dot"></span>
-					うみぽす甲子園2026 ファイナリスト</div>
+				<div class="badge">
+					<span class="badge-dot"></span>
+					うみぽす甲子園2026 ファイナリスト
+				</div>
+				
 				<div class="hero-text-wrap">
 					<h1 class="hero-catch-title">
 						<span class="line-from">「見えない危険」から</span>
 						<span class="line-to">「<span class="highlight-aqua">伝わる安全</span>」へ</span>
-					</h1><p class="hero-caption">
+					</h1>
+					<p class="hero-caption">
 						看板だけに頼らず、持ち歩けるサインとサイトで沖縄の海を守る「海のサインプロジェクト」
 					</p>
 				</div>
-				<!--ステータスバナー-->
+
+				<!-- 決勝発表終了・実践継続ステータスバナー -->
 				<div class="countdown-box is-production">
 					<div class="countdown-header">
-						<span class="countdown-label is-live">うみぽす甲子園2026 最終発表動画 公開中！</span>
-						<span class="countdown-date-note">海に入る前から安全を届ける挑戦は、これからも続いていきます！</span>
+						<span class="countdown-label is-live">🌊 うみぽす甲子園2026 最終発表アーカイブ公開中</span>
+						<span class="countdown-date-note">決勝大会での発表を終え、いよいよ地域の事業者へ届ける実践フェーズへ！</span>
 					</div>
 				</div>
 			</div>
@@ -28,30 +33,66 @@ import Layout from '../layouts/Layout.astro';
 
 		<section class="section">
 			<div class="container flex-container">
-				<!--最終発表動画カード -->
+				
+				<!-- 1. 最優先配置：最終発表アーカイブ動画カード -->
 				<div class="card featured-video-card">
 					<div class="video-badge-row">
-						<span class="video-tag">FINAL PRESENTATION</span>
-						<span class="video-sub">うみぽす甲子園2026 最終発表動画</span></div>
-					<h2>最終発表はこちら</h2>
-					<p class="video-desc">私たちが取り組んでいる「見えない危険から伝わる安全へ」の活動と、海の安全を伝え続ける仕組みをまとめた最終発表です。ぜひご覧ください！</p>
-					<div class="video-wrapper">
-						<iframe src="https://www.youtube-nocookie.com/embed/E9Af2iGSPHk?rel=0" title="海のサインプロジェクト 最終発表" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+						<span class="video-tag">🎬 FINAL PRESENTATION ARCHIVE</span>
+						<span class="video-sub">うみぽす甲子園2026 決勝大会 最終発表</span>
 					</div>
+					<h2>最終発表のアーカイブはこちら</h2>
+					<p class="video-desc">
+						2026年11月22日の決勝大会で行った最終発表のアーカイブ動画です。「見えない危険から伝わる安全へ」をテーマに、私たちが形にした海の安全を伝え続ける仕組みをぜひご覧ください！
+					</p>
+
+					<div class="video-wrapper">
+						<iframe
+							src="https://www.youtube-nocookie.com/embed/E9Af2iGSPHk?rel=0"
+							title="海のサインプロジェクト 最終発表"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+							loading="lazy"
+						></iframe>
+					</div>
+
 					<div class="video-actions">
-						<a href="https://www.youtube.com/watch?v=E9Af2iGSPHk" target="_blank" rel="noopener noreferrer" class="youtube-watch-btn">YouTubeで高評価・応援コメントする</a>
-						<a href="https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw" target="_blank" rel="noopener noreferrer" class="channel-sub-btn">プロジェクト公式YouTube</a>
-						<a href="https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA" target="_blank" rel="noopener noreferrer" class="channel-sub-btn">大会公式チャンネル</a>
+						<a
+							href="https://www.youtube.com/watch?v=E9Af2iGSPHk"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="youtube-watch-btn"
+						>
+							YouTubeで高評価・応援コメントする ↗
+						</a>
+						<a
+							href="https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="channel-sub-btn"
+						>
+							プロジェクト公式YouTube ↗
+						</a>
+						<a
+							href="https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="channel-sub-btn"
+						>
+							大会公式チャンネル ↗
+						</a>
 					</div>
 				</div>
 
-				<!-- プロジェクト概要カード-->
+				<!-- 2. プロジェクト概要カード（資料準拠・実践継続仕様） -->
 				<div class="card main-card">
 					<div class="status-tag">PROJECT OVERVIEW</div>
 					<h2>「海のサインプロジェクト」の挑戦</h2>
-					<p class="desc">私たちは、沖縄の海での水難事故ゼロを目指して活動している高校生チームです。名護海上保安署・名護市消防本部・名護市観光課・沖縄県北部土木事務所の機関への取材や久米島分教室との交流を通じて見えた「文字ばかりの看板は読まれず、3〜4年で風景化してしまう」という課題に対し、<strong>海に入る前から安全を届け続ける新しい仕組み</strong>づくりを進めています。</p>
+					<p class="desc">
+						私たちは、沖縄の海での水難事故ゼロを目指して活動している高校生チームです。名護海上保安署・名護市消防本部・名護市観光課・沖縄県北部土木事務所の4機関への取材や久米島分教室との交流を通じて見えた「文字ばかりの看板は読まれず、3〜4年で風景化してしまう」という課題に対し、<strong>海に入る前から安全を届け続ける新しい仕組み</strong>づくりを進めています。
+					</p>
 
-					<!--3つの柱-->
+					<!-- プロジェクトの3つの柱 -->
 					<div class="presentation-steps">
 						<div class="step-item">
 							<span class="step-num">POINT 01｜調査と20種のピクトグラム</span>
@@ -59,40 +100,53 @@ import Layout from '../layouts/Layout.astro';
 							<p>泳ぎ・シュノーケリング事故者の27人中25人がライフジャケット未着用という現状や、ハブクラゲ等の危険生物被害を受け、仲間や他学年の生徒とも協力して直感的に伝わる20種類のピクトグラムを制作しました。</p>
 						</div>
 						<div class="step-item">
-							<span class="step-num">POINT 02｜キーホルダー×多言語サイト</span>
+							<span class="step-num">POINT 02｜キーホルダー × 6言語サイト</span>
 							<h4>表はピクトグラム、裏はQRと緊急連絡先</h4>
 							<p>レーザー加工機とUVプリンタで「持ち歩ける海の安全サイン（キーホルダー）」を制作。表面はピクトグラム、裏面はQRコードと「海のもしもは118 / 救急 119」、協力事業者名が入る仕様で、6言語対応の緊急SOS・ピクトグラム辞典や「How to SEA」動画へつながります。</p>
 						</div>
 						<div class="step-item">
 							<span class="step-num">POINT 03｜これからの展開</span>
 							<h4>ホテル・レンタカー事業者へ広げる挑戦</h4>
-							<p>「海へ行く前に目にとまる場所で伝えることが大切」という取材での学びをもとに、今後はホテルのフロントやレンタカーのキーなど、海に入る前の手元に届ける提案を進めていきます。後輩へも引き継げる持続可能な活動を目指します！</p>
+							<p>決勝大会での発表を終え、いよいよここからは実践のステージへ！「海へ行く前に目にとまる場所で伝えることが大切」という学びをもとに、ホテルのフロントやレンタカーのキーなど、海に入る前の手元に届ける提案を進め、後輩へも引き継げる持続可能な活動を目指します。</p>
 						</div>
 					</div>
 
 					<div class="message-box">
-						<h3>私たちの想い</h3>
-						<p>「せっかく沖縄に来たなら、安全に海を楽しもう！」<br/>メンバーそれぞれの得意分野（イラスト・動画編集・外部交渉・まとめ役等）を合わせ、海の事故ゼロを目指してこれからも活動を続けていきます！</p>
+						<h3>💡 私たちの想い</h3>
+						<p>「せっかく沖縄に来たなら、安全に海を楽しもう！」<br />メンバーそれぞれの得意分野（イラスト・動画編集・外部交渉・まとめ役）を合わせ、大会のその先も、沖縄の海の事故ゼロを目指して活動を続けていきます！</p>
 					</div>
 				</div>
 
-				<!-- 活動メディア（ライブRSS自動取得） -->
+				<!-- 3. 最新活動メディア（ライブRSS自動取得） -->
 				<div class="card blog-card">
-					<div class="blog-header"><div>
+					<div class="blog-header">
+						<div>
 							<div class="archive-sub-tag">ACTIVITY LOG</div>
-							<h2>最新の活動記録・メディア</h2></div>
+							<h2>📢 最新の活動記録・メディア</h2>
+						</div>
+						
 						<div class="tab-controls" role="tablist">
 							<button type="button" class="tab-btn active" data-source="blog">明日の地図</button>
 							<button type="button" class="tab-btn" data-source="note">note</button>
 							<button type="button" class="tab-btn" data-source="youtube">YouTube</button>
 						</div>
 
-						<a id="external-archive-link" href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/" target="_blank" rel="noopener noreferrer" class="all-posts-link">ブログ一覧を見る ↗</a>
+						<a 
+							id="external-archive-link"
+							href="https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/" 
+							target="_blank" 
+							rel="noopener noreferrer" 
+							class="all-posts-link"
+						>
+							ブログ一覧を見る ↗
+						</a>
 					</div>
+
 					<div id="blog-list-container" class="blog-list">
 						<p class="loading-text">最新情報を読み込み中...</p>
 					</div>
 				</div>
+
 			</div>
 		</section>
 	</main>
@@ -102,6 +156,7 @@ import Layout from '../layouts/Layout.astro';
 	type FeedSource = { rssUrl: string; fallbackApiUrl?: string; filterKeywords: string[] };
 	type MediaConfigItem = { feeds: FeedSource[]; archiveUrl: string; archiveLabel: string };
 	type PostItem = { title: string; link: string; date: string; timestamp: number };
+
 	const MEDIA_CONFIG: Record<'blog' | 'note' | 'youtube', MediaConfigItem> = {
 		blog: {
 			feeds: [{
@@ -110,7 +165,7 @@ import Layout from '../layouts/Layout.astro';
 				filterKeywords: []
 			}],
 			archiveUrl: 'https://umipos.com/koshien/repechage/author/%E6%B5%B7%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88/',
-			archiveLabel: 'ブログ一覧を見る'
+			archiveLabel: 'ブログ一覧を見る ↗'
 		},
 		note: {
 			feeds: [{
@@ -119,7 +174,7 @@ import Layout from '../layouts/Layout.astro';
 				filterKeywords: []
 			}],
 			archiveUrl: 'https://note.com/umi_sign_project',
-			archiveLabel: 'note一覧を見る'
+			archiveLabel: 'note一覧を見る ↗'
 		},
 		youtube: {
 			feeds: [
@@ -131,12 +186,15 @@ import Layout from '../layouts/Layout.astro';
 				}
 			],
 			archiveUrl: 'https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw',
-			archiveLabel: '公式YouTubeへ'
+			archiveLabel: '公式YouTubeへ ↗'
 		}
 	};
+
 	type MediaType = keyof typeof MEDIA_CONFIG;
 	const cache: Partial<Record<MediaType, PostItem[]>> = {};
+
 	const escapeHtml = (str: string) => str.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m] || m));
+
 	function formatDate(dateStr: string) {
 		if (!dateStr) return { formatted: '', timestamp: 0 };
 		const norm = dateStr.includes(' ') && !dateStr.includes('T') ? dateStr.replace(' ', 'T') + '+09:00' : dateStr;
@@ -154,6 +212,7 @@ import Layout from '../layouts/Layout.astro';
 		const entries = Array.from(doc.getElementsByTagName('entry'));
 		const items = Array.from(doc.getElementsByTagName('item'));
 		const isAtom = entries.length > 0;
+
 		return (isAtom ? entries : items).map((item) => {
 			const title = item.getElementsByTagName('title')[0]?.textContent?.trim() || '無題';
 			let link = '#';
@@ -171,6 +230,7 @@ import Layout from '../layouts/Layout.astro';
 		.filter((p) => filterKeywords.length === 0 || filterKeywords.some((kw) => p.fullText.includes(kw)))
 		.map(({ title, link, date, timestamp }) => ({ title, link, date, timestamp }));
 	}
+
 	async function fetchSingleFeed(feed: FeedSource): Promise<PostItem[]> {
 		const cb = Date.now();
 		try {
@@ -185,6 +245,7 @@ import Layout from '../layouts/Layout.astro';
 				}
 			}
 		} catch (_) {}
+
 		try {
 			const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed.rssUrl)}&_=${cb}`);
 			if (res.ok) {
@@ -227,7 +288,7 @@ import Layout from '../layouts/Layout.astro';
 			cache[type] = topPosts;
 			renderPosts(topPosts, container);
 		} else {
-			container.innerHTML = '<p class="no-posts">最新の投稿は上の「一覧を見る」からご覧いただけます。</p>';
+			container.innerHTML = '<p class="no-posts">最新の投稿は上の「一覧を見る ↗」からご覧いただけます。</p>';
 		}
 	}
 
@@ -248,6 +309,7 @@ import Layout from '../layouts/Layout.astro';
 	});
 	loadMedia('blog');
 </script>
+
 <style>
 	.hero { background: var(--ocean-gradient, radial-gradient(circle at 50% 25%, #0369a1 0%, #075985 55%, #082f49 100%)); color: #fff; padding: 3.5rem 1.25rem 5.5rem; text-align: center; position: relative; }
 	.hero-inner { display: flex; flex-direction: column; align-items: center; max-width: 880px; margin: 0 auto; }
