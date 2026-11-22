@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="【いよいよ最終発表会】海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
+<Layout title="【本日 最終発表会】海のサインプロジェクト | うみぽす甲子園2026 ファイナリスト">
 	<main>
 		<section class="hero">
 			<div class="container hero-inner">
 				<div class="badge">
 					<span class="badge-dot"></span>
-					うみぽす甲子園2026 最終発表会
+					うみぽす甲子園2026 最終発表会 ファイナリスト
 				</div>
 				
 				<div class="hero-text-wrap">
@@ -21,32 +21,11 @@ import Layout from '../layouts/Layout.astro';
 					</p>
 				</div>
 
-				<!-- 最終発表会カウントダウン -->
-				<div class="countdown-box" id="countdown-container">
+				<!-- 本番当日ステータスバナー（発表前モード） -->
+				<div class="countdown-box is-production">
 					<div class="countdown-header">
-						<span class="countdown-label" id="countdown-title">🏆 うみぽす甲子園2026 最終発表会まで</span>
-						<span class="countdown-date-note">2026年11月22日(日) 10:00 START</span>
-					</div>
-					<div class="countdown-grid" id="countdown-grid">
-						<div class="time-unit">
-							<span class="time-num" id="cd-days">--</span>
-							<span class="time-text">DAYS</span>
-						</div>
-						<span class="time-sep">:</span>
-						<div class="time-unit">
-							<span class="time-num" id="cd-hours">--</span>
-							<span class="time-text">HOURS</span>
-						</div>
-						<span class="time-sep">:</span>
-						<div class="time-unit">
-							<span class="time-num" id="cd-minutes">--</span>
-							<span class="time-text">MINS</span>
-						</div>
-						<span class="time-sep">:</span>
-						<div class="time-unit">
-							<span class="time-num" id="cd-seconds">--</span>
-							<span class="time-text">SECS</span>
-						</div>
+						<span class="countdown-label is-live">🔴 本日開催！うみぽす甲子園2026 最終発表会 出場中！</span>
+						<span class="countdown-date-note">2026年11月22日(日)｜まもなく私たちの発表本番です！応援よろしくお願いします！</span>
 					</div>
 				</div>
 			</div>
@@ -63,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<h2>最終発表はこちら</h2>
 					<p class="video-desc">
-						私たちがこれまで取り組んできた「伝わる看板」の活動と、海の安全を届けるための新たな挑戦をまとめた最終発表です。ぜひご覧ください！
+						私たちがこれまで取り組んできた「伝わる看板」の活動と、海の安全を届けるための挑戦をまとめた最終発表です。ぜひご覧ください！
 					</p>
 
 					<div class="video-wrapper">
@@ -87,17 +66,25 @@ import Layout from '../layouts/Layout.astro';
 							YouTubeで高評価・応援コメントする ↗
 						</a>
 						<a
+							href="https://www.youtube.com/channel/UCIgVHeQ7JWG11Ld9ztQjyDw"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="channel-sub-btn"
+						>
+							プロジェクト公式YouTube ↗
+						</a>
+						<a
 							href="https://www.youtube.com/channel/UCNMQaHzpu6nnxoiiGwo_OrA"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="channel-sub-btn"
 						>
-							大会公式チャンネルを見る ↗
+							大会公式チャンネル ↗
 						</a>
 					</div>
 				</div>
 
-				<!-- 2. プロジェクト概要カード（ソフト表現版） -->
+				<!-- 2. プロジェクト概要カード（ネタバレ防止・ソフト表現版） -->
 				<div class="card main-card">
 					<div class="status-tag">PROJECT OVERVIEW</div>
 					<h2>「海のサインプロジェクト」の挑戦</h2>
@@ -105,7 +92,7 @@ import Layout from '../layouts/Layout.astro';
 						私たちは、「見る看板」から「伝わる看板」へをテーマに、誰もが安心して楽しめる沖縄の海を目指して活動している高校生チームです。
 					</p>
 
-					<!-- 発表の3ステップ要約 -->
+					<!-- 発表の3ステップ要約（中身は濁した構成） -->
 					<div class="presentation-steps">
 						<div class="step-item">
 							<span class="step-num">POINT 01｜現場の調査</span>
@@ -118,15 +105,15 @@ import Layout from '../layouts/Layout.astro';
 							<p>年齢や言語を問わず、海を訪れるすべての人に安全意識が自然と届くような視覚表現や仕組みづくりに挑戦しています。</p>
 						</div>
 						<div class="step-item">
-							<span class="step-num">POINT 03｜最終発表へ</span>
+							<span class="step-num">POINT 03｜本日の最終発表へ</span>
 							<h4>これからの海の安全に向けて</h4>
-							<p>これまでの活動から見つけた私たちなりの答えと、未来へつなげる提案を最終発表の場でお届けします。ぜひ発表本編をご覧ください！</p>
+							<p>これまでの活動から見つけた私たちなりの答えと、未来へつなげる提案を本日のステージでお届けします！ぜひ発表を見守ってください。</p>
 						</div>
 					</div>
 
 					<div class="message-box">
 						<h3>💡 私たちの想い</h3>
-						<p>「せっかく沖縄に来たなら、安全に海を楽しもう！」<br />メンバーそれぞれの得意分野（イラスト・動画編集・外部交渉・まとめ役）を合わせ、海の事故ゼロを目指して全力で取り組みます！</p>
+						<p>「せっかく沖縄に来たなら、安全に海を楽しもう！」<br />メンバーそれぞれの得意分野（イラスト・動画編集・外部交渉・まとめ役）を合わせ、海の事故ゼロを目指して本番のステージに挑みます！</p>
 					</div>
 				</div>
 
@@ -167,54 +154,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	// ==========================================
-	// 1. 最終発表会カウントダウン（2026年11月22日 10:00）
-	// ==========================================
-	const TARGET_DATE_STR = '2026-11-22T10:00:00+09:00';
-	const EVENT_ENDED_TEXT = '🔴 最終発表会 開催中！ぜひ動画をご覧ください！';
-
-	function initCountdown() {
-		const targetTime = new Date(TARGET_DATE_STR).getTime();
-		const daysEl = document.getElementById('cd-days');
-		const hoursEl = document.getElementById('cd-hours');
-		const minutesEl = document.getElementById('cd-minutes');
-		const secondsEl = document.getElementById('cd-seconds');
-		const gridEl = document.getElementById('countdown-grid');
-		const titleEl = document.getElementById('countdown-title');
-
-		if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
-
-		function updateTimer() {
-			const now = Date.now();
-			const diff = targetTime - now;
-
-			if (diff <= 0) {
-				if (titleEl) {
-					titleEl.textContent = EVENT_ENDED_TEXT;
-					titleEl.classList.add('is-live');
-				}
-				if (gridEl) gridEl.style.display = 'none';
-				return;
-			}
-
-			const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-			const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-			const minutes = Math.floor((diff / 1000 / 60) % 60);
-			const seconds = Math.floor((diff / 1000) % 60);
-
-			daysEl!.textContent = String(days).padStart(2, '0');
-			hoursEl!.textContent = String(hours).padStart(2, '0');
-			minutesEl!.textContent = String(minutes).padStart(2, '0');
-			secondsEl!.textContent = String(seconds).padStart(2, '0');
-		}
-
-		updateTimer();
-		setInterval(updateTimer, 1000);
-	}
-
-	initCountdown();
-
-	// ==========================================
-	// 2. 最新活動メディア（RSSライブ自動取得・複数チャンネル統合対応）
+	// 最新活動メディア（RSSライブ自動取得・複数チャンネル統合対応）
 	// ==========================================
 	type FeedSource = {
 		rssUrl: string;
@@ -415,7 +355,6 @@ import Layout from '../layouts/Layout.astro';
 
 		container.innerHTML = '<p class="loading-text">最新情報を読み込み中...</p>';
 
-		// 複数ソース（YouTubeの2チャンネル等）を並列取得して統合・重複除去・新着順に並べ替え
 		const results = await Promise.all(config.feeds.map((feed) => fetchSingleFeed(feed)));
 		const merged = results.flat();
 
@@ -556,78 +495,37 @@ import Layout from '../layouts/Layout.astro';
 		text-shadow: 0 1px 4px rgba(8, 47, 73, 0.5);
 	}
 
-	/* カウントダウンUI */
+	/* 本番当日ステータスバナー */
 	.countdown-box {
 		margin-top: 1.85rem;
-		background: rgba(8, 47, 73, 0.55);
+		background: rgba(8, 47, 73, 0.65);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
-		border: 1px solid rgba(125, 211, 252, 0.4);
+		border: 1px solid rgba(253, 224, 71, 0.55);
 		border-radius: 18px;
-		padding: 1.15rem 2rem 1.3rem;
+		padding: 1rem 2rem;
 		box-shadow: 0 10px 28px rgba(8, 47, 73, 0.4);
 		display: inline-flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.75rem;
 	}
 	.countdown-header {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.25rem;
-	}
-	.countdown-label {
-		font-size: 0.92rem;
-		font-weight: 800;
-		color: #ffffff;
-		letter-spacing: 0.04em;
+		gap: 0.35rem;
 	}
 	.countdown-label.is-live {
 		font-size: 1.05rem;
+		font-weight: 800;
 		color: #fde047;
+		letter-spacing: 0.04em;
 	}
 	.countdown-date-note {
-		font-size: 0.78rem;
+		font-size: 0.82rem;
 		font-weight: 700;
-		color: #7dd3fc;
-		letter-spacing: 0.06em;
-	}
-	.countdown-grid {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
-	}
-	.time-unit {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		background: rgba(255, 255, 255, 0.12);
-		border: 1px solid rgba(255, 255, 255, 0.22);
-		border-radius: 10px;
-		min-width: 3.75rem;
-		padding: 0.5rem 0.55rem;
-	}
-	.time-num {
-		font-size: 1.75rem;
-		font-weight: 900;
-		line-height: 1.1;
-		color: #ffffff;
-		font-variant-numeric: tabular-nums;
-		text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-	}
-	.time-text {
-		font-size: 0.65rem;
-		font-weight: 700;
-		color: #7dd3fc;
-		letter-spacing: 0.08em;
-		margin-top: 0.2rem;
-	}
-	.time-sep {
-		font-size: 1.35rem;
-		font-weight: 800;
-		color: rgba(255, 255, 255, 0.55);
-		margin-bottom: 0.8rem;
+		color: #e0f2fe;
+		letter-spacing: 0.05em;
 	}
 
 	.section {
@@ -964,22 +862,12 @@ import Layout from '../layouts/Layout.astro';
 			line-height: 1.3;
 		}
 		.countdown-box {
-			padding: 0.95rem 1rem 1.1rem;
+			padding: 0.9rem 1rem;
 			width: 100%;
 			max-width: 340px;
 		}
-		.countdown-grid {
-			gap: 0.35rem;
-		}
-		.time-unit {
-			min-width: 3.1rem;
-			padding: 0.4rem 0.3rem;
-		}
-		.time-num {
-			font-size: 1.35rem;
-		}
-		.time-sep {
-			font-size: 1.1rem;
+		.countdown-label.is-live {
+			font-size: 0.95rem;
 		}
 		.card {
 			padding: 1.4rem 1rem;
